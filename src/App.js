@@ -1,10 +1,18 @@
+// Styles
 import "./App.css";
+
+// Pages
+import GamePage from "./pages/GamePage/GamePage";
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">Testing 1, 2, 3</header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<GamePage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
