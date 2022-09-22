@@ -3,21 +3,18 @@ import "./GamePage.scss";
 
 // Components
 import Hero from "../../components/Hero/Hero";
-import ActorList from "../../components/ActorList/ActorList";
+import Movie from "../../components/Movie/Movie";
 
 // Libraries
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 function GamePage() {
-  const [movieIds, setMovieIds] = useState(null);
-  const [actors, setActors] = useState(null);
+  const [puzzleData, setPuzzleData] = useState(null);
 
   const getData = () => {
     axios.get(`http://localhost:8888/puzzle/`).then((res) => {
-      console.log(res.data.actors);
-      setMovieIds(res.data.movies);
-      setActors(res.data.actors);
+      setPuzzleData(res.data);
     });
   };
 
@@ -27,8 +24,8 @@ function GamePage() {
 
   return (
     <>
-      <Hero movieIds={movieIds} />
-      {actors && <ActorList actors={actors} />}
+      <Hero />
+      {puzzleData && puzzleData.puzzle.map((movie) => <Movie movie={movie} />)}
     </>
   );
 }
