@@ -30,13 +30,17 @@ function Movie({ movie, genres }) {
   };
 
   const formatGenre = (id) => {
-    // genres.map((genre) => console.log(typeof genre.id));
-    // console.log(typeof id);
+    let genreName = genres.find((genre) => {
+      if (genre.id === id) {
+        return genre.name;
+      }
+    });
+    return genreName.name;
   };
 
   return (
     <>
-      <div className="movie">
+      <div className="movie__wrapper">
         <div className="movie__details">
           <img
             alt="hidden!"
@@ -48,13 +52,26 @@ function Movie({ movie, genres }) {
             }
           />
           <div className="movie__info">
+            <p className="movie__text">Title</p>
             <p className="movie__text">
-              Year: {formatDate(movie.release_date, dateOptions)}
+              <span className="movie__singledetail">
+                Year: {formatDate(movie.release_date, dateOptions)}
+              </span>
             </p>
             <p className="movie__text">
-              Genre(s):
-              {movie.genre_ids.map((id) => formatGenre(id))}
+              <span className="movie__singledetail">Genre(s):</span>
             </p>
+            <ul className="movie__genrelist">
+              {movie.genre_ids.map((id) => {
+                return (
+                  <li
+                    className={`movie__genre movie__genre--${formatGenre(id)}`}
+                  >
+                    {formatGenre(id)}
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </div>
         <div className="movie__castpics">
@@ -72,7 +89,6 @@ function Movie({ movie, genres }) {
           ))}
         </div>
       </div>
-      <p></p>
     </>
   );
 }

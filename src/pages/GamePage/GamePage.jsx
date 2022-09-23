@@ -37,10 +37,12 @@ function GamePage() {
   return (
     <>
       <Hero />
-      {puzzleData &&
-        puzzleData.puzzle.map((movie) => (
-          <Movie key={movie.id} movie={movie} genres={genreData} />
-        ))}
+      <div className="movie">
+        {puzzleData &&
+          puzzleData.puzzle.map((movie) => (
+            <Movie key={movie.id} movie={movie} genres={genreData} />
+          ))}
+      </div>
     </>
   );
 }
