@@ -1,4 +1,38 @@
+// Styles
+import "./Hero.scss";
+
+// Components & Data
+import API from "../../data/api_info.json";
+
+// Libraries
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 function Hero() {
+  const [titleQuery, setTitleQuery] = useState([]);
+  const [searchTitles, setSearchTitles] = useState([]);
+  // eslint-disable-next-line no-unused-vars
+  const [guesses, setGuesses] = useState([]);
+
+  /**
+   * Handle the incoming input and use the specified callback function
+   * @param {event} e
+   * @param {function} setFunc
+   */
+  const handleStateChange = (e, setFunc) => {
+    setFunc(e.target.value);
+  };
+
+  useEffect(() => {
+    axios
+      .get(`${API.api_search_url}&api_key=${API.api_key}&query=${titleQuery}`)
+      .then((res) => {
+        setSearchTitles(res.data.results);
+        console.log(res.data.results.length);
+      })
+      .catch((err) => console.error(err));
+  }, [titleQuery]);
+
   return (
     <div className="hero">
       <div className="hero__wrapper">
@@ -6,13 +40,48 @@ function Hero() {
           <div className="hero__moviecard"></div>
         </div>
         <form className="hero__guessform">
-          <input
-            className="hero__guessinput"
-            type="text"
-            placeholder="Type a movie title..."
-          ></input>
-          <button>Guess!</button>
+          <div className="hero__searchbox">
+            <input
+              className="hero__guessinput"
+              type="text"
+              placeholder="Type a movie title..."
+              onChange={(e) => {
+                if (e.target.value) {
+                  handleStateChange(e, setTitleQuery);
+                } else {
+                  setSearchTitles([]);
+                }
+              }}
+            />
+            <ul className="hero__searchsuggestions">
+              {searchTitles.length
+                ? searchTitles.map((title) => {
+                    return (
+                      <li key={title.id} className="hero__suggestion">
+                        {title.original_title}
+                      </li>
+                    );
+                  })
+                : null}
+            </ul>
+          </div>
+          <div className="hero__buttonbox">
+            <button className="hero__guessbutton">Guess!</button>
+          </div>
         </form>
+        <div className="hero__guesslist">
+          <ul>
+            {guesses
+              ? guesses.map((guess) => {
+                  return (
+                    <li key={guess.id} className="hero__guess">
+                      {guess.original_title}
+                    </li>
+                  );
+                })
+              : ""}
+          </ul>
+        </div>
       </div>
     </div>
   );

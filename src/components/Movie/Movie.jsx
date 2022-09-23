@@ -3,7 +3,6 @@ import "./Movie.scss";
 
 // Libraries
 import { useState } from "react";
-import { getDefaultNormalizer } from "@testing-library/react";
 
 // variables
 const IMG_BASE = "https://image.tmdb.org/t/p/w500/";
@@ -15,6 +14,7 @@ const dateOptions = {
 };
 
 function Movie({ movie, genres }) {
+  // eslint-disable-next-line no-unused-vars
   const [movieGuessed, setMovieGuessed] = useState(false);
 
   /**
@@ -31,9 +31,7 @@ function Movie({ movie, genres }) {
 
   const formatGenre = (id) => {
     let genreName = genres.find((genre) => {
-      if (genre.id === id) {
-        return genre.name;
-      }
+      return genre.id === id ? genre.name : null;
     });
     return genreName.name;
   };
@@ -65,6 +63,7 @@ function Movie({ movie, genres }) {
               {movie.genre_ids.map((id) => {
                 return (
                   <li
+                    key={id}
                     className={`movie__genre movie__genre--${formatGenre(id)}`}
                   >
                     {formatGenre(id)}

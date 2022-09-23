@@ -3,8 +3,6 @@
 .header {
     width: 100%;
 
-    border: 1px solid orange;
-
     border-bottom: 1px solid black;
 
     &__wrapper {
@@ -26,10 +24,53 @@
 .hero {
 
     width: 100%;
+    min-height: 3rem;
 
     &__wrapper {
+        width: 90%;
+        margin: 0 auto;
         padding: 0 .5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
+
+    &__guessform {
+        width: 100%;
+        border: 1px solid orange;
+        display: flex;
+        justify-content: space-evenly;
+        margin: 1rem 0;
+    }
+
+    &__searchbox {
+        border: 1px solid skyblue;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__guessinput {
+        min-width: 100%;
+        max-width: 100%;
+
+    }
+
+    &__searchsuggestions {
+        position: absolute;
+    }
+
+    &__suggestion {
+        font-size: .5rem;
+        // height: 1rem;
+        text-align: left;
+        padding: .5rem;
+        vertical-align: middle;
+        background: #FFF;
+        list-style: none;
+        z-index: 5;
+    }
+
+
 }
 
 .movie {
