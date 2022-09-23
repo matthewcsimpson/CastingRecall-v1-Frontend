@@ -1,7 +1,7 @@
 @use './global' as *;
 
 .header {
-    width: 100%;
+    width: 50%;
 
     border-bottom: 1px solid black &__wrapper {
         margin: 0 auto;
@@ -19,16 +19,28 @@
     }
 }
 
-.actors {
+.movie {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
 
-    &__cards {
+
+    &__details {
+        width: 20%;
+        border: 1px solid red;
         display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around
     }
 
-    &__cardimage {
-        max-width: 6rem;
+    &__poster {
+        max-width: 80px;
+    }
 
+    &__castpics {
+        width: 60%;
+
+    }
+
+    &__headshot {
+        max-width: 80px;
     }
 }

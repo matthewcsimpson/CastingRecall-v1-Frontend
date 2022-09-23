@@ -11,11 +11,23 @@ import { useEffect, useState } from "react";
 
 function GamePage() {
   const [puzzleData, setPuzzleData] = useState(null);
+  const [genreData, setGenreData] = useState(null);
 
   const getData = () => {
-    axios.get(`http://localhost:8888/puzzle/`).then((res) => {
-      setPuzzleData(res.data);
-    });
+    axios
+      .get(`http://localhost:8888/puzzle/`)
+      .then((res) => {
+        setPuzzleData(res.data);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+    axios
+      .get(
+        `https://api.themoviedb.org/3/genre/movie/list?api_key=1d1a538338aaac91dbf1adc28d4663aa&language=en-US`
+      )
+      .then((res) => setGenreData(res.data.genres))
+      .catch((e) => console.log(e));
   };
 
   useEffect(() => {
@@ -25,7 +37,10 @@ function GamePage() {
   return (
     <>
       <Hero />
-      {puzzleData && puzzleData.puzzle.map((movie) => <Movie movie={movie} />)}
+      {puzzleData &&
+        puzzleData.puzzle.map((movie) => (
+          <Movie key={movie.id} movie={movie} genres={genreData} />
+        ))}
     </>
   );
 }
