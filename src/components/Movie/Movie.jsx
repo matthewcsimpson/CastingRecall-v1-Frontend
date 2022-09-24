@@ -62,10 +62,7 @@ function Movie({ movie, genres }) {
             <ul className="movie__genrelist">
               {movie.genre_ids.map((id) => {
                 return (
-                  <li
-                    key={id}
-                    className={`movie__genre movie__genre--${formatGenre(id)}`}
-                  >
+                  <li key={id} className={`movie__genre movie__genre--${id}`}>
                     {formatGenre(id)}
                   </li>
                 );
