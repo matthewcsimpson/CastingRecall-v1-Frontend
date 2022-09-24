@@ -31,8 +31,10 @@
         margin: 0 auto;
         padding: 0 .5rem;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        border: 1px solid red;
     }
 
     &__guessform {
@@ -47,11 +49,11 @@
         border: 1px solid skyblue;
         display: flex;
         flex-direction: column;
+        width: 100%;
     }
 
     &__guessinput {
-        min-width: 100%;
-        max-width: 100%;
+        width: 90%;
 
     }
 
@@ -61,7 +63,6 @@
 
     &__suggestion {
         font-size: .5rem;
-        // height: 1rem;
         text-align: left;
         padding: .5rem;
         vertical-align: middle;
@@ -70,6 +71,9 @@
         z-index: 5;
     }
 
+    &__guesslist {
+        border: 1px solid chartreuse;
+    }
 
 }
 
@@ -98,7 +102,7 @@
     }
 
     &__castpics {
-        width: 50%;
+        width: 100%;
         border: 1px solid skyblue;
         display: flex;
         justify-content: space-between;
@@ -111,6 +115,10 @@
 
         &--key {
             border: .1875rem solid blue;
+        }
+
+        &--key:last-child {
+            border: .1875rem solid white;
         }
     }
 }

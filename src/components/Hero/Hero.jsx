@@ -13,6 +13,7 @@ function Hero() {
   const [searchTitles, setSearchTitles] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [guesses, setGuesses] = useState([]);
+  const [tempGuess, setTempGuess] = useState(null);
 
   /**
    * Handle the incoming input and use the specified callback function
@@ -23,14 +24,48 @@ function Hero() {
     setFunc(e.target.value);
   };
 
+  /**
+   * Handle when one of the auto-complete items is clicked on.
+   * @param {event} e
+   */
+  const handleListItemClick = (e) => {
+    setTempGuess(e.target.innerHTML);
+    setSearchTitles([]);
+  };
+
+  /**
+   * Handle when the form is submitted / guess is made
+   * @param {event} e
+   */
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (titleQuery.length !== 0) {
+      axios
+        .get(
+          `${API.api_search_url}&api_key=${API.api_key}&query=${e.target.search_term.value}`
+        )
+        .then((res) => {
+          setGuesses([...guesses, res.data.results[0]]);
+        })
+        .catch((err) => console.error(err));
+    } else {
+      alert("you need to enter something!");
+    }
+  };
+
+  /**
+   * useEffect to load auto-complete options as you type in the inpur field.
+   */
   useEffect(() => {
-    axios
-      .get(`${API.api_search_url}&api_key=${API.api_key}&query=${titleQuery}`)
-      .then((res) => {
-        setSearchTitles(res.data.results);
-        console.log(res.data.results.length);
-      })
-      .catch((err) => console.error(err));
+    if (titleQuery.length !== 0) {
+      axios
+        .get(`${API.api_search_url}&api_key=${API.api_key}&query=${titleQuery}`)
+        .then((res) => {
+          setSearchTitles(res.data.results);
+          // console.log(res.data.results.length);
+        })
+        .catch((err) => console.error(err));
+    }
   }, [titleQuery]);
 
   return (
@@ -39,12 +74,15 @@ function Hero() {
         <div className="hero__guesses">
           <div className="hero__moviecard"></div>
         </div>
-        <form className="hero__guessform">
+        <form className="hero__guessform" onSubmit={handleSubmit}>
           <div className="hero__searchbox">
             <input
+              name="search_term"
+              value={tempGuess ? tempGuess : undefined}
               className="hero__guessinput"
               type="text"
               placeholder="Type a movie title..."
+              onFocus={() => setTempGuess("")}
               onChange={(e) => {
                 if (e.target.value) {
                   handleStateChange(e, setTitleQuery);
@@ -57,7 +95,12 @@ function Hero() {
               {searchTitles.length
                 ? searchTitles.map((title) => {
                     return (
-                      <li key={title.id} className="hero__suggestion">
+                      <li
+                        onClick={handleListItemClick}
+                        key={title.id}
+                        name={title}
+                        className="hero__suggestion"
+                      >
                         {title.original_title}
                       </li>
                     );
