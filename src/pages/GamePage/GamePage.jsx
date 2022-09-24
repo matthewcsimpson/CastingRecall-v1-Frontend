@@ -12,17 +12,18 @@ import { useEffect, useState } from "react";
 function GamePage() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [genreData, setGenreData] = useState(null);
+  const [guesses, setGuesses] = useState([]);
 
-  const getData = () => {
-    axios
-      .get(`http://localhost:8888/puzzle/`)
+  const getData = async () => {
+    await axios
+      .get(`http://Matthews-MacBook-Pro.local:8888/puzzle/`)
       .then((res) => {
         setPuzzleData(res.data);
       })
       .catch((e) => {
         console.error(e);
       });
-    axios
+    await axios
       .get(
         `https://api.themoviedb.org/3/genre/movie/list?api_key=1d1a538338aaac91dbf1adc28d4663aa&language=en-US`
       )
@@ -36,11 +37,17 @@ function GamePage() {
 
   return (
     <>
-      <Hero />
+      <Hero guesses={guesses} setGuesses={setGuesses} />
       <div className="movie">
         {puzzleData &&
+          genreData &&
           puzzleData.puzzle.map((movie) => (
-            <Movie key={movie.id} movie={movie} genres={genreData} />
+            <Movie
+              key={movie.id}
+              movie={movie}
+              genres={genreData}
+              guesses={guesses}
+            />
           ))}
       </div>
     </>

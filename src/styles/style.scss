@@ -4,7 +4,6 @@
 
 .header {
     width: 100%;
-
     border-bottom: 1px solid black;
 
     &__wrapper {
@@ -12,6 +11,10 @@
         padding: 0 .5rem;
         display: flex;
         justify-content: space-between;
+
+        @include tablet {
+            max-width: 70rem;
+        }
     }
 
     &__heading {
@@ -37,14 +40,25 @@
         justify-content: center;
         align-items: center;
         border: 1px solid red;
+
+        @include tablet {
+            max-width: 65rem;
+
+        }
     }
 
     &__guessform {
         width: 100%;
         border: 1px solid orange;
         display: flex;
+        flex-direction: column;
         justify-content: space-evenly;
         margin: 1rem 0;
+
+        @include tablet {
+            flex-direction: row;
+            max-width: 50%;
+        }
     }
 
     &__searchbox {
@@ -55,157 +69,176 @@
     }
 
     &__guessinput {
-        width: 90%;
+        width: 95%;
+        height: 2rem;
+        font-size: 1.5rem;
+        border-radius: 1rem;
 
     }
 
     &__searchsuggestions {
         position: absolute;
+        margin-top: 1rem;
     }
 
     &__suggestion {
-        font-size: .5rem;
+        font-size: 1rem;
         text-align: left;
         padding: .5rem;
         vertical-align: middle;
         background: #FFF;
         list-style: none;
         z-index: 5;
+        border-bottom: 1px solid lightgray
     }
 
     &__guesslist {
         border: 1px solid chartreuse;
     }
 
+    &__buttonbox {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__guessbutton {
+        height: 3rem;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+        background-color: blue;
+    }
+
 }
 
 .movie {
-    width: 100vw;
-    border: 1px solid red;
+    width: 100%;
+    border: 3px solid pink;
 
     &__wrapper {
-        border: 1px soild green;
-        padding: 0 .5rem;
+        border: 1px solid green;
         display: flex;
         flex-direction: column;
+        margin: 0 auto 2rem;
+
+
+        @include tablet {
+            max-width: 70rem;
+            flex-direction: row;
+            justify-content: space-between;
+        }
     }
 
     &__details {
-        width: 100%;
-        border: 1px solid red;
         display: flex;
-        order: 1
-    }
+        font-size: .9rem;
 
-    &__poster {
-        max-width: 6rem;
-        ;
-        height: 70%;
-    }
-
-    &__castpics {
-        width: 100%;
-        border: 1px solid skyblue;
-        display: flex;
-        justify-content: space-between;
-
-    }
-
-    &__headshot {
-        width: 3.75rem;
-        border: .1875rem solid white;
-
-        &--key {
-            border: .1875rem solid blue;
-        }
-
-        &--key:last-child {
-            border: .1875rem solid white;
+        @include tablet {
+            width: 39%;
+            height: 300px;
         }
     }
 
-    &__genre__list {
+    &__info {
+        border: 1px solid grey;
+        width: auto;
+    }
+
+    &__actorname {
+        font-size: .75rem;
+        font-style: italic;
+        margin-top: 0px;
+        text-align: center;
+        align-self: middle;
+    }
+
+    &__genrelist {
         list-style: none;
+        padding: 0;
+
+
     }
 
     &__genre {
         display: inline-block;
-        padding: .5rem 1rem;
+        margin: 0;
+        padding: .25rem 1rem;
         border-radius: .625rem;
 
         &--28 {
             // Action
-            background: #FFF;
+            background: #F5B7B1;
         }
 
         &--12 {
             // Adventure 
-            background: #FFF;
+            background: #D2B4DE;
         }
 
         &--16 {
             // Animation 
-            background: #FFF;
+            background: #A9CCE3;
         }
 
         &--35 {
             // Comedy 
-            background: #FFF;
+            background: #A2D9CE;
         }
 
         &--80 {
             // Crime 
-            background: #FFF;
+            background: #ABEBC6;
         }
 
         &--99 {
             // Documentary 
-            background: #FFF;
+            background: #F9E79F;
         }
 
         &--18 {
             // Drama 
-            background: #FFF;
+            background: #F5CBA7;
         }
 
         &--10751 {
             // Family 
-            background: #FFF;
+            background: #884EA0;
         }
 
         &--14 {
             // Fantasy 
-            background: #FFF;
+            background: #2471A3;
         }
 
         &--36 {
             // History 
-            background: #FFF;
+            background: #2471A3;
         }
 
         &--27 {
             // Horror    
-            background: #FFF;
+            background: #A93226;
         }
 
         &--10402 {
             // Music    
-            background: #FFF;
+            background: #EDBB99;
         }
 
         &--9648 {
             // Mystery    
-            background: #FFF;
+            background: #A9DFBF;
         }
 
         &--10749 {
             // Romance    
-            background: #FFF;
+            background: #A3E4D7;
         }
 
         &--878 {
             // Science Fiction    
-            background: #FFF;
+            background: #AED6F1;
         }
 
         &--10770 {
@@ -215,17 +248,82 @@
 
         &--53 {
             // Thriller    
-            background: #FFF;
+            background: #FAD7A0;
         }
 
         &--10752 {
             // War    
-            background: #FFF;
+            background: #D7BDE2;
         }
 
         &--37 {
             // Western    
-            background: #FFF;
+            background: #E6B0AA;
+        }
+
+    }
+
+    &__castpics {
+        border: 1px solid black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+
+        @include tablet {
+            width: 60%;
+        }
+
+        &inner {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+        }
+
+        &--heading {
+            margin: 0;
+            align-self: flex-start;
+            margin-bottom: 1rem;
+        }
+    }
+
+    &__headshotbox {
+
+        height: 140px;
+        width: 90px;
+        border: 1px solid red;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: .5rem;
+
+        @include tablet {
+            height: 220px;
+            width: 120px;
+        }
+    }
+
+    &__headshot,
+    &__poster {
+        object-fit: cover;
+        border: .1875rem solid white;
+        height: 100px;
+
+        @include tablet {
+            height: 170px;
+        }
+
+        &--mobile {
+            height: 150px;
+
+            @include tablet {
+                height: 250px;
+            }
+
+        }
+
+        &--key {
+            border: .1875rem solid blue;
         }
 
     }

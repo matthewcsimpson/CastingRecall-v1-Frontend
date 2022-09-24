@@ -8,11 +8,10 @@ import API from "../../data/api_info.json";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-function Hero() {
+function Hero({ guesses, setGuesses }) {
   const [titleQuery, setTitleQuery] = useState([]);
   const [searchTitles, setSearchTitles] = useState([]);
   // eslint-disable-next-line no-unused-vars
-  const [guesses, setGuesses] = useState([]);
   const [tempGuess, setTempGuess] = useState(null);
 
   /**
@@ -46,6 +45,7 @@ function Hero() {
         )
         .then((res) => {
           setGuesses([...guesses, res.data.results[0]]);
+          setTitleQuery("");
         })
         .catch((err) => console.error(err));
     } else {
@@ -62,7 +62,6 @@ function Hero() {
         .get(`${API.api_search_url}&api_key=${API.api_key}&query=${titleQuery}`)
         .then((res) => {
           setSearchTitles(res.data.results);
-          // console.log(res.data.results.length);
         })
         .catch((err) => console.error(err));
     }
