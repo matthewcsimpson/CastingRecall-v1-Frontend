@@ -14,15 +14,10 @@ function GamePage() {
   const [genreData, setGenreData] = useState(null);
   const [guesses, setGuesses] = useState([]);
 
-  const getData = async () => {
-    await axios
-      .get(`http://Matthews-MacBook-Pro.local:8888/puzzle/`)
-      .then((res) => {
-        setPuzzleData(res.data);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+  /**
+   * Function to retrieve genre information from TMDB
+   */
+  const getGenres = async () => {
     await axios
       .get(
         `https://api.themoviedb.org/3/genre/movie/list?api_key=1d1a538338aaac91dbf1adc28d4663aa&language=en-US`
@@ -31,8 +26,32 @@ function GamePage() {
       .catch((e) => console.log(e));
   };
 
+  /**
+   * useEffect to load genre details from TMDB.
+   */
   useEffect(() => {
-    getData();
+    getGenres();
+  }, []);
+
+  /**
+   * Function to retrieve the the most recently generated puzzle.
+   */
+  const getLatestPuzzle = async () => {
+    await axios
+      .get(`http://Matthews-MacBook-Pro.local:8888/puzzle/`)
+      .then((res) => {
+        setPuzzleData(res.data);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  /**
+   * useEffect to load the latest puzzle.
+   */
+  useEffect(() => {
+    getLatestPuzzle();
   }, []);
 
   return (

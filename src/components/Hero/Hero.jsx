@@ -11,8 +11,8 @@ import axios from "axios";
 function Hero({ guesses, setGuesses }) {
   const [titleQuery, setTitleQuery] = useState([]);
   const [searchTitles, setSearchTitles] = useState([]);
-  // eslint-disable-next-line no-unused-vars
   const [tempGuess, setTempGuess] = useState(null);
+  const [guessId, setGuessId] = useState(null);
 
   /**
    * Handle the incoming input and use the specified callback function
@@ -28,6 +28,8 @@ function Hero({ guesses, setGuesses }) {
    * @param {event} e
    */
   const handleListItemClick = (e) => {
+    e.preventDefault();
+    setGuessId(e.target.id);
     setTempGuess(e.target.innerHTML);
     setSearchTitles([]);
   };
@@ -40,11 +42,9 @@ function Hero({ guesses, setGuesses }) {
     e.preventDefault();
     if (titleQuery.length !== 0) {
       axios
-        .get(
-          `${API.api_search_url}&api_key=${API.api_key}&query=${e.target.search_term.value}`
-        )
+        .get(`${API.api_movie_search_url}${guessId}?api_key=${API.api_key}`)
         .then((res) => {
-          setGuesses([...guesses, res.data.results[0]]);
+          setGuesses([...guesses, res.data]);
           setTitleQuery("");
         })
         .catch((err) => console.error(err));
@@ -95,6 +95,7 @@ function Hero({ guesses, setGuesses }) {
                 ? searchTitles.map((title) => {
                     return (
                       <li
+                        id={title.id}
                         onClick={handleListItemClick}
                         key={title.id}
                         name={title}

@@ -4,6 +4,13 @@ import "./Movie.scss";
 // Libraries
 import { useEffect, useState } from "react";
 
+// Utility Functions
+import {
+  formatDate,
+  formatGenre,
+  obscureString,
+} from "../../utilities/utilities";
+
 // variables
 const IMG_BASE = "https://image.tmdb.org/t/p/w500/";
 
@@ -16,30 +23,6 @@ const dateOptions = {
 function Movie({ movie, genres, guesses }) {
   // eslint-disable-next-line no-unused-vars
   const [movieGuessed, setMovieGuessed] = useState(false);
-
-  /**
-   * Function to return a formatted date from a timestamp string,
-   * based on dateOptions previously specified.
-   *
-   * @param {string} timestamp;
-   * @param {Object} dateOptions;
-   */
-  const formatDate = (timestamp, options) => {
-    let date = new Date(timestamp);
-    return date.toLocaleDateString("en-us", options);
-  };
-
-  /**
-   * Return the genre name based on the genre ID# provide by TMDB.
-   * @param {number} id
-   * @returns
-   */
-  const formatGenre = (id) => {
-    let genreName = genres.find((genre) => {
-      return genre.id === id ? genre.name : null;
-    });
-    return genreName.name;
-  };
 
   useEffect(() => {
     setMovieGuessed(
@@ -64,7 +47,7 @@ function Movie({ movie, genres, guesses }) {
           <div className="movie__info">
             <p className="movie__text">
               <span className="movie__text movie__text--title">Title: </span>
-              {movieGuessed ? movie.title : null}
+              {movieGuessed ? movie.title : obscureString(movie.title)}
             </p>
             <p className="movie__text">
               <span className="movie__text movie__text--title">
@@ -81,7 +64,7 @@ function Movie({ movie, genres, guesses }) {
               {movie.genre_ids.map((id) => {
                 return (
                   <li key={id} className={`movie__genre movie__genre--${id}`}>
-                    {formatGenre(id)}
+                    {formatGenre(id, genres)}
                   </li>
                 );
               })}

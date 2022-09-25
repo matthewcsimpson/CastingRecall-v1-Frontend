@@ -10,7 +10,9 @@
         margin: 0 auto;
         padding: 0 .5rem;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 2rem;
 
         @include tablet {
             max-width: 70rem;
