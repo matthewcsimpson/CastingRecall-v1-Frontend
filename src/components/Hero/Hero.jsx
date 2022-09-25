@@ -8,7 +8,15 @@ import API from "../../data/api_info.json";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-function Hero({ guesses, setGuesses }) {
+// Utilities
+import { formatDate } from "../../utilities/utilities";
+
+// Variables
+const dateOptions = {
+  year: "numeric",
+};
+
+function Hero({ puzzle, guesses, setGuesses }) {
   const [titleQuery, setTitleQuery] = useState([]);
   const [searchTitles, setSearchTitles] = useState([]);
   const [tempGuess, setTempGuess] = useState(null);
@@ -53,6 +61,10 @@ function Hero({ guesses, setGuesses }) {
     }
   };
 
+  const isGuessCorrect = (guessid, puzzle) => {
+    return puzzle.find((p) => p.id === guessid);
+  };
+
   /**
    * useEffect to load auto-complete options as you type in the inpur field.
    */
@@ -70,54 +82,59 @@ function Hero({ guesses, setGuesses }) {
   return (
     <div className="hero">
       <div className="hero__wrapper">
-        <div className="hero__guesses">
-          <div className="hero__moviecard"></div>
-        </div>
-        <form className="hero__guessform" onSubmit={handleSubmit}>
-          <div className="hero__searchbox">
-            <input
-              name="search_term"
-              value={tempGuess ? tempGuess : undefined}
-              className="hero__guessinput"
-              type="text"
-              placeholder="Type a movie title..."
-              onFocus={() => setTempGuess("")}
-              onChange={(e) => {
-                if (e.target.value) {
-                  handleStateChange(e, setTitleQuery);
-                } else {
-                  setSearchTitles([]);
-                }
-              }}
-            />
-            <ul className="hero__searchsuggestions">
-              {searchTitles.length
-                ? searchTitles.map((title) => {
-                    return (
-                      <li
-                        id={title.id}
-                        onClick={handleListItemClick}
-                        key={title.id}
-                        name={title}
-                        className="hero__suggestion"
-                      >
-                        {title.original_title}
-                      </li>
-                    );
-                  })
-                : null}
-            </ul>
-          </div>
-          <div className="hero__buttonbox">
-            <button className="hero__guessbutton">Guess!</button>
-          </div>
+        <form
+          className="hero__guessform"
+          autoComplete="off"
+          onSubmit={handleSubmit}
+        >
+          <input
+            name="search_term"
+            value={tempGuess ? tempGuess : undefined}
+            className="hero__guessinput"
+            type="text"
+            placeholder="Type a movie title..."
+            onFocus={() => setTempGuess("")}
+            onChange={(e) => {
+              if (e.target.value) {
+                handleStateChange(e, setTitleQuery);
+              } else {
+                setSearchTitles([]);
+              }
+            }}
+          />
+          <ul className="hero__searchsuggestions">
+            {searchTitles.length
+              ? searchTitles.map((title) => {
+                  return (
+                    <li
+                      id={title.id}
+                      onClick={handleListItemClick}
+                      key={title.id}
+                      name={title}
+                      className="hero__suggestion"
+                    >
+                      {title.original_title} (
+                      {formatDate(title.release_date, dateOptions)})
+                    </li>
+                  );
+                })
+              : null}
+          </ul>
+          <button className="hero__guessbutton">Guess!</button>
         </form>
         <div className="hero__guesslist">
           <ul>
             {guesses
               ? guesses.map((guess) => {
                   return (
-                    <li key={guess.id} className="hero__guess">
+                    <li
+                      key={guess.id}
+                      className={
+                        isGuessCorrect(guess.id, puzzle)
+                          ? `hero__guess hero__guess--correct`
+                          : `hero__guess hero__guess--incorrect`
+                      }
+                    >
                       {guess.original_title}
                     </li>
                   );

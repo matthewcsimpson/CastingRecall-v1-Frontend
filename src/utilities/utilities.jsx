@@ -27,7 +27,7 @@ const formatGenre = (id, genres) => {
  */
 const obscureString = (string) => {
   const regex = /([A-Za-z0-9])/gi;
-  return string.replace(regex, "#");
+  return string.replace(regex, "*");
 };
 
 export { formatDate, formatGenre, obscureString };

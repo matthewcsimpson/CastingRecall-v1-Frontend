@@ -56,7 +56,13 @@ function GamePage() {
 
   return (
     <>
-      <Hero guesses={guesses} setGuesses={setGuesses} />
+      {puzzleData && (
+        <Hero
+          puzzle={puzzleData.puzzle}
+          guesses={guesses}
+          setGuesses={setGuesses}
+        />
+      )}
       <div className="movie">
         {puzzleData &&
           genreData &&
