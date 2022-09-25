@@ -44,17 +44,29 @@ function Movie({ movie, genres, guesses }) {
             />
             <div className="movie__detailsbox">
               <div className="movie__info">
-                <p className="movie__text movie__text--title">Title:</p>
-                <p className="movie__text movie__text--item">
-                  {movieGuessed ? movie.title : obscureString(movie.title)}
-                </p>
-                <p className="movie__text movie__text--title">Year: </p>
                 <p className="movie__text movie__text--title">
-                  {movieGuessed
-                    ? formatDate(movie.release_date, dateOptions)
-                    : obscureString(
-                        formatDate(movie.release_date, dateOptions)
-                      )}
+                  Title:{" "}
+                  <span className="movie__text movie__text--item">
+                    {movieGuessed ? movie.title : obscureString(movie.title)}
+                  </span>
+                </p>
+                <p className="movie__text movie__text--title">
+                  Year:{" "}
+                  <span className="movie__text movie__text--item">
+                    {movieGuessed
+                      ? formatDate(movie.release_date, dateOptions)
+                      : obscureString(
+                          formatDate(movie.release_date, dateOptions)
+                        )}
+                  </span>
+                </p>
+                <p className="movie__text movie__text--title">
+                  Synopsis:{" "}
+                  <span className="movie__text movie__text--item">
+                    {movieGuessed
+                      ? movie.overview
+                      : obscureString(movie.overview)}
+                  </span>
                 </p>
               </div>
               <div className="movie__genres">
@@ -90,6 +102,9 @@ function Movie({ movie, genres, guesses }) {
               </div>
             ))}
           </div>
+        </div>
+        <div className="movie__hintswrapper">
+          <p className="movie__text">Hints:</p>
         </div>
       </div>
     </>

@@ -209,12 +209,13 @@ body {
         background-color: #151515;
         display: flex;
         flex-direction: column;
+        flex-wrap: wrap;
         margin: 0 auto;
         padding: 0 .5rem;
         border-bottom: 1px solid #f1f1f1;
 
         @include tablet {
-            min-height: 22rem;
+            min-height: 25rem;
             max-width: 70rem;
             flex-direction: row;
             justify-content: space-between;
@@ -267,7 +268,6 @@ body {
         @include tablet {
             width: 100%;
         }
-
     }
 
     &__genres {
@@ -284,6 +284,14 @@ body {
         color: white;
         margin: 0;
         padding: 0 0 .25rem 0;
+
+        &--title {
+            font-weight: 600;
+        }
+
+        &--item {
+            font-size: 75%;
+        }
     }
 
     &__actorname {
@@ -437,8 +445,18 @@ body {
         }
     }
 
-    &__headshot,
     &__poster {
+        object-fit: cover;
+        border: .1875rem solid #f1f1f1;
+        height: 100px;
+
+        @include tablet {
+            height: 125px;
+        }
+
+    }
+
+    &__headshot {
         object-fit: cover;
         border: .1875rem solid #f1f1f1;
         height: 100px;
@@ -460,4 +478,6 @@ body {
         }
 
     }
+
+    &__hints {}
 }

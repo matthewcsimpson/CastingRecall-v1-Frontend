@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Casting Recall",
+  "name": "Casting Recall - A Movie Guessing Game",
 
   "start_url": ".",
   "display": "standalone",
