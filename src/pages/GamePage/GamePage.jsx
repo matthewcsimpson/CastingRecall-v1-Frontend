@@ -1,6 +1,9 @@
 // Styles
 import "./GamePage.scss";
 
+// Assets
+import loading from "../../assets/loading-25.gif";
+
 // Components
 import Hero from "../../components/Hero/Hero";
 import Movie from "../../components/Movie/Movie";
@@ -56,16 +59,15 @@ function GamePage() {
 
   return (
     <>
-      {puzzleData && (
+      {puzzleData ? (
         <Hero
           puzzle={puzzleData.puzzle}
           guesses={guesses}
           setGuesses={setGuesses}
         />
-      )}
+      ) : null}
       <div className="movie">
-        {puzzleData &&
-          genreData &&
+        {puzzleData && genreData ? (
           puzzleData.puzzle.map((movie) => (
             <Movie
               key={movie.id}
@@ -73,7 +75,12 @@ function GamePage() {
               genres={genreData}
               guesses={guesses}
             />
-          ))}
+          ))
+        ) : (
+          <div className="loading--box">
+            <img className="loading--gif" src={loading} alt="loading" />
+          </div>
+        )}
       </div>
     </>
   );

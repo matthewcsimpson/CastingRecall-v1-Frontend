@@ -87,39 +87,41 @@ function Hero({ puzzle, guesses, setGuesses }) {
           autoComplete="off"
           onSubmit={handleSubmit}
         >
-          <input
-            name="search_term"
-            value={tempGuess ? tempGuess : undefined}
-            className="hero__guessinput"
-            type="text"
-            placeholder="Type a movie title..."
-            onFocus={() => setTempGuess("")}
-            onChange={(e) => {
-              if (e.target.value) {
-                handleStateChange(e, setTitleQuery);
-              } else {
-                setSearchTitles([]);
-              }
-            }}
-          />
-          <ul className="hero__searchsuggestions">
-            {searchTitles.length
-              ? searchTitles.map((title) => {
-                  return (
-                    <li
-                      id={title.id}
-                      onClick={handleListItemClick}
-                      key={title.id}
-                      name={title}
-                      className="hero__suggestion"
-                    >
-                      {title.original_title} (
-                      {formatDate(title.release_date, dateOptions)})
-                    </li>
-                  );
-                })
-              : null}
-          </ul>
+          <div className='hero__suggestionpositioning'>
+            <input
+              name="search_term"
+              value={tempGuess ? tempGuess : undefined}
+              className="hero__guessinput"
+              type="text"
+              placeholder="Type a movie title..."
+              onFocus={() => setTempGuess("")}
+              onChange={(e) => {
+                if (e.target.value) {
+                  handleStateChange(e, setTitleQuery);
+                } else {
+                  setSearchTitles([]);
+                }
+              }}
+            />
+            <ul className="hero__searchsuggestions">
+              {searchTitles.length
+                ? searchTitles.map((title) => {
+                    return (
+                      <li
+                        id={title.id}
+                        onClick={handleListItemClick}
+                        key={title.id}
+                        name={title}
+                        className="hero__suggestion"
+                      >
+                        {title.original_title} (
+                        {formatDate(title.release_date, dateOptions)})
+                      </li>
+                    );
+                  })
+                : null}
+            </ul>
+          </div>
           <button className="hero__guessbutton">Guess!</button>
         </form>
         <div className="hero__guesslist">

@@ -17,8 +17,6 @@ import {
 // variables
 const IMG_BASE = "https://image.tmdb.org/t/p/w500/";
 const dateOptions = {
-  day: "2-digit",
-  month: "short",
   year: "numeric",
 };
 
@@ -44,27 +42,36 @@ function Movie({ movie, genres, guesses }) {
               className="movie__poster movie__poster--mobile"
               src={movieGuessed ? `${IMG_BASE}${movie.poster_path}` : qm}
             />
-            <div className="movie__info">
-              <p className="movie__text movie__text--title">Title:</p>
-              <p className="movie__text movie__text--item">
-                {movieGuessed ? movie.title : obscureString(movie.title)}
-              </p>
-              <p className="movie__text movie__text--title">Release Date: </p>
-              <p className="movie__text movie__text--title">
-                {movieGuessed
-                  ? formatDate(movie.release_date, dateOptions)
-                  : obscureString(formatDate(movie.release_date, dateOptions))}
-              </p>
-              <p className="movie__text movie__text--title">Genre(s):</p>
-              <ul className="movie__genrelist">
-                {movie.genre_ids.map((id) => {
-                  return (
-                    <li key={id} className={`movie__genre movie__genre--${id}`}>
-                      {formatGenre(id, genres)}
-                    </li>
-                  );
-                })}
-              </ul>
+            <div className="movie__detailsbox">
+              <div className="movie__info">
+                <p className="movie__text movie__text--title">Title:</p>
+                <p className="movie__text movie__text--item">
+                  {movieGuessed ? movie.title : obscureString(movie.title)}
+                </p>
+                <p className="movie__text movie__text--title">Year: </p>
+                <p className="movie__text movie__text--title">
+                  {movieGuessed
+                    ? formatDate(movie.release_date, dateOptions)
+                    : obscureString(
+                        formatDate(movie.release_date, dateOptions)
+                      )}
+                </p>
+              </div>
+              <div className="movie__genres">
+                <p className="movie__text movie__text--title">Genre(s):</p>
+                <ul className="movie__genrelist">
+                  {movie.genre_ids.map((id) => {
+                    return (
+                      <li
+                        key={id}
+                        className={`movie__genre movie__genre--${id}`}
+                      >
+                        {formatGenre(id, genres)}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
