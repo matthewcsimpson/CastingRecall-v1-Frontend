@@ -30,4 +30,13 @@ const obscureString = (string) => {
   return string.replace(regex, "*");
 };
 
-export { formatDate, formatGenre, obscureString };
+/**
+ * Shortens a string to 200 chars with ellipses on the end.
+ * @param {string} string
+ * @returns
+ */
+const shortenString = (string) => {
+  return string.substring(0, 197) + "...";
+};
+
+export { formatDate, formatGenre, obscureString, shortenString };

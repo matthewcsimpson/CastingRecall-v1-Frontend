@@ -224,13 +224,17 @@ body {
         &:first-child {
             border-top: 1px solid #f1f1f1
         }
+
+        &--guessed,
+        &--guessed:first-child {
+            border: 10px solid green;
+        }
     }
 
     &__heading {
-        margin: 0 1rem;
+        margin: 1rem 1rem 0rem;
         color: #f1f1f1;
         align-self: flex-start;
-        margin: 1rem;
     }
 
     &__details {
@@ -253,7 +257,7 @@ body {
 
     &__detailsbox {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         width: 100%;
 
         @include tablet {
@@ -262,8 +266,8 @@ body {
     }
 
     &__info {
-        width: 49%;
-        padding-left: 1rem;
+        width: 90%;
+        padding: 0 1rem 0;
 
         @include tablet {
             width: 100%;
@@ -271,7 +275,7 @@ body {
     }
 
     &__genres {
-        width: 50%;
+        width: 90%;
 
         @include tablet {
             width: 100%;
@@ -297,9 +301,17 @@ body {
     &__actorname {
         font-size: .75rem;
         font-style: italic;
-        margin-top: 0px;
+        margin: 0 0 .25rem 0;
         text-align: center;
         align-self: middle;
+
+        &--as {
+            margin: 0;
+        }
+
+        &--char {
+            color: red;
+        }
     }
 
     &__genrelist {
@@ -431,7 +443,7 @@ body {
     }
 
     &__headshotbox {
-        height: 140px;
+        height: 190px;
         width: 90px;
         display: flex;
         flex-direction: column;
@@ -440,7 +452,7 @@ body {
         background-color: #f1f1f1;
 
         @include tablet {
-            height: 220px;
+            height: 250px;
             width: 120px;
         }
     }
@@ -479,5 +491,9 @@ body {
 
     }
 
-    &__hints {}
+    &__hintswrapper {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 1rem 1rem 1rem;
+    }
 }

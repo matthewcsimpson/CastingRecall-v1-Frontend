@@ -12,6 +12,7 @@ import {
   formatDate,
   formatGenre,
   obscureString,
+  shortenString,
 } from "../../utilities/utilities";
 
 // variables
@@ -21,8 +22,21 @@ const dateOptions = {
 };
 
 function Movie({ movie, genres, guesses }) {
-  // eslint-disable-next-line no-unused-vars
   const [movieGuessed, setMovieGuessed] = useState(false);
+  const [revealYear, setRevealYear] = useState(false);
+  const [revealSynopsis, setRevealSynopsis] = useState(false);
+  const [revealCharNames, setRevealCharNames] = useState(false);
+
+  const handleHintClick = (e, setFunc) => {
+    e.preventDefault();
+    setFunc((prev) => {
+      if (prev === false) {
+        return !prev;
+      } else {
+        return prev;
+      }
+    });
+  };
 
   useEffect(() => {
     setMovieGuessed(
@@ -33,7 +47,13 @@ function Movie({ movie, genres, guesses }) {
 
   return (
     <>
-      <div className="movie__wrapper">
+      <div
+        className={
+          movieGuessed
+            ? "movie__wrapper movie__wrapper--guessed"
+            : "movie__wrapper"
+        }
+      >
         <div className="movie__details">
           <h2 className="movie__heading">Movie Details</h2>
           <div className="movie__details--inner">
@@ -53,7 +73,7 @@ function Movie({ movie, genres, guesses }) {
                 <p className="movie__text movie__text--title">
                   Year:{" "}
                   <span className="movie__text movie__text--item">
-                    {movieGuessed
+                    {movieGuessed || revealYear
                       ? formatDate(movie.release_date, dateOptions)
                       : obscureString(
                           formatDate(movie.release_date, dateOptions)
@@ -63,9 +83,9 @@ function Movie({ movie, genres, guesses }) {
                 <p className="movie__text movie__text--title">
                   Synopsis:{" "}
                   <span className="movie__text movie__text--item">
-                    {movieGuessed
-                      ? movie.overview
-                      : obscureString(movie.overview)}
+                    {movieGuessed || revealSynopsis
+                      ? shortenString(movie.overview)
+                      : shortenString(obscureString(movie.overview))}
                   </span>
                 </p>
               </div>
@@ -99,12 +119,41 @@ function Movie({ movie, genres, guesses }) {
                   alt={actor.name}
                 />
                 <p className="movie__actorname">{`${actor.name}`}</p>
+                <p className="movie__actorname movie__actorname--as">as</p>
+                {
+                  <p className="movie__actorname movie__actorname--char">
+                    {movieGuessed || revealCharNames
+                      ? actor.character
+                      : obscureString(actor.character)}
+                  </p>
+                }
               </div>
             ))}
           </div>
         </div>
         <div className="movie__hintswrapper">
-          <p className="movie__text">Hints:</p>
+          <p className="movie__text movie__text--item">
+            Pssst.... Need a hint?? <br />
+            <button
+              className="movie__hintbutton"
+              onClick={(e) => handleHintClick(e, setRevealYear)}
+            >
+              Reveal Year
+            </button>
+            <button
+              className="movie__hintbutton"
+              onClick={(e) => handleHintClick(e, setRevealSynopsis)}
+            >
+              Reveal Synopsis
+            </button>
+            <button
+              className="movie__hintbutton"
+              onClick={(e) => handleHintClick(e, setRevealCharNames)}
+            >
+              Reveal Character Names
+            </button>
+            {/* <button className="movie__hintbutton">Reveal Key Person</button> */}
+          </p>
         </div>
       </div>
     </>

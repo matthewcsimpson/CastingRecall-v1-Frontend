@@ -87,7 +87,7 @@ function Hero({ puzzle, guesses, setGuesses }) {
           autoComplete="off"
           onSubmit={handleSubmit}
         >
-          <div className='hero__suggestionpositioning'>
+          <div className="hero__suggestionpositioning">
             <input
               name="search_term"
               value={tempGuess ? tempGuess : undefined}
