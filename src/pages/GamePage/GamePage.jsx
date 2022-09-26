@@ -6,7 +6,7 @@ import API from "../../data/api_info.json";
 
 // Components
 import SiteNav from "../../components/SiteNav/SiteNav";
-import Hero from "../../components/Hero/Hero";
+import GuessForm from "../../components/Hero/GuessForm";
 import Movie from "../../components/Movie/Movie";
 import LoadingScreen from "../../components/LoadingScreen/LoadingScreen";
 
@@ -89,7 +89,7 @@ function GamePage() {
   };
 
   /**
-   * useEffect to load genre details from TMDB.
+   * useEffect to load the list of puzzles & genre details from TMDB.
    */
   useEffect(() => {
     getPuzzleList();
@@ -102,6 +102,11 @@ function GamePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * Load the puzzle details.
+   * If there is a puzzle id, load that puzzle.
+   * If there is no puzzle id, load the latest puzzle.
+   */
   useEffect(() => {
     if (puzzleId) {
       getSpecificPuzzle(puzzleId);
@@ -117,15 +122,11 @@ function GamePage() {
     getLocalGuesses(puzzleData);
   }, [puzzleData]);
 
-  useEffect(() => {
-    // console.log(correctGuesses);
-  }, [correctGuesses]);
-
   return (
     <>
       <SiteNav puzzleId={puzzleId} puzzleList={puzzleList} />
       {puzzleData ? (
-        <Hero
+        <GuessForm
           puzzle={puzzleData.puzzle}
           guesses={guesses}
           setGuesses={handleGuesses}

@@ -1,5 +1,5 @@
 // Styles
-import "./Hero.scss";
+import "./GuessForm.scss";
 
 // Components & Data
 import API from "../../data/api_info.json";
@@ -16,7 +16,7 @@ const dateOptions = {
   year: "numeric",
 };
 
-function Hero({ puzzle, guesses, setGuesses, correctGuesses }) {
+function GuessForm({ puzzle, guesses, setGuesses, correctGuesses }) {
   const [titleQuery, setTitleQuery] = useState([]);
   const [searchTitles, setSearchTitles] = useState([]);
   const [tempGuess, setTempGuess] = useState(null);
@@ -146,4 +146,4 @@ function Hero({ puzzle, guesses, setGuesses, correctGuesses }) {
   );
 }
 
-export default Hero;
+export default GuessForm;
