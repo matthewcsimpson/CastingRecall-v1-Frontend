@@ -11,12 +11,14 @@ import Movie from "../../components/Movie/Movie";
 // Libraries
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 function GamePage() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [genreData, setGenreData] = useState(null);
   const [guesses, setGuesses] = useState([]);
   const [correctGuesses, setCorrectGuesses] = useState([]);
+  const { puzzleId } = useParams();
 
   /**
    * Handle incoming guesses and write them to local storage.
