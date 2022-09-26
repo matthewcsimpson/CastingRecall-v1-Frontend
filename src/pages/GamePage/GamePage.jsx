@@ -26,7 +26,7 @@ function GamePage() {
   const getPuzzleList = async () => {
     await axios
       .get(`${API.api_local_url}/puzzle/list`)
-      .then((res) => setPuzzleList(res.data))
+      .then((res) => setPuzzleList([res.data].flat()))
       .catch((e) => console.error(e));
   };
 
@@ -101,6 +101,14 @@ function GamePage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (puzzleId) {
+      getSpecificPuzzle(puzzleId);
+    } else {
+      getLatestPuzzle();
+    }
+  }, [puzzleId]);
 
   /**
    * useEffect to load guesses from localStorage

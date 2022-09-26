@@ -111,7 +111,8 @@ body {
         font-size: .75rem;
         border-left: 1px solid #f1f1f1;
         border-right: 1px solid #f1f1f1;
-        padding: 0 .25rem;
+        padding: 0 .25rem 1rem;
+
         margin: 0;
         text-align: center;
 
@@ -129,6 +130,26 @@ body {
             @include tablet {
                 display: contents;
             }
+        }
+
+        &--hideifnull {
+            visibility: hidden;
+        }
+
+        &--link {
+            text-decoration: none;
+            color: #f1f1f1;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        &--inactivelink {
+            text-decoration: none;
+            color: rgb(100, 100, 100);
+            pointer-events: none;
+            cursor: default;
         }
 
         @include tablet {

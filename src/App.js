@@ -20,8 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<GamePage />} />
           <Route path="/puzzle/:puzzleId" element={<GamePage />} />
-          {/* <Route path="/list" element={<ListPage />} />
-          <Route path="*" element={<GamePage />} /> */}
+          <Route path="*" element={<GamePage />} />
         </Routes>
       </BrowserRouter>
       <SiteFooter />
