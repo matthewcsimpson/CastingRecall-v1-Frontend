@@ -9,14 +9,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 // Utilities
-import { formatDate } from "../../utilities/utilities";
+import { formatDate, isGuessCorrect } from "../../utilities/utilities";
 
 // Variables
 const dateOptions = {
   year: "numeric",
 };
 
-function Hero({ puzzle, guesses, setGuesses }) {
+function Hero({ puzzle, guesses, setGuesses, correctGuesses }) {
   const [titleQuery, setTitleQuery] = useState([]);
   const [searchTitles, setSearchTitles] = useState([]);
   const [tempGuess, setTempGuess] = useState(null);
@@ -61,10 +61,6 @@ function Hero({ puzzle, guesses, setGuesses }) {
     }
   };
 
-  const isGuessCorrect = (guessid, puzzle) => {
-    return puzzle.find((p) => p.id === guessid);
-  };
-
   /**
    * useEffect to load auto-complete options as you type in the inpur field.
    */
@@ -82,6 +78,7 @@ function Hero({ puzzle, guesses, setGuesses }) {
   return (
     <div className="hero">
       <div className="hero__wrapper">
+        <p className="hero__text">Correct: {correctGuesses.length} / 6</p>
         <form
           className="hero__guessform"
           autoComplete="off"
@@ -127,7 +124,7 @@ function Hero({ puzzle, guesses, setGuesses }) {
         <div className="hero__guesslist">
           <ul>
             {guesses
-              ? guesses.map((guess) => {
+              ? guesses.map((guess, i) => {
                   return (
                     <li
                       key={guess.id}
@@ -137,7 +134,7 @@ function Hero({ puzzle, guesses, setGuesses }) {
                           : `hero__guess hero__guess--incorrect`
                       }
                     >
-                      {guess.original_title}
+                      Guess #{i + 1}: {guess.original_title}
                     </li>
                   );
                 })

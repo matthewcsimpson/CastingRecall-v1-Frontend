@@ -16,6 +16,21 @@ function GamePage() {
   const [puzzleData, setPuzzleData] = useState(null);
   const [genreData, setGenreData] = useState(null);
   const [guesses, setGuesses] = useState([]);
+  const [correctGuesses, setCorrectGuesses] = useState([]);
+
+  /**
+   * Handle incoming guesses and write them to local storage.
+   * @param {*} guesses
+   */
+  const handleGuesses = (guesses) => {
+    setGuesses(guesses);
+    const pId = puzzleData.puzzleId;
+    const puzzle = {
+      id: pId,
+      guesses: guesses,
+    };
+    localStorage.setItem("castingrecall", JSON.stringify(puzzle));
+  };
 
   /**
    * Function to retrieve genre information from TMDB
@@ -28,13 +43,6 @@ function GamePage() {
       .then((res) => setGenreData(res.data.genres))
       .catch((e) => console.log(e));
   };
-
-  /**
-   * useEffect to load genre details from TMDB.
-   */
-  useEffect(() => {
-    getGenres();
-  }, []);
 
   /**
    * Function to retrieve the the most recently generated puzzle.
@@ -51,11 +59,37 @@ function GamePage() {
   };
 
   /**
-   * useEffect to load the latest puzzle.
+   * Retrieve guess data stored in localStorage, if any
+   * @param {object} puzzleData
+   */
+  const getLocalGuesses = async (puzzleData) => {
+    const localGuesses = JSON.parse(localStorage.getItem("castingrecall"));
+    if (localGuesses && puzzleData) {
+      if (puzzleData.puzzleId === localGuesses.id) {
+        setGuesses(localGuesses.guesses);
+      }
+    }
+  };
+
+  /**
+   * useEffect to load genre details from TMDB.
    */
   useEffect(() => {
+    getGenres();
     getLatestPuzzle();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /**
+   * useEffect to load guesses from localStorage
+   */
+  useEffect(() => {
+    getLocalGuesses(puzzleData);
+  }, [puzzleData]);
+
+  useEffect(() => {
+    console.log(correctGuesses);
+  }, [correctGuesses]);
 
   return (
     <>
@@ -63,7 +97,8 @@ function GamePage() {
         <Hero
           puzzle={puzzleData.puzzle}
           guesses={guesses}
-          setGuesses={setGuesses}
+          setGuesses={handleGuesses}
+          correctGuesses={correctGuesses}
         />
       ) : null}
       <div className="movie">
@@ -74,6 +109,8 @@ function GamePage() {
               movie={movie}
               genres={genreData}
               guesses={guesses}
+              correctGuesses={correctGuesses}
+              setCorrectGuesses={setCorrectGuesses}
             />
           ))
         ) : (

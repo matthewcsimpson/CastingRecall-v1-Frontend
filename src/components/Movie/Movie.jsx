@@ -21,7 +21,7 @@ const dateOptions = {
   year: "numeric",
 };
 
-function Movie({ movie, genres, guesses }) {
+function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
   const [movieGuessed, setMovieGuessed] = useState(false);
   const [revealYear, setRevealYear] = useState(false);
   const [revealSynopsis, setRevealSynopsis] = useState(false);
@@ -38,6 +38,15 @@ function Movie({ movie, genres, guesses }) {
     });
   };
 
+  const handleSetCorrectGuesses = (m) => {
+    if (!correctGuesses.find((c) => (c.id === m.id ? true : false))) {
+      setCorrectGuesses([...correctGuesses, m]);
+    }
+  };
+
+  /**
+   * Toggle this movie as guessed when it is guessed
+   */
   useEffect(() => {
     setMovieGuessed(
       guesses.find((guess) => (guess.id === movie.id ? true : false))
@@ -45,6 +54,19 @@ function Movie({ movie, genres, guesses }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses]);
 
+  useEffect(() => {
+    if (movieGuessed) {
+      handleSetCorrectGuesses(movie);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [movieGuessed]);
+
+  useEffect(() => {
+    if (movieGuessed) {
+      handleSetCorrectGuesses(movie);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <>
       <div

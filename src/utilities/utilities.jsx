@@ -39,4 +39,20 @@ const shortenString = (string) => {
   return string.substring(0, 197) + "...";
 };
 
-export { formatDate, formatGenre, obscureString, shortenString };
+/**
+ * Evaluate if a guess is correct.
+ * @param {number} guessid
+ * @param {object} puzzle
+ * @returns
+ */
+const isGuessCorrect = (guessid, puzzle) => {
+  return puzzle.find((p) => p.id === guessid);
+};
+
+export {
+  formatDate,
+  formatGenre,
+  obscureString,
+  shortenString,
+  isGuessCorrect,
+};

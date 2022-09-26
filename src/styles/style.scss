@@ -199,6 +199,14 @@ body {
         }
     }
 
+    &__text {
+        color: white;
+        margin: 0;
+        padding: 0 0 .25rem 0;
+        text-align: center;
+
+    }
+
 }
 
 .movie {
@@ -452,7 +460,7 @@ body {
         background-color: #f1f1f1;
 
         @include tablet {
-            height: 250px;
+            height: 260px;
             width: 120px;
         }
     }

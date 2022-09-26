@@ -7,16 +7,21 @@ import SiteFooter from "./components/SiteFooter/SiteFooter";
 
 // Pages
 import GamePage from "./pages/GamePage/GamePage";
+// import ListPage from "./pages/ListPage/ListPage";
+
+// Libraries
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <>
       <Header />
-
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<GamePage />} />
+          {/* <Route path="/puzzle/:puzzleid" element={<GamePage />} />
+          <Route path="/list" element={<ListPage />} />
+          <Route path="*" element={<GamePage />} /> */}
         </Routes>
       </BrowserRouter>
       <SiteFooter />
