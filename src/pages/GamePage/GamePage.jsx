@@ -1,12 +1,14 @@
 // Styles
 import "./GamePage.scss";
 
-// Assets
-import loading from "../../assets/loading-25.gif";
+// Data
+import API from "../../data/api_info.json";
 
 // Components
+import SiteNav from "../../components/SiteNav/SiteNav";
 import Hero from "../../components/Hero/Hero";
 import Movie from "../../components/Movie/Movie";
+import LoadingScreen from "../../components/LoadingScreen/LoadingScreen";
 
 // Libraries
 import axios from "axios";
@@ -18,7 +20,15 @@ function GamePage() {
   const [genreData, setGenreData] = useState(null);
   const [guesses, setGuesses] = useState([]);
   const [correctGuesses, setCorrectGuesses] = useState([]);
+  const [puzzleList, setPuzzleList] = useState(null);
   const { puzzleId } = useParams();
+
+  const getPuzzleList = async () => {
+    await axios
+      .get(`${API.api_local_url}/puzzle/list`)
+      .then((res) => setPuzzleList(res.data))
+      .catch((e) => console.error(e));
+  };
 
   /**
    * Handle incoming guesses and write them to local storage.
@@ -39,11 +49,9 @@ function GamePage() {
    */
   const getGenres = async () => {
     await axios
-      .get(
-        `https://api.themoviedb.org/3/genre/movie/list?api_key=1d1a538338aaac91dbf1adc28d4663aa&language=en-US`
-      )
+      .get(`${API.api_genre_details}?api_key=${API.api_key}&language=en-US`)
       .then((res) => setGenreData(res.data.genres))
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   };
 
   /**
@@ -51,13 +59,20 @@ function GamePage() {
    */
   const getLatestPuzzle = async () => {
     await axios
-      .get(`http://Matthews-MacBook-Pro.local:8888/puzzle/`)
+      .get(`${API.api_local_url}/puzzle/`)
       .then((res) => {
         setPuzzleData(res.data);
       })
       .catch((e) => {
         console.error(e);
       });
+  };
+
+  const getSpecificPuzzle = async (id) => {
+    await axios
+      .get(`${API.api_local_url}/puzzle/${id}`)
+      .then((res) => setPuzzleData(res.data))
+      .catch((e) => console.error(e));
   };
 
   /**
@@ -77,8 +92,13 @@ function GamePage() {
    * useEffect to load genre details from TMDB.
    */
   useEffect(() => {
+    getPuzzleList();
     getGenres();
-    getLatestPuzzle();
+    if (puzzleId) {
+      getSpecificPuzzle(puzzleId);
+    } else {
+      getLatestPuzzle();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -90,11 +110,12 @@ function GamePage() {
   }, [puzzleData]);
 
   useEffect(() => {
-    console.log(correctGuesses);
+    // console.log(correctGuesses);
   }, [correctGuesses]);
 
   return (
     <>
+      <SiteNav puzzleId={puzzleId} puzzleList={puzzleList} />
       {puzzleData ? (
         <Hero
           puzzle={puzzleData.puzzle}
@@ -116,9 +137,7 @@ function GamePage() {
             />
           ))
         ) : (
-          <div className="loading--box">
-            <img className="loading--gif" src={loading} alt="loading" />
-          </div>
+          <LoadingScreen />
         )}
       </div>
     </>

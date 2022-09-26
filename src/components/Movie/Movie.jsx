@@ -2,7 +2,7 @@
 import "./Movie.scss";
 
 // Assets
-import qm from "../../assets/question.jpg";
+import questionmarkimg from "../../assets/question.jpg";
 
 // Libraries
 import { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ import {
   formatGenre,
   obscureString,
   shortenString,
+  removeVoiceFromString,
 } from "../../utilities/utilities";
 
 // variables
@@ -54,6 +55,9 @@ function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses]);
 
+  /**
+   * useEffect to set correct guesses
+   */
   useEffect(() => {
     if (movieGuessed) {
       handleSetCorrectGuesses(movie);
@@ -82,7 +86,11 @@ function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
             <img
               alt={movieGuessed ? movie.original_title : "hidden!"}
               className="movie__poster movie__poster--mobile"
-              src={movieGuessed ? `${IMG_BASE}${movie.poster_path}` : qm}
+              src={
+                movieGuessed
+                  ? `${IMG_BASE}${movie.poster_path}`
+                  : questionmarkimg
+              }
             />
             <div className="movie__detailsbox">
               <div className="movie__info">
@@ -145,8 +153,8 @@ function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
                 {
                   <p className="movie__actorname movie__actorname--char">
                     {movieGuessed || revealCharNames
-                      ? actor.character
-                      : obscureString(actor.character)}
+                      ? removeVoiceFromString(actor.character)
+                      : obscureString(removeVoiceFromString(actor.character))}
                   </p>
                 }
               </div>

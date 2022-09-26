@@ -39,6 +39,10 @@ const shortenString = (string) => {
   return string.substring(0, 197) + "...";
 };
 
+const removeVoiceFromString = (string) => {
+  return string.replace("(voice)", "");
+};
+
 /**
  * Evaluate if a guess is correct.
  * @param {number} guessid
@@ -54,5 +58,6 @@ export {
   formatGenre,
   obscureString,
   shortenString,
+  removeVoiceFromString,
   isGuessCorrect,
 };

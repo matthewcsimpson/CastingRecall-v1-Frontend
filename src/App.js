@@ -19,7 +19,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<GamePage />} />
-          <Route path="/puzzle/:puzzleid" element={<GamePage />} />
+          <Route path="/puzzle/:puzzleId" element={<GamePage />} />
           {/* <Route path="/list" element={<ListPage />} />
           <Route path="*" element={<GamePage />} /> */}
         </Routes>

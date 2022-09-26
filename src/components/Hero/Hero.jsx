@@ -78,7 +78,6 @@ function Hero({ puzzle, guesses, setGuesses, correctGuesses }) {
   return (
     <div className="hero">
       <div className="hero__wrapper">
-        <p className="hero__text">Correct: {correctGuesses.length} / 6</p>
         <form
           className="hero__guessform"
           autoComplete="off"
@@ -121,6 +120,7 @@ function Hero({ puzzle, guesses, setGuesses, correctGuesses }) {
           </div>
           <button className="hero__guessbutton">Guess!</button>
         </form>
+        <p className="hero__text">Correct: {correctGuesses.length} / 6</p>
         <div className="hero__guesslist">
           <ul>
             {guesses
