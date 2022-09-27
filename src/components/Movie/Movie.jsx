@@ -3,6 +3,7 @@ import "./Movie.scss";
 
 // Assets
 import questionmarkimg from "../../assets/question.jpg";
+import profilePic from "../../assets/profile-placeholder.jpg";
 
 // Libraries
 import { useEffect, useState } from "react";
@@ -145,7 +146,11 @@ function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
                 <img
                   key={actor.id}
                   className={"movie__headshot"}
-                  src={`${IMG_BASE}${actor.profile_path}`}
+                  src={
+                    actor.profile_path
+                      ? `${IMG_BASE}${actor.profile_path}`
+                      : profilePic
+                  }
                   alt={actor.name}
                 />
                 <p className="movie__actorname">{`${actor.name}`}</p>
