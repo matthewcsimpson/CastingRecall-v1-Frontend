@@ -6,7 +6,7 @@ import API from "../../data/api_info.json";
 
 // Components
 import SiteNav from "../../components/SiteNav/SiteNav";
-import GuessForm from "../../components/Hero/GuessForm";
+import GuessForm from "../../components/GuessForm/GuessForm";
 import Movie from "../../components/Movie/Movie";
 import LoadingScreen from "../../components/LoadingScreen/LoadingScreen";
 
@@ -84,6 +84,8 @@ function GamePage() {
     if (localGuesses && puzzleData) {
       if (puzzleData.puzzleId === localGuesses.id) {
         setGuesses(localGuesses.guesses);
+      } else {
+        setGuesses([]);
       }
     }
   };
@@ -113,6 +115,7 @@ function GamePage() {
     } else {
       getLatestPuzzle();
     }
+    getLocalGuesses(puzzleData);
   }, [puzzleId]);
 
   /**
