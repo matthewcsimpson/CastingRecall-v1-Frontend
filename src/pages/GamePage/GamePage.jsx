@@ -18,11 +18,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 function GamePage() {
+  const { puzzleId } = useParams();
   const [puzzleData, setPuzzleData] = useState(null);
   const [genreData, setGenreData] = useState(null);
   const [guesses, setGuesses] = useState([]);
   const [correctGuesses, setCorrectGuesses] = useState([]);
-  const { puzzleId } = useParams();
   const [youWon, setYouWon] = useState(false);
   const [youLost, setYouLost] = useState(false);
 
@@ -36,8 +36,17 @@ function GamePage() {
     const puzzle = {
       id: pId,
       guesses: guesses,
+      won: youWon,
+      lost: youLost,
     };
-    localStorage.setItem("castingrecall", JSON.stringify(puzzle));
+    localStorage.setItem(pId, JSON.stringify(puzzle));
+  };
+
+  const handleSetCorrectGuesses = (m) => {
+    if (!correctGuesses.find((c) => (c.id === m.id ? true : false))) {
+      
+      setCorrectGuesses([...correctGuesses, m]);
+    }
   };
 
   /**
@@ -64,6 +73,10 @@ function GamePage() {
       });
   };
 
+  /**
+   * get a specific puzzle from the server
+   * @param {*} id
+   */
   const getSpecificPuzzle = async (id) => {
     await axios
       .get(`${API.api_local_url}/puzzle/${id}`)
@@ -76,13 +89,17 @@ function GamePage() {
    * @param {object} puzzleData
    */
   const getLocalGuesses = async (puzzleData) => {
-    const localGuesses = JSON.parse(localStorage.getItem("castingrecall"));
+    let pId = puzzleData.puzzleId;
+    const localGuesses = JSON.parse(localStorage.getItem(pId));
     if (localGuesses && puzzleData) {
       if (puzzleData.puzzleId === localGuesses.id) {
         setGuesses(localGuesses.guesses);
       } else {
         setGuesses([]);
       }
+    }
+    if (guesses.length > 0) {
+      console.info(guesses[0]);
     }
   };
 
@@ -100,6 +117,13 @@ function GamePage() {
   }, []);
 
   /**
+   * useEffect to load guesses from localStorage
+   */
+  useEffect(() => {
+    getLocalGuesses(puzzleData);
+  }, [puzzleData]);
+
+  /**
    * Load the puzzle details.
    * If there is a puzzle id, load that puzzle.
    * If there is no puzzle id, load the latest puzzle.
@@ -110,27 +134,34 @@ function GamePage() {
     } else {
       getLatestPuzzle();
     }
+
     getLocalGuesses(puzzleData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [puzzleId]);
 
-  /**
-   * useEffect to load guesses from localStorage
-   */
   useEffect(() => {
-    getLocalGuesses(puzzleData);
-  }, [puzzleData]);
+    console.log(`correct: ${correctGuesses.length}`);
+    if (correctGuesses.length > 5) {
+      setYouWon(true);
+    }
+  }, [correctGuesses]);
 
   useEffect(() => {
-    console.log(correctGuesses);
-  }, [correctGuesses]);
+    if (guesses.length > 9) {
+      setYouLost(true);
+    }
+  }, [guesses]);
 
   return (
     <>
       <SiteNav />
       {/* puzzleList={puzzleList} */}
       {puzzleData ? (
-        <GuessForm guesses={guesses} setGuesses={handleGuesses} />
+        <GuessForm
+          guesses={guesses}
+          setGuesses={handleGuesses}
+          correctGuesses={correctGuesses}
+        />
       ) : null}
       {youWon && <YouWon guesses={guesses} />}
       {youLost && <YouLost guesses={guesses} />}
@@ -144,7 +175,7 @@ function GamePage() {
               genres={genreData}
               guesses={guesses}
               correctGuesses={correctGuesses}
-              setCorrectGuesses={setCorrectGuesses}
+              handleSetCorrectGuesses={handleSetCorrectGuesses}
             />
           ))
         ) : (

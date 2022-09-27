@@ -16,7 +16,7 @@ const dateOptions = {
   year: "numeric",
 };
 
-function GuessForm({ guesses, setGuesses, setYouLost }) {
+function GuessForm({ guesses, setGuesses, correctGuesses }) {
   const [titleQuery, setTitleQuery] = useState([]);
   const [searchTitles, setSearchTitles] = useState([]);
   const [guessIdsArray, setGuessIdsArray] = useState([]);
@@ -75,9 +75,6 @@ function GuessForm({ guesses, setGuesses, setYouLost }) {
   useEffect(() => {
     let tempIds = guesses.map((guess) => guess.id);
     setGuessIdsArray(tempIds);
-    if (guesses.length > 9) {
-      setYouLost(true);
-    }
   }, [guesses]);
 
   return (
@@ -96,7 +93,7 @@ function GuessForm({ guesses, setGuesses, setYouLost }) {
                 setSearchTitles([]);
               }
             }}
-            disabled={guesses.length > 9}
+            disabled={correctGuesses.length > 5 || guesses.length > 9}
           />
         </form>
         <div className="hero__suggestionpositioning">

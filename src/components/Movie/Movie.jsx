@@ -14,6 +14,7 @@ import {
   formatGenre,
   obscureString,
   shortenString,
+  shortenMultipleCharNames,
   removeVoiceFromString,
 } from "../../utilities/utilities";
 
@@ -23,27 +24,24 @@ const dateOptions = {
   year: "numeric",
 };
 
-function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
+function Movie({ movie, genres, guesses, handleSetCorrectGuesses }) {
   const [movieGuessed, setMovieGuessed] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [revealYear, setRevealYear] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [revealSynopsis, setRevealSynopsis] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [revealCharNames, setRevealCharNames] = useState(false);
 
-  // const handleHintClick = (e, setFunc) => {
-  //   e.preventDefault();
-  //   setFunc((prev) => {
-  //     if (prev === false) {
-  //       return !prev;
-  //     } else {
-  //       return prev;
-  //     }
-  //   });
-  // };
-
-  const handleSetCorrectGuesses = (m) => {
-    if (!correctGuesses.find((c) => (c.id === m.id ? true : false))) {
-      setCorrectGuesses([...correctGuesses, m]);
-    }
+  // eslint-disable-next-line no-unused-vars
+  const handleHintClick = (setFunc) => {
+    setFunc((prev) => {
+      if (prev === false) {
+        return !prev;
+      } else {
+        return prev;
+      }
+    });
   };
 
   /**
@@ -61,6 +59,7 @@ function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
    */
   useEffect(() => {
     if (movieGuessed) {
+      movie = {};
       handleSetCorrectGuesses(movie);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -156,8 +155,14 @@ function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
                 {
                   <p className="movie__actorname movie__actorname--char">
                     {movieGuessed || revealCharNames
-                      ? removeVoiceFromString(actor.character)
-                      : obscureString(removeVoiceFromString(actor.character))}
+                      ? removeVoiceFromString(
+                          shortenMultipleCharNames(actor.character)
+                        )
+                      : obscureString(
+                          removeVoiceFromString(
+                            shortenMultipleCharNames(actor.character)
+                          )
+                        )}
                   </p>
                 }
               </div>
