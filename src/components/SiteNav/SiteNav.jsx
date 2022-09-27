@@ -14,7 +14,7 @@ function SiteNav() {
     await axios
       .get(`${API.api_local_url}/puzzle/list`)
       .then((res) => setPuzzleList([res.data].flat()))
-      .catch((e) => console.error(e));
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {

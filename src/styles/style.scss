@@ -161,18 +161,17 @@ body {
 }
 
 .hero {
-
     width: 100%;
-    min-height: 3rem;
 
     &__wrapper {
         background-color: #151515;
         width: 90%;
         margin: 0 auto;
         padding: 0 .5rem;
+
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
 
         @include tablet {
@@ -189,109 +188,46 @@ body {
         margin: 1rem 0;
 
         @include tablet {
-            flex-direction: row;
-            width: 60%;
+            width: 80%;
         }
     }
 
     &__guessinput {
-        width: 15.5rem;
-        height: 1.5rem;
+        width: 80%;
+        height: 2rem;
         font-size: 1rem;
-        border-radius: 1rem;
-        padding-left: 1rem;
-
-        @include tablet {
-            width: 95%;
-            height: 3rem;
-            font-size: 1.5rem;
-            border-radius: 1rem;
-            padding-left: 1rem;
-        }
+        border-radius: .5rem;
+        padding: 0 .5rem;
     }
 
     &__suggestionpositioning {
-        width: inherit;
-        display: flex;
-        justify-content: center;
-        // align-items: center;
+        align-self: flex-start;
     }
 
 
     &__searchsuggestions {
         position: absolute;
-        margin-top: 1.5rem;
-        left: 0px;
+        margin: 0 0 0 2rem;
 
         @include tablet {
-            margin-top: 3rem;
+            margin: 0 0 0 8rem;
         }
 
+        @include desktop {
+            margin: 0 0 0 10rem;
+        }
     }
 
     &__suggestion {
         list-style: none;
         font-size: 1rem;
-        text-align: left;
-        padding: .5rem;
         background: #FFF;
-        z-index: 10;
-        border-bottom: 1px dotted lightgray
-    }
-
-    &__guesslist {
-        @include tablet {}
-    }
-
-    &__guess {
-        list-style: none;
-        padding: .25rem 2rem;
-        border-radius: 1.25rem;
-
-        &--correct {
-            background-color: forestgreen;
-            color: white;
-        }
-
-        &--incorrect {
-            background-color: maroon;
-            color: white;
-        }
+        border-bottom: 1px dotted lightgray;
+        padding: .25rem .5rem;
     }
 
 
-    &__buttonbox {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
 
-    &__guessbutton {
-        height: 1.5rem;
-        color: white;
-        width: 15.5rem;
-        font-size: 1rem;
-        background-color: #907163;
-        border: 0;
-        border-radius: 1.25rem;
-
-        @include tablet {
-            height: 3.25rem;
-            font-size: 1.5rem;
-            width: auto;
-            padding: 0 1rem;
-
-
-        }
-    }
-
-    &__text {
-        color: white;
-        margin: 0;
-        padding: 0 0 .25rem 0;
-        text-align: center;
-
-    }
 
 }
 
@@ -385,7 +321,7 @@ body {
         display: inline-block;
         margin: 0 0.25rem .25rem;
         padding: .25rem 1rem;
-        border-radius: .25rem;
+        border-radius: .5rem;
         text-align: center;
         font-size: .75rem;
 
@@ -488,13 +424,22 @@ body {
     // &__posterbox {}
 
     &__poster {
-        object-fit: scale-down;
-        width: 80px;
+        object-fit: cover;
+        height: 100px;
         border: 1px solid #f1f1f1;
         margin-bottom: 1rem;
 
+
         @include tablet {
-            height: 125px;
+            height: 170px;
+        }
+
+        &--mobile {
+            height: 150px;
+
+            @include tablet {
+                height: 250px;
+            }
         }
     }
 
@@ -521,7 +466,7 @@ body {
     &__actorname {
         font-size: .75rem;
         font-style: italic;
-        margin: 0 0 .25rem 0;
+        margin: .25rem 0 0 0;
         text-align: center;
         align-self: middle;
 
@@ -543,7 +488,7 @@ body {
         align-items: center;
 
         @include tablet {
-            width: 59%;
+            width: 57%;
         }
 
         &--inner {
@@ -563,14 +508,14 @@ body {
         height: 200px;
         width: 80px;
         display: flex;
-        border-radius: .3125rem;
+        border-radius: .5rem;
         flex-direction: column;
         margin: 0 .125rem .125rem;
 
         background-color: #f1f1f1;
 
         @include tablet {
-            height: 260px;
+            height: 275px;
             width: 120px;
             margin: 0 .125rem .5rem .125rem;
         }
@@ -581,7 +526,7 @@ body {
     &__headshot {
         object-fit: cover;
         height: 100px;
-        border-radius: .3125rem .3125rem 0 0;
+        border-radius: .5rem .5rem 0 0;
 
         @include tablet {
             height: 170px;
@@ -640,6 +585,74 @@ body {
         &--tiny {
             margin-top: 2rem;
             font-size: .5rem;
+        }
+    }
+}
+
+.youwon {
+    width: 100%;
+
+    &__wrapper {
+        width: 90%;
+        background-color: #151515;
+        margin: 0 auto;
+        padding: .5rem .5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 10px solid green;
+
+        @include tablet {
+            max-width: 70rem;
+        }
+    }
+
+    &__heading {
+        color: #f1f1f1;
+        font-size: 2rem;
+        text-align: center;
+
+        @include tablet {
+            font-size: 3rem;
+        }
+
+        @include desktop {
+            font-size: 4rem;
+        }
+    }
+}
+
+.youlost {
+    width: 100%;
+
+    &__wrapper {
+        width: 90%;
+        background-color: #151515;
+        margin: 0 auto;
+        padding: .5rem .5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 10px solid red;
+
+        @include tablet {
+            max-width: 70rem;
+        }
+    }
+
+    &__heading {
+        color: #f1f1f1;
+        font-size: 2rem;
+        text-align: center;
+
+        @include tablet {
+            font-size: 3rem;
+        }
+
+        @include desktop {
+            font-size: 4rem;
         }
     }
 }

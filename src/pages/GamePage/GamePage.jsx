@@ -9,6 +9,8 @@ import SiteNav from "../../components/SiteNav/SiteNav";
 import GuessForm from "../../components/GuessForm/GuessForm";
 import Movie from "../../components/Movie/Movie";
 import LoadingScreen from "../../components/LoadingScreen/LoadingScreen";
+import YouWon from "../../components/YouWon/YouWon";
+import YouLost from "../../components/YouLost/YouLost";
 
 // Libraries
 import axios from "axios";
@@ -21,6 +23,8 @@ function GamePage() {
   const [guesses, setGuesses] = useState([]);
   const [correctGuesses, setCorrectGuesses] = useState([]);
   const { puzzleId } = useParams();
+  const [youWon, setYouWon] = useState(false);
+  const [youLost, setYouLost] = useState(false);
 
   /**
    * Handle incoming guesses and write them to local storage.
@@ -43,7 +47,7 @@ function GamePage() {
     await axios
       .get(`${API.api_genre_details}?api_key=${API.api_key}&language=en-US`)
       .then((res) => setGenreData(res.data.genres))
-      .catch((e) => console.error(e));
+      .catch((err) => console.error(err));
   };
 
   /**
@@ -55,8 +59,8 @@ function GamePage() {
       .then((res) => {
         setPuzzleData(res.data);
       })
-      .catch((e) => {
-        console.error(e);
+      .catch((err) => {
+        console.error(err);
       });
   };
 
@@ -64,7 +68,7 @@ function GamePage() {
     await axios
       .get(`${API.api_local_url}/puzzle/${id}`)
       .then((res) => setPuzzleData(res.data))
-      .catch((e) => console.error(e));
+      .catch((err) => console.error(err));
   };
 
   /**
@@ -117,18 +121,20 @@ function GamePage() {
     getLocalGuesses(puzzleData);
   }, [puzzleData]);
 
+  useEffect(() => {
+    console.log(correctGuesses);
+  }, [correctGuesses]);
+
   return (
     <>
       <SiteNav />
       {/* puzzleList={puzzleList} */}
       {puzzleData ? (
-        <GuessForm
-          puzzle={puzzleData.puzzle}
-          guesses={guesses}
-          setGuesses={handleGuesses}
-          correctGuesses={correctGuesses}
-        />
+        <GuessForm guesses={guesses} setGuesses={handleGuesses} />
       ) : null}
+      {youWon && <YouWon guesses={guesses} />}
+      {youLost && <YouLost guesses={guesses} />}
+
       <div className="movie">
         {puzzleData && genreData ? (
           puzzleData.puzzle.map((movie) => (

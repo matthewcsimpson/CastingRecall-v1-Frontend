@@ -9,45 +9,33 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 // Utilities
-import { formatDate, isGuessCorrect } from "../../utilities/utilities";
+import { formatDate } from "../../utilities/utilities";
 
 // Variables
 const dateOptions = {
   year: "numeric",
 };
 
-function GuessForm({ puzzle, guesses, setGuesses, correctGuesses }) {
+function GuessForm({ guesses, setGuesses, setYouLost }) {
   const [titleQuery, setTitleQuery] = useState([]);
   const [searchTitles, setSearchTitles] = useState([]);
-  const [tempGuess, setTempGuess] = useState(null);
+  const [guessIdsArray, setGuessIdsArray] = useState([]);
   const [guessId, setGuessId] = useState(null);
-
-  /**
-   * Handle the incoming input and use the specified callback function
-   * @param {event} e
-   * @param {function} setFunc
-   */
-  const handleStateChange = (e, setFunc) => {
-    setFunc(e.target.value);
-  };
 
   /**
    * Handle when one of the auto-complete items is clicked on.
    * @param {event} e
    */
-  const handleListItemClick = (e) => {
-    e.preventDefault();
-    setGuessId(e.target.id);
-    setTempGuess(e.target.innerHTML);
+  const handleListItemClick = (event) => {
+    event.preventDefault();
+    setGuessId(event.target.id);
     setSearchTitles([]);
   };
 
   /**
    * Handle when the form is submitted / guess is made
-   * @param {event} e
    */
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     if (titleQuery.length !== 0) {
       axios
         .get(`${API.api_movie_search_url}${guessId}?api_key=${API.api_key}`)
@@ -56,8 +44,6 @@ function GuessForm({ puzzle, guesses, setGuesses, correctGuesses }) {
           setTitleQuery("");
         })
         .catch((err) => console.error(err));
-    } else {
-      alert("you need to enter something!");
     }
   };
 
@@ -69,76 +55,68 @@ function GuessForm({ puzzle, guesses, setGuesses, correctGuesses }) {
       axios
         .get(`${API.api_search_url}&api_key=${API.api_key}&query=${titleQuery}`)
         .then((res) => {
-          setSearchTitles(res.data.results);
+          let filteredResults = res.data.results.filter((movie) => {
+            return !guessIdsArray.includes(movie.id);
+          });
+          setSearchTitles(filteredResults);
         })
         .catch((err) => console.error(err));
     }
   }, [titleQuery]);
 
+  /**
+   * useEffect calls handleSubmit to search the currently selected guess, then clears the guess.
+   */
+  useEffect(() => {
+    handleSubmit();
+    setGuessId(null);
+  }, [guessId]);
+
+  useEffect(() => {
+    let tempIds = guesses.map((guess) => guess.id);
+    setGuessIdsArray(tempIds);
+    if (guesses.length > 9) {
+      setYouLost(true);
+    }
+  }, [guesses]);
+
   return (
     <div className="hero">
       <div className="hero__wrapper">
-        <form
-          className="hero__guessform"
-          autoComplete="off"
-          onSubmit={handleSubmit}
-        >
-          <div className="hero__suggestionpositioning">
-            <input
-              name="search_term"
-              value={tempGuess ? tempGuess : undefined}
-              className="hero__guessinput"
-              type="text"
-              placeholder="Type a movie title..."
-              onFocus={() => setTempGuess("")}
-              onChange={(e) => {
-                if (e.target.value) {
-                  handleStateChange(e, setTitleQuery);
-                } else {
-                  setSearchTitles([]);
-                }
-              }}
-            />
-            <ul className="hero__searchsuggestions">
-              {searchTitles.length
-                ? searchTitles.map((title) => {
-                    return (
-                      <li
-                        id={title.id}
-                        onClick={handleListItemClick}
-                        key={title.id}
-                        name={title}
-                        className="hero__suggestion"
-                      >
-                        {title.original_title} (
-                        {formatDate(title.release_date, dateOptions)})
-                      </li>
-                    );
-                  })
-                : null}
-            </ul>
-          </div>
-          <button className="hero__guessbutton">Guess!</button>
+        <form className="hero__guessform" autoComplete="off">
+          <input
+            name="search_term"
+            className="hero__guessinput"
+            type="text"
+            placeholder={`${10 - guesses.length} guesses left`}
+            onChange={(event) => {
+              if (event.target.value) {
+                setTitleQuery(event.target.value);
+              } else {
+                setSearchTitles([]);
+              }
+            }}
+            disabled={guesses.length > 9}
+          />
         </form>
-        <p className="hero__text">Correct: {correctGuesses.length} / 6</p>
-        <div className="hero__guesslist">
-          <ul>
-            {guesses
-              ? guesses.map((guess, i) => {
+        <div className="hero__suggestionpositioning">
+          <ul className="hero__searchsuggestions">
+            {searchTitles.length
+              ? searchTitles.map((title) => {
                   return (
                     <li
-                      key={guess.id}
-                      className={
-                        isGuessCorrect(guess.id, puzzle)
-                          ? `hero__guess hero__guess--correct`
-                          : `hero__guess hero__guess--incorrect`
-                      }
+                      id={title.id}
+                      onClick={handleListItemClick}
+                      key={title.id}
+                      name={title}
+                      className="hero__suggestion"
                     >
-                      Guess #{i + 1}: {guess.original_title}
+                      {title.original_title} (
+                      {formatDate(title.release_date, dateOptions)})
                     </li>
                   );
                 })
-              : ""}
+              : null}
           </ul>
         </div>
       </div>

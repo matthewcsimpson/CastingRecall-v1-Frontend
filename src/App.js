@@ -21,7 +21,6 @@ function App() {
         <Routes>
           <Route path="/" element={<GamePage />} />
           <Route path="/how-to-play" element={<HowToPage />} />
-
           <Route path="/puzzle/:puzzleId" element={<GamePage />} />
           <Route path="/puzzle/list" element={<ListPage />} />
           <Route path="*" element={<GamePage />} />

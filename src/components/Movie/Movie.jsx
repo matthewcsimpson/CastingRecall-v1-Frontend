@@ -29,16 +29,16 @@ function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
   const [revealSynopsis, setRevealSynopsis] = useState(false);
   const [revealCharNames, setRevealCharNames] = useState(false);
 
-  const handleHintClick = (e, setFunc) => {
-    e.preventDefault();
-    setFunc((prev) => {
-      if (prev === false) {
-        return !prev;
-      } else {
-        return prev;
-      }
-    });
-  };
+  // const handleHintClick = (e, setFunc) => {
+  //   e.preventDefault();
+  //   setFunc((prev) => {
+  //     if (prev === false) {
+  //       return !prev;
+  //     } else {
+  //       return prev;
+  //     }
+  //   });
+  // };
 
   const handleSetCorrectGuesses = (m) => {
     if (!correctGuesses.find((c) => (c.id === m.id ? true : false))) {
@@ -72,6 +72,7 @@ function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <>
       <div
