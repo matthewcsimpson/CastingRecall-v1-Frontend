@@ -1,7 +1,26 @@
-// Libraries
-import { NavLink } from "react-router-dom";
+// Data
+import API from "../../data/api_info.json";
 
-function SiteNav({ puzzleId, puzzleList }) {
+// Libraries
+import { NavLink, useParams } from "react-router-dom";
+import axios from "axios";
+import { useState, useEffect } from "react";
+
+function SiteNav() {
+  const [puzzleList, setPuzzleList] = useState(null);
+  let { puzzleId } = useParams();
+
+  const getPuzzleList = async () => {
+    await axios
+      .get(`${API.api_local_url}/puzzle/list`)
+      .then((res) => setPuzzleList([res.data].flat()))
+      .catch((e) => console.error(e));
+  };
+
+  useEffect(() => {
+    getPuzzleList();
+  }, []);
+
   if (puzzleList) {
     if (!puzzleId) {
       puzzleId = puzzleList[puzzleList.length - 1];
@@ -11,6 +30,7 @@ function SiteNav({ puzzleId, puzzleList }) {
   if (puzzleList) {
     index = puzzleList.indexOf(puzzleId);
   }
+
   return (
     <>
       {puzzleList && puzzleId ? (
@@ -38,18 +58,30 @@ function SiteNav({ puzzleId, puzzleList }) {
                   Prev Puzzle
                 </NavLink>
               </li>
-              <li className="nav__item">How to Play</li>
-              <li className="nav__item">Puzzle List</li>
+              <li className="nav__item">
+                <NavLink
+                  className={"nav item nav__item--link"}
+                  to="/how-to-play"
+                >
+                  How to Play
+                </NavLink>
+              </li>
+              <li className="nav__item">
+                <NavLink
+                  className={"nav item nav__item--link"}
+                  to="/puzzle/list"
+                >
+                  Puzzle List
+                </NavLink>
+              </li>
               <li className="nav__item">
                 <NavLink
                   className={
-                    puzzleId === puzzleList[puzzleList.length - 1]
-                      ? "nav item nav__item--inactivelink"
-                      : "nav item nav__item--link"
+                    // puzzleId === puzzleList[puzzleList.length - 1]
+                    //   ? "nav item nav__item--inactivelink" :
+                    "nav item nav__item--link"
                   }
-                  to={
-                    puzzleList && `/puzzle/${puzzleList[puzzleList.length - 1]}`
-                  }
+                  to={`/`}
                 >
                   Latest Puzzle
                 </NavLink>
@@ -70,9 +102,7 @@ function SiteNav({ puzzleId, puzzleList }) {
                         ? "nav__item nav__item--hidden nav__item--hideifnull"
                         : "nav__item nav__item--hidden"
                     }
-                  >
-                    ➡️
-                  </span>
+                  ></span>
                 </NavLink>
               </li>
             </ul>

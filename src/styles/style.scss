@@ -638,3 +638,34 @@ body {
         }
     }
 }
+
+.listmodal {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__window {
+
+        width: 100vw;
+        height: 100vh;
+        background-color: #f1f1f1;
+        padding: 3rem 1rem;
+
+        @include tablet {
+            position: absolute;
+            background-color: #f1f1f1;
+            top: 11.5625rem;
+            box-shadow: 0px 2px 5px rgba(19, 24, 44, 0.1);
+            border-radius: 3px;
+            max-width: 42rem;
+            max-height: 16.375rem;
+            padding: 0 4rem;
+            justify-content: flex-start;
+        }
+    }
+}

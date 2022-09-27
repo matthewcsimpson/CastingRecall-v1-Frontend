@@ -7,7 +7,8 @@ import SiteFooter from "./components/SiteFooter/SiteFooter";
 
 // Pages
 import GamePage from "./pages/GamePage/GamePage";
-// import ListPage from "./pages/ListPage/ListPage";
+import HowToPage from "./pages/HowToPage/HowToPage";
+import ListPage from "./pages/ListPage/ListPage";
 
 // Libraries
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -19,7 +20,10 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<GamePage />} />
+          <Route path="/how-to-play" element={<HowToPage />} />
+
           <Route path="/puzzle/:puzzleId" element={<GamePage />} />
+          <Route path="/puzzle/list" element={<ListPage />} />
           <Route path="*" element={<GamePage />} />
         </Routes>
       </BrowserRouter>
