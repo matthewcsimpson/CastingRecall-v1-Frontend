@@ -107,8 +107,8 @@ body {
     &__item {
         display: inline-block;
         color: #f1f1f1;
-        font-family: "Pacifico";
         font-size: .75rem;
+        font-weight: 600;
         border-left: 1px solid #f1f1f1;
         border-right: 1px solid #f1f1f1;
         padding: 0 .25rem 1rem;
@@ -309,8 +309,8 @@ body {
         border-bottom: 1px solid #f1f1f1;
 
         @include tablet {
-            min-height: 25rem;
             max-width: 70rem;
+            min-height: 28rem;
             flex-direction: row;
             justify-content: space-between;
         }
@@ -326,15 +326,15 @@ body {
     }
 
     &__heading {
-        margin: 1rem 1rem 0rem;
+        margin: .5rem 1rem 1rem;
         color: #f1f1f1;
         align-self: flex-start;
     }
 
     &__details {
+        order: 1;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
         font-size: .9rem;
 
         @include tablet {
@@ -343,82 +343,51 @@ body {
         }
 
         &--inner {
-            padding: 0 1rem;
+            padding: 0 .75rem;
             display: flex;
+            flex-direction: column;
             justify-content: center;
+            margin-bottom: 1rem;
+
+            @include tablet {
+                flex-direction: row;
+            }
         }
+
     }
 
     &__detailsbox {
         display: flex;
         flex-direction: column;
-        width: 100%;
+        justify-content: space-evenly;
 
-        @include tablet {
+        &--title,
+        &--year,
+        &--synopsis,
+        &--genres {
+            display: flex;
             flex-direction: column;
-        }
-    }
-
-    &__info {
-        width: 90%;
-        padding: 0 1rem 0;
-
-        @include tablet {
-            width: 100%;
-        }
-    }
-
-    &__genres {
-        width: 90%;
-
-        @include tablet {
-            width: 100%;
-            padding-left: 1rem;
-            ;
-        }
-    }
-
-    &__text {
-        color: white;
-        margin: 0;
-        padding: 0 0 .25rem 0;
-
-        &--title {
-            font-weight: 600;
-        }
-
-        &--item {
-            font-size: 75%;
-        }
-    }
-
-    &__actorname {
-        font-size: .75rem;
-        font-style: italic;
-        margin: 0 0 .25rem 0;
-        text-align: center;
-        align-self: middle;
-
-        &--as {
             margin: 0;
+
+            @include tablet {
+                flex-direction: row;
+                padding: 0 .75rem;
+
+            }
         }
 
-        &--char {
-            color: red;
+        &--genres {
+            flex-direction: column
         }
-    }
-
-    &__genrelist {
-        list-style: none;
-        padding: 0;
     }
 
     &__genre {
         display: inline-block;
-        margin: 0;
-        text-align: center;
+        margin: 0 0.25rem .25rem;
         padding: .25rem 1rem;
-        border-radius: .625rem;
+        border-radius: .25rem;
+        text-align: center;
+        font-size: .75rem;
 
         &--28 {
             // Action
@@ -516,6 +485,58 @@ body {
         }
     }
 
+    // &__posterbox {}
+
+    &__poster {
+        object-fit: scale-down;
+        width: 80px;
+        border: 1px solid #f1f1f1;
+        margin-bottom: 1rem;
+
+        @include tablet {
+            height: 125px;
+        }
+    }
+
+    &__text {
+        color: #f1f1f1;
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+        min-height: 1.5rem;
+
+        &--title {
+            min-width: 25%;
+        }
+
+        &--item {
+            width: 100%;
+
+            @include tablet {
+                width: 74%;
+            }
+        }
+    }
+
+    &__actorname {
+        font-size: .75rem;
+        font-style: italic;
+        margin: 0 0 .25rem 0;
+        text-align: center;
+        align-self: middle;
+
+        &--as {
+            margin: 0;
+        }
+
+        &--char {
+            color: red;
+        }
+    }
+
+
+
+
     &__castpics {
         display: flex;
         flex-direction: column;
@@ -526,31 +547,25 @@ body {
         }
 
         &--inner {
-            width: 90%;
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
             justify-content: center;
-            margin-bottom: 0;
+            margin-bottom: .5rem;
 
             @include tablet {
                 width: 100%;
             }
         }
-
-
     }
 
     &__headshotbox {
         height: 200px;
-        width: 90px;
+        width: 80px;
         display: flex;
+        border-radius: .3125rem;
         flex-direction: column;
-        margin: 0;
-        padding: 0 .125rem;
         margin: 0 .125rem .125rem;
-        ;
-        // margin: 0 .125rem .5rem .125rem;
 
         background-color: #f1f1f1;
 
@@ -561,21 +576,12 @@ body {
         }
     }
 
-    &__poster {
-        object-fit: cover;
-        border: .1875rem solid #f1f1f1;
-        height: 75px;
 
-        @include tablet {
-            height: 125px;
-        }
-
-    }
 
     &__headshot {
         object-fit: cover;
-        border: .1875rem solid #f1f1f1;
         height: 100px;
+        border-radius: .3125rem .3125rem 0 0;
 
         @include tablet {
             height: 170px;
@@ -622,7 +628,6 @@ body {
     }
 
     &__text {
-        font-family: "Pacifico";
         color: #f1f1f1;
         margin: 0;
         font-size: .75rem;
@@ -635,37 +640,6 @@ body {
         &--tiny {
             margin-top: 2rem;
             font-size: .5rem;
-        }
-    }
-}
-
-.listmodal {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &__window {
-
-        width: 100vw;
-        height: 100vh;
-        background-color: #f1f1f1;
-        padding: 3rem 1rem;
-
-        @include tablet {
-            position: absolute;
-            background-color: #f1f1f1;
-            top: 11.5625rem;
-            box-shadow: 0px 2px 5px rgba(19, 24, 44, 0.1);
-            border-radius: 3px;
-            max-width: 42rem;
-            max-height: 16.375rem;
-            padding: 0 4rem;
-            justify-content: flex-start;
         }
     }
 }

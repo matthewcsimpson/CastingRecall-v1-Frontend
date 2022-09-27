@@ -82,58 +82,55 @@ function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
         }
       >
         <div className="movie__details">
-          <h2 className="movie__heading">Movie Details</h2>
+          <h2 className="movie__heading">Movie Details:</h2>
           <div className="movie__details--inner">
-            <img
-              alt={movieGuessed ? movie.original_title : "hidden!"}
-              className="movie__poster movie__poster--mobile"
-              src={
-                movieGuessed
-                  ? `${IMG_BASE}${movie.poster_path}`
-                  : questionmarkimg
-              }
-            />
+            <div className="movie__posterbox">
+              <img
+                alt={movieGuessed ? movie.original_title : "hidden!"}
+                className="movie__poster"
+                src={
+                  movieGuessed
+                    ? `${IMG_BASE}${movie.poster_path}`
+                    : questionmarkimg
+                }
+              />
+            </div>
             <div className="movie__detailsbox">
-              <div className="movie__info">
-                <p className="movie__text movie__text--title">
-                  Title:{" "}
-                  <span className="movie__text movie__text--item">
-                    {movieGuessed ? movie.title : obscureString(movie.title)}
-                  </span>
-                </p>
-                <p className="movie__text movie__text--title">
-                  Year:{" "}
-                  <span className="movie__text movie__text--item">
-                    {movieGuessed || revealYear
-                      ? formatDate(movie.release_date, dateOptions)
-                      : obscureString(
-                          formatDate(movie.release_date, dateOptions)
-                        )}
-                  </span>
-                </p>
-                <p className="movie__text movie__text--title">
-                  Synopsis:{" "}
-                  <span className="movie__text movie__text--item">
-                    {movieGuessed || revealSynopsis
-                      ? shortenString(movie.overview)
-                      : shortenString(obscureString(movie.overview))}
-                  </span>
+              <div className="movie__detailsbox--title">
+                <p className="movie__text movie__text--title">Title: </p>
+                <p className="movie__text movie__text--item">
+                  {movieGuessed ? movie.title : obscureString(movie.title)}
                 </p>
               </div>
-              <div className="movie__genres">
-                <p className="movie__text movie__text--title">Genre(s):</p>
-                <ul className="movie__genrelist">
-                  {movie.genre_ids.map((id) => {
-                    return (
-                      <li
-                        key={id}
-                        className={`movie__genre movie__genre--${id}`}
-                      >
-                        {formatGenre(id, genres)}
-                      </li>
-                    );
-                  })}
-                </ul>
+              "
+              <div className="movie__detailsbox--year">
+                <p className="movie__text movie__text--title">Year: </p>
+                <p className="movie__text movie__text--item">
+                  {movieGuessed || revealYear
+                    ? formatDate(movie.release_date, dateOptions)
+                    : obscureString(
+                        formatDate(movie.release_date, dateOptions)
+                      )}
+                </p>
+              </div>
+              <div className="movie__detailsbox--synopsis">
+                <p className="movie__text movie__text--title">Synopsis: </p>
+                <p className="movie__text movie__text--item">
+                  {movieGuessed || revealSynopsis
+                    ? shortenString(movie.overview)
+                    : shortenString(obscureString(movie.overview))}
+                </p>
+              </div>
+              <div className="movie__detailsbox--genres">
+                <p className="movie__text movie__text--title">Genres</p>
+
+                {movie.genre_ids.map((id) => {
+                  return (
+                    <p key={id} className={`movie__genre movie__genre--${id}`}>
+                      {formatGenre(id, genres)}
+                    </p>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -165,30 +162,6 @@ function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
               </div>
             ))}
           </div>
-        </div>
-        <div className="movie__hintswrapper">
-          <p className="movie__text movie__text--item">
-            Pssst.... Need a hint?? <br />
-            <button
-              className="movie__hintbutton"
-              onClick={(e) => handleHintClick(e, setRevealYear)}
-            >
-              Reveal Year
-            </button>
-            <button
-              className="movie__hintbutton"
-              onClick={(e) => handleHintClick(e, setRevealSynopsis)}
-            >
-              Reveal Synopsis
-            </button>
-            <button
-              className="movie__hintbutton"
-              onClick={(e) => handleHintClick(e, setRevealCharNames)}
-            >
-              Reveal Character Names
-            </button>
-            {/* <button className="movie__hintbutton">Reveal Key Person</button> */}
-          </p>
         </div>
       </div>
     </>
