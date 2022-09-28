@@ -1,27 +1,4 @@
-// Libraries
-import { useState, useEffect } from "react";
-
-function YouWon({ puzzleId, guesses, correctGuesses }) {
-  const [youWon, setYouWon] = useState(false);
-
-  useEffect(() => {
-    // console.log(`youlost1: ${puzzleId}`);
-  }, []);
-
-  useEffect(() => {
-    // console.log(`youwon2: ${puzzleId}`);
-  }, [puzzleId]);
-
-  useEffect(() => {
-    if (correctGuesses && correctGuesses.length > 5) {
-      setYouWon(true);
-      // localStorage.setItem(
-      //   `${puzzleId}-wl`,
-      //   JSON.stringify({ youWon: youWon })
-      // );
-    }
-  }, [correctGuesses]);
-
+function YouWon({ guesses, youWon }) {
   return (
     <>
       {youWon && (
