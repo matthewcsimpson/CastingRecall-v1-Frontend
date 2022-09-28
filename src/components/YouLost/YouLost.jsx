@@ -22,8 +22,6 @@ function YouLost({ puzzleId, guesses }) {
       `${puzzleId}-wl`,
       JSON.stringify({ puzzleId: puzzleId, youLost: youLost })
     );
-
-    // setYouLost(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [youLost]);
 

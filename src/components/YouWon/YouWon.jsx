@@ -5,20 +5,33 @@ function YouWon({ puzzleId, guesses, correctGuesses }) {
   const [youWon, setYouWon] = useState(false);
 
   useEffect(() => {
-    // console.log(`youlost1: ${puzzleId}`);
+    let checkData = JSON.parse(localStorage.getItem(`${puzzleId}-wl`));
+    if (checkData) {
+      console.log(checkData);
+    } else {
+      localStorage.setItem(
+        `${puzzleId}-wl`,
+        JSON.stringify({ puzzleId: puzzleId, youWon: youWon })
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    // console.log(`youwon2: ${puzzleId}`);
+    localStorage.setItem(
+      `${puzzleId}-wl`,
+      JSON.stringify({ puzzleId: puzzleId, youWon: youWon })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [youWon]);
+
+  useEffect(() => {
+    setYouWon(false);
   }, [puzzleId]);
 
   useEffect(() => {
     if (correctGuesses && correctGuesses.length > 5) {
       setYouWon(true);
-      // localStorage.setItem(
-      //   `${puzzleId}-wl`,
-      //   JSON.stringify({ youWon: youWon })
-      // );
     }
   }, [correctGuesses]);
 

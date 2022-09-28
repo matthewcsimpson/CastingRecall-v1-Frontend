@@ -8,7 +8,9 @@ import API from "../../data/api_info.json";
 import SiteNav from "../../components/SiteNav/SiteNav";
 import GuessForm from "../../components/GuessForm/GuessForm";
 import Movie from "../../components/Movie/Movie";
+import Counter from "../../components/Counter/Counter";
 import LoadingScreen from "../../components/LoadingScreen/LoadingScreen";
+
 import YouWon from "../../components/YouWon/YouWon";
 import YouLost from "../../components/YouLost/YouLost";
 
@@ -18,13 +20,18 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 function GamePage() {
-  const [puzzleData, setPuzzleData] = useState(null);
-  const [genreData, setGenreData] = useState(null);
-  const [guesses, setGuesses] = useState([]);
-  const [correctGuesses, setCorrectGuesses] = useState([]);
-  // eslint-disable-next-line no-unused-vars
+  let { puzzleId } = useParams();
 
-  const { puzzleId } = useParams();
+  const [genreData, setGenreData] = useState(null);
+  const [puzzleList, setPuzzleList] = useState(null);
+  const [puzzleData, setPuzzleData] = useState(null);
+
+  const [guesses, setGuesses] = useState([]);
+
+  const [youLost, setYouLost] = useState(false);
+  const [youWon, setYouWon] = useState(false);
+
+  // ------------------------------------------------------------------------data loading
 
   /**
    * 1. Function to retrieve genre information from TMDB
@@ -37,17 +44,13 @@ function GamePage() {
   };
 
   /**
-   * 2. Function to retrieve the the most recently generated puzzle.
+   * function to get a list of all puzzles
    */
-  const getLatestPuzzle = async () => {
+  const getPuzzleList = async () => {
     await axios
-      .get(`${API.api_local_url}/puzzle/`)
-      .then((res) => {
-        setPuzzleData(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      .get(`${API.api_local_url}/puzzle/list`)
+      .then((res) => setPuzzleList([res.data].flat()))
+      .catch((err) => console.error(err));
   };
 
   /**
@@ -61,110 +64,100 @@ function GamePage() {
       .catch((err) => console.error(err));
   };
 
+  // ------------------------------------------------------------------------useEffects
   /**
-   * 4 Retrieve guess data stored in localStorage, if any
-   * @param {object} puzzleData
+   * Get the genre list
    */
-  const getLocalGuesses = async () => {
-    if (puzzleData) {
-      console.log("local guesses", puzzleData.puzzleId);
-      const local = JSON.parse(localStorage.getItem(puzzleData.puzzleId));
-      if (local && puzzleData) {
-        if (puzzleData.puzzleId === local.id) {
-          setGuesses(local.guesses);
-          setCorrectGuesses(local.correctGuesses);
-          console.log("in set guesses", local.guesses);
-        } else {
-          setGuesses([]);
-          setCorrectGuesses([]);
-        }
+  useEffect(() => {
+    getGenres();
+  }, []);
+
+  /**
+   * Get the puzzle list
+   */
+  useEffect(() => {
+    getPuzzleList();
+  }, []);
+
+  /**
+   * Get the specific puzzle if there is a puzzleId, otherwise get the latest puzzle
+   */
+  useEffect(() => {
+    console.log(puzzleList);
+    if (puzzleId) {
+      getSpecificPuzzle(puzzleId);
+    } else {
+      getSpecificPuzzle("latest");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (puzzleId) {
+      getSpecificPuzzle(puzzleId);
+    } else {
+      getSpecificPuzzle("latest");
+    }
+  }, [puzzleId]);
+
+  useEffect(() => {
+    let correctCounter = guesses.filter((guess) => guess.correct === true);
+    if (correctCounter.length > 5) {
+      setYouWon(true);
+    }
+    if (guesses.length > 9) {
+      setYouLost(true);
+    }
+    console.log("winCounter: ", correctCounter.length, "youWon: ", youWon);
+    console.log("guesses: ", guesses.length, "youLost: ", youLost);
+  }, [guesses.length]);
+
+  // check all the data
+  useEffect(() => {
+    console.log("genreData: ", genreData);
+    console.log("puzzleList: ", puzzleList);
+    console.log("puzleId: ", puzzleId);
+    console.log("guesses: ", guesses);
+  }, [genreData, puzzleList, puzzleId, guesses]);
+
+  // ------------------------------------------------------------------------functions
+  /**
+   * Receive a movie object from the guess form and process it.
+   * @param {*} movie
+   */
+  const handleSubmitGuess = (movie) => {
+    if (puzzleData.puzzle) {
+      let goodGuess = puzzleData.puzzle.find((puzzleMovie) =>
+        puzzleMovie.id === movie.id ? true : false
+      );
+      if (goodGuess) {
+        goodGuess = { ...goodGuess, ...{ correct: true } };
+        setGuesses([...guesses, goodGuess]);
+      } else {
+        let badGuess = { ...movie, ...{ correct: false } };
+        setGuesses([...guesses, badGuess]);
       }
     }
   };
 
-  /**
-   * handle setting correct guessses.
-   * @param {*} movie
-   */
-  const handleSetCorrectGuesses = (movie) => {
-    console.log(`correct movie: ${movie.original_title}`);
-    if (!correctGuesses.find((c) => (c.id === movie.id ? true : false))) {
-      setCorrectGuesses([...correctGuesses, movie]);
-    }
-  };
-
-  /**
-   * Handle incoming guesses and write them to local storage.
-   * @param {*} guesses
-   */
-  const handleGuesses = (guesses) => {
-    setGuesses(guesses);
-    const pId = puzzleData.puzzleId;
-    const puzzle = {
-      id: pId,
-      guesses: guesses,
-    };
-    localStorage.setItem(pId, JSON.stringify(puzzle));
-  };
-
-  useEffect(() => {
-    // console.log(`gamepage: ${puzzleId}`);
-  }, [puzzleId]);
-
-  /**
-   * 1, 2, 3 useEffect to load the list of puzzles & genre details from TMDB on page load
-   */
-  useEffect(() => {
-    getGenres();
-    if (puzzleId) {
-      getSpecificPuzzle(puzzleId);
-    } else {
-      getLatestPuzzle();
-    }
-    getLocalGuesses();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  /**
-   * Load the puzzle details.
-   * If there is a puzzle id, load that puzzle.
-   * If there is no puzzle id, load the latest puzzle.
-   */
-  useEffect(() => {
-    if (puzzleId) {
-      getSpecificPuzzle(puzzleId);
-    } else {
-      getLatestPuzzle();
-    }
-    // getLocalGuesses();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [puzzleId]);
-
-  /**
-   * useEffect to load guesses from localStorage
-   */
-  useEffect(() => {
-    getLocalGuesses();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [puzzleData]);
-
   return (
     <>
-      <SiteNav />
+      {puzzleList ? (
+        <SiteNav puzzleId={puzzleId} puzzleList={puzzleList} />
+      ) : (
+        <LoadingScreen />
+      )}
       {puzzleData ? (
-        <GuessForm
-          puzzleData={puzzleData}
-          guesses={guesses}
-          correctGuesses={correctGuesses}
-          handleGuesses={handleGuesses}
-        />
+        <>
+          <GuessForm
+            puzzleData={puzzleData}
+            guessNum={guesses.length}
+            youWon={youWon}
+            youLost={youLost}
+            handleSubmitGuess={(movie) => handleSubmitGuess(movie)}
+          />
+          <Counter guesses={guesses} />
+        </>
       ) : null}
-      <YouWon
-        puzzleId={puzzleId}
-        guesses={guesses}
-        correctGuesses={correctGuesses}
-      />
-      <YouLost puzzleId={puzzleId} guesses={guesses} />
 
       <div className="movie">
         {puzzleData && genreData ? (
@@ -174,7 +167,6 @@ function GamePage() {
               movie={movie}
               genres={genreData}
               guesses={guesses}
-              handleSetCorrectGuesses={(m1) => handleSetCorrectGuesses(m1)}
             />
           ))
         ) : (
