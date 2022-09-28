@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // Styles
 import "./Movie.scss";
 
@@ -23,28 +24,12 @@ const dateOptions = {
   year: "numeric",
 };
 
-function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
+function Movie({ movie, genres, guesses, handleSetCorrectGuesses }) {
   const [movieGuessed, setMovieGuessed] = useState(false);
-  const [revealYear, setRevealYear] = useState(false);
-  const [revealSynopsis, setRevealSynopsis] = useState(false);
-  const [revealCharNames, setRevealCharNames] = useState(false);
-
-  // const handleHintClick = (e, setFunc) => {
-  //   e.preventDefault();
-  //   setFunc((prev) => {
-  //     if (prev === false) {
-  //       return !prev;
-  //     } else {
-  //       return prev;
-  //     }
-  //   });
-  // };
-
-  const handleSetCorrectGuesses = (m) => {
-    if (!correctGuesses.find((c) => (c.id === m.id ? true : false))) {
-      setCorrectGuesses([...correctGuesses, m]);
-    }
-  };
+  const [revealTitle, setRevealTitle] = useState(true);
+  const [revealYear, setRevealYear] = useState(true);
+  const [revealSynopsis, setRevealSynopsis] = useState(true);
+  const [revealCharNames, setRevealCharNames] = useState(true);
 
   /**
    * Toggle this movie as guessed when it is guessed
@@ -56,22 +41,12 @@ function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses]);
 
-  /**
-   * useEffect to set correct guesses
-   */
   useEffect(() => {
     if (movieGuessed) {
       handleSetCorrectGuesses(movie);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [movieGuessed]);
-
-  useEffect(() => {
-    if (movieGuessed) {
-      handleSetCorrectGuesses(movie);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <>
@@ -100,7 +75,9 @@ function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
               <div className="movie__detailsbox--title">
                 <p className="movie__text movie__text--title">Title: </p>
                 <p className="movie__text movie__text--item">
-                  {movieGuessed ? movie.title : obscureString(movie.title)}
+                  {movieGuessed || revealTitle
+                    ? movie.title
+                    : obscureString(movie.title)}
                 </p>
               </div>
               "
@@ -123,15 +100,19 @@ function Movie({ movie, genres, guesses, correctGuesses, setCorrectGuesses }) {
                 </p>
               </div>
               <div className="movie__detailsbox--genres">
-                <p className="movie__text movie__text--title">Genres</p>
-
-                {movie.genre_ids.map((id) => {
-                  return (
-                    <p key={id} className={`movie__genre movie__genre--${id}`}>
-                      {formatGenre(id, genres)}
-                    </p>
-                  );
-                })}
+                <p className="movie__text movie__text--title">Genres: </p>
+                <p className="movie__genrelist">
+                  {movie.genre_ids.map((id) => {
+                    return (
+                      <span
+                        key={id}
+                        className={`movie__genre movie__genre--${id}`}
+                      >
+                        {formatGenre(id, genres)}
+                      </span>
+                    );
+                  })}
+                </p>
               </div>
             </div>
           </div>

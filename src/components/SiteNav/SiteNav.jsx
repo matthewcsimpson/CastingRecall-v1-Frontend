@@ -95,7 +95,9 @@ function SiteNav() {
                         ? "nav__item nav__item--hidden nav__item--hideifnull"
                         : "nav__item nav__item--hidden"
                     }
-                  ></span>
+                  >
+                    ➡️
+                  </span>
                 </NavLink>
               </li>
             </ul>

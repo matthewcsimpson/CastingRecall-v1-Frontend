@@ -16,11 +16,13 @@ const dateOptions = {
   year: "numeric",
 };
 
-function GuessForm({ guesses, setGuesses, setYouLost }) {
+function GuessForm({ puzzleData, guesses, correctGuesses, handleGuesses }) {
   const [titleQuery, setTitleQuery] = useState([]);
   const [searchTitles, setSearchTitles] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [guessIdsArray, setGuessIdsArray] = useState([]);
   const [guessId, setGuessId] = useState(null);
+  const [youLost, setYouLost] = useState(false);
 
   /**
    * Handle when one of the auto-complete items is clicked on.
@@ -33,14 +35,17 @@ function GuessForm({ guesses, setGuesses, setYouLost }) {
   };
 
   /**
-   * Handle when the form is submitted / guess is made
+   * Submit a guess.
+   * @param {titleQuery} tq
+   * @param {guessId} gid
+   * @param {puzzleData} puzzle
    */
-  const handleSubmit = () => {
-    if (titleQuery.length !== 0) {
+  const handleSubmit = (tq, gid) => {
+    if (tq.length !== 0) {
       axios
-        .get(`${API.api_movie_search_url}${guessId}?api_key=${API.api_key}`)
+        .get(`${API.api_movie_search_url}${gid}?api_key=${API.api_key}`)
         .then((res) => {
-          setGuesses([...guesses, res.data]);
+          handleGuesses([...guesses, res.data]);
           setTitleQuery("");
         })
         .catch((err) => console.error(err));
@@ -48,12 +53,13 @@ function GuessForm({ guesses, setGuesses, setYouLost }) {
   };
 
   /**
-   * useEffect to load auto-complete options as you type in the inpur field.
+   * load autocomplete data
+   * @param {*} tq
    */
-  useEffect(() => {
-    if (titleQuery.length !== 0) {
+  const loadAutoComplete = (tq) => {
+    if (tq.length !== 0) {
       axios
-        .get(`${API.api_search_url}&api_key=${API.api_key}&query=${titleQuery}`)
+        .get(`${API.api_search_url}&api_key=${API.api_key}&query=${tq}`)
         .then((res) => {
           let filteredResults = res.data.results.filter((movie) => {
             return !guessIdsArray.includes(movie.id);
@@ -62,23 +68,32 @@ function GuessForm({ guesses, setGuesses, setYouLost }) {
         })
         .catch((err) => console.error(err));
     }
+  };
+
+  /**
+   * useEffect to load auto-complete options as you type in the input field.
+   */
+  useEffect(() => {
+    loadAutoComplete(titleQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [titleQuery]);
 
   /**
    * useEffect calls handleSubmit to search the currently selected guess, then clears the guess.
    */
   useEffect(() => {
-    handleSubmit();
+    handleSubmit(titleQuery, guessId);
     setGuessId(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guessId]);
 
   useEffect(() => {
-    let tempIds = guesses.map((guess) => guess.id);
-    setGuessIdsArray(tempIds);
-    if (guesses.length > 9) {
-      setYouLost(true);
-    }
-  }, [guesses]);
+    let checkData = JSON.parse(
+      localStorage.getItem(`${puzzleData.puzzleId}-wl`)
+    );
+
+    console.log(`guessform youLost: ${checkData}`);
+  }, []);
 
   return (
     <div className="hero">
@@ -96,7 +111,7 @@ function GuessForm({ guesses, setGuesses, setYouLost }) {
                 setSearchTitles([]);
               }
             }}
-            disabled={guesses.length > 9}
+            disabled={youLost}
           />
         </form>
         <div className="hero__suggestionpositioning">

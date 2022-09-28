@@ -22,26 +22,12 @@ function GamePage() {
   const [genreData, setGenreData] = useState(null);
   const [guesses, setGuesses] = useState([]);
   const [correctGuesses, setCorrectGuesses] = useState([]);
+  // eslint-disable-next-line no-unused-vars
+
   const { puzzleId } = useParams();
-  const [youWon, setYouWon] = useState(false);
-  const [youLost, setYouLost] = useState(false);
 
   /**
-   * Handle incoming guesses and write them to local storage.
-   * @param {*} guesses
-   */
-  const handleGuesses = (guesses) => {
-    setGuesses(guesses);
-    const pId = puzzleData.puzzleId;
-    const puzzle = {
-      id: pId,
-      guesses: guesses,
-    };
-    localStorage.setItem("castingrecall", JSON.stringify(puzzle));
-  };
-
-  /**
-   * Function to retrieve genre information from TMDB
+   * 1. Function to retrieve genre information from TMDB
    */
   const getGenres = async () => {
     await axios
@@ -51,7 +37,7 @@ function GamePage() {
   };
 
   /**
-   * Function to retrieve the the most recently generated puzzle.
+   * 2. Function to retrieve the the most recently generated puzzle.
    */
   const getLatestPuzzle = async () => {
     await axios
@@ -64,6 +50,10 @@ function GamePage() {
       });
   };
 
+  /**
+   * 3. Function to retrieve a specific puzzle
+   * @param {*} id
+   */
   const getSpecificPuzzle = async (id) => {
     await axios
       .get(`${API.api_local_url}/puzzle/${id}`)
@@ -72,22 +62,57 @@ function GamePage() {
   };
 
   /**
-   * Retrieve guess data stored in localStorage, if any
+   * 4 Retrieve guess data stored in localStorage, if any
    * @param {object} puzzleData
    */
-  const getLocalGuesses = async (puzzleData) => {
-    const localGuesses = JSON.parse(localStorage.getItem("castingrecall"));
-    if (localGuesses && puzzleData) {
-      if (puzzleData.puzzleId === localGuesses.id) {
-        setGuesses(localGuesses.guesses);
-      } else {
-        setGuesses([]);
+  const getLocalGuesses = async () => {
+    if (puzzleData) {
+      console.log("local guesses", puzzleData.puzzleId);
+      const local = JSON.parse(localStorage.getItem(puzzleData.puzzleId));
+      if (local && puzzleData) {
+        if (puzzleData.puzzleId === local.id) {
+          setGuesses(local.guesses);
+          setCorrectGuesses(local.correctGuesses);
+          console.log("in set guesses", local.guesses);
+        } else {
+          setGuesses([]);
+          setCorrectGuesses([]);
+        }
       }
     }
   };
 
   /**
-   * useEffect to load the list of puzzles & genre details from TMDB.
+   * handle setting correct guessses.
+   * @param {*} movie
+   */
+  const handleSetCorrectGuesses = (movie) => {
+    console.log(`correct movie: ${movie.original_title}`);
+    if (!correctGuesses.find((c) => (c.id === movie.id ? true : false))) {
+      setCorrectGuesses([...correctGuesses, movie]);
+    }
+  };
+
+  /**
+   * Handle incoming guesses and write them to local storage.
+   * @param {*} guesses
+   */
+  const handleGuesses = (guesses) => {
+    setGuesses(guesses);
+    const pId = puzzleData.puzzleId;
+    const puzzle = {
+      id: pId,
+      guesses: guesses,
+    };
+    localStorage.setItem(pId, JSON.stringify(puzzle));
+  };
+
+  useEffect(() => {
+    // console.log(`gamepage: ${puzzleId}`);
+  }, [puzzleId]);
+
+  /**
+   * 1, 2, 3 useEffect to load the list of puzzles & genre details from TMDB on page load
    */
   useEffect(() => {
     getGenres();
@@ -96,6 +121,7 @@ function GamePage() {
     } else {
       getLatestPuzzle();
     }
+    getLocalGuesses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -110,7 +136,7 @@ function GamePage() {
     } else {
       getLatestPuzzle();
     }
-    getLocalGuesses(puzzleData);
+    // getLocalGuesses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [puzzleId]);
 
@@ -118,22 +144,26 @@ function GamePage() {
    * useEffect to load guesses from localStorage
    */
   useEffect(() => {
-    getLocalGuesses(puzzleData);
+    getLocalGuesses();
   }, [puzzleData]);
-
-  useEffect(() => {
-    console.log(correctGuesses);
-  }, [correctGuesses]);
 
   return (
     <>
       <SiteNav />
-      {/* puzzleList={puzzleList} */}
       {puzzleData ? (
-        <GuessForm guesses={guesses} setGuesses={handleGuesses} />
+        <GuessForm
+          puzzleData={puzzleData}
+          guesses={guesses}
+          correctGuesses={correctGuesses}
+          handleGuesses={handleGuesses}
+        />
       ) : null}
-      {youWon && <YouWon guesses={guesses} />}
-      {youLost && <YouLost guesses={guesses} />}
+      <YouWon
+        puzzleId={puzzleId}
+        guesses={guesses}
+        correctGuesses={correctGuesses}
+      />
+      <YouLost puzzleId={puzzleId} guesses={guesses} />
 
       <div className="movie">
         {puzzleData && genreData ? (
@@ -143,8 +173,7 @@ function GamePage() {
               movie={movie}
               genres={genreData}
               guesses={guesses}
-              correctGuesses={correctGuesses}
-              setCorrectGuesses={setCorrectGuesses}
+              handleSetCorrectGuesses={(m1) => handleSetCorrectGuesses(m1)}
             />
           ))
         ) : (
