@@ -15,6 +15,7 @@ import {
   formatGenre,
   obscureString,
   shortenString,
+  shortenMultipleCharNames,
   removeVoiceFromString,
 } from "../../utilities/utilities";
 
@@ -28,7 +29,9 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
   const [movieGuessed, setMovieGuessed] = useState(false);
   const [revealTitle, setRevealTitle] = useState(false);
   const [revealYear, setRevealYear] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [revealSynopsis, setRevealSynopsis] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [revealCharNames, setRevealCharNames] = useState(false);
   const [revealHints, setRevealHints] = useState(false);
 
@@ -121,8 +124,14 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
                 {
                   <p className="movie__actorname movie__actorname--char">
                     {movieGuessed || revealCharNames
-                      ? removeVoiceFromString(actor.character)
-                      : obscureString(removeVoiceFromString(actor.character))}
+                      ? removeVoiceFromString(
+                          shortenMultipleCharNames(actor.character)
+                        )
+                      : obscureString(
+                          removeVoiceFromString(
+                            shortenMultipleCharNames(actor.character)
+                          )
+                        )}
                   </p>
                 }
               </div>

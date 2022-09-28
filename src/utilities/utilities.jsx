@@ -39,18 +39,27 @@ const shortenString = (string) => {
   return string.substring(0, 97) + "...";
 };
 
+/**
+ * removes the substring `(voice)` from a character name
+ * @param {string} string
+ * @returns
+ */
 const removeVoiceFromString = (string) => {
   return string.replace("(voice)", "");
 };
 
 /**
- * Evaluate if a guess is correct.
- * @param {number} guessid
- * @param {object} puzzle
+ * Shortens the character name string if there are multiple characters
+ * @param {*} string
  * @returns
  */
-const isGuessCorrect = (guessid, puzzle) => {
-  return puzzle.find((p) => p.id === guessid);
+const shortenMultipleCharNames = (string) => {
+  const split = string.split(" / ");
+  if (split.length > 1) {
+    return `${split[0]} / ${split[1]}`;
+  } else {
+    return string;
+  }
 };
 
 export {
@@ -59,5 +68,5 @@ export {
   obscureString,
   shortenString,
   removeVoiceFromString,
-  isGuessCorrect,
+  shortenMultipleCharNames,
 };

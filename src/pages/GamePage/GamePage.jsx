@@ -1,9 +1,6 @@
 // Styles
 import "./GamePage.scss";
 
-// Data
-import API from "../../data/api_info.json";
-
 // Components
 import SiteNav from "../../components/SiteNav/SiteNav";
 import GuessForm from "../../components/GuessForm/GuessForm";
@@ -20,6 +17,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 function GamePage() {
+  // Data
+  const REACT_APP_TMDB_KEY = process.env.REACT_APP_TMDB_KEY;
+  const REACT_APP_TMDB_GENRE_DETAILS = process.env.REACT_APP_TMDB_GENRE_DETAILS;
+  const REACT_APP_API_REMOTE_URL = process.env.REACT_APP_API_REMOTE_URL;
+
   let { puzzleId } = useParams();
   const [genreData, setGenreData] = useState(null);
   const [puzzleList, setPuzzleList] = useState(null);
@@ -35,7 +37,9 @@ function GamePage() {
    */
   const getGenres = async () => {
     await axios
-      .get(`${API.api_genre_details}?api_key=${API.api_key}&language=en-US`)
+      .get(
+        `${REACT_APP_TMDB_GENRE_DETAILS}?api_key=${REACT_APP_TMDB_KEY}&language=en-US`
+      )
       .then((res) => setGenreData(res.data.genres))
       .catch((err) => console.error(err));
   };
@@ -45,7 +49,7 @@ function GamePage() {
    */
   const getPuzzleList = async () => {
     await axios
-      .get(`${API.api_local_url}/puzzle/list`)
+      .get(`${REACT_APP_API_REMOTE_URL}/puzzle/list`)
       .then((res) => setPuzzleList([res.data].flat()))
       .catch((err) => console.error(err));
   };
@@ -56,7 +60,7 @@ function GamePage() {
    */
   const getSpecificPuzzle = async (id) => {
     await axios
-      .get(`${API.api_local_url}/puzzle/${id}`)
+      .get(`${REACT_APP_API_REMOTE_URL}/puzzle/${id}`)
       .then((res) => setPuzzleData(res.data))
       .catch((err) => console.error(err));
   };
@@ -74,6 +78,9 @@ function GamePage() {
         youLost: youLost,
       };
       localStorage.setItem(pId, JSON.stringify(puzzle));
+    }
+    if (guesses.length > 0) {
+      console.info(guesses[0]);
     }
   };
 
@@ -121,6 +128,7 @@ function GamePage() {
    */
   useEffect(() => {
     getGenres();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -128,6 +136,7 @@ function GamePage() {
    */
   useEffect(() => {
     getPuzzleList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -154,6 +163,7 @@ function GamePage() {
     } else {
       getSpecificPuzzle("latest");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [puzzleId]);
 
   /**
