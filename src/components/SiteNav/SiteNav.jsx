@@ -1,3 +1,6 @@
+// Styles
+import "./SiteNav.scss";
+
 // Libraries
 import { NavLink } from "react-router-dom";
 

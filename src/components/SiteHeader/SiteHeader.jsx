@@ -1,3 +1,6 @@
+// Styles
+import "./SiteHeader.scss";
+
 function Header() {
   return (
     <header className="header">

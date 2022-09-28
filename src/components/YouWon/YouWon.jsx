@@ -1,3 +1,6 @@
+// Styles
+import "./YouWon.scss";
+
 function YouWon({ guesses, youWon }) {
   return (
     <>

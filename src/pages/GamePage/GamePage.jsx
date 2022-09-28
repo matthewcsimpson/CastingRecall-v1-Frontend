@@ -215,9 +215,9 @@ function GamePage() {
 
       <div className="movie">
         {puzzleData && genreData ? (
-          puzzleData.puzzle.map((movie) => (
+          puzzleData.puzzle.map((movie, i) => (
             <Movie
-              key={movie.id}
+              key={`${i}-${movie.id}`}
               movie={movie}
               genres={genreData}
               guesses={guesses}

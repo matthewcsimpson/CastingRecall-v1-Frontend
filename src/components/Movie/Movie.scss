@@ -1,0 +1,325 @@
+@use "../../styles/partials/global" as *;
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/fontface" as *;
+
+.movie {
+    width: 100%;
+
+    &__wrapper {
+        width: 90%;
+        background-color: #151515;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        margin: 0 auto;
+        padding: 0 0.5rem;
+        border-bottom: 1px solid #f1f1f1;
+
+        @include tablet {
+            max-width: 70rem;
+            min-height: 28rem;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        &:first-child {
+            border-top: 1px solid #f1f1f1;
+        }
+
+        &--guessed,
+        &--guessed:first-child {
+            border: 10px solid green;
+        }
+    }
+
+    &__heading {
+        margin: 0.5rem 1rem 1rem;
+        color: #f1f1f1;
+        align-self: flex-start;
+    }
+
+    &__details {
+        order: 1;
+        display: flex;
+        flex-direction: column;
+        font-size: 0.9rem;
+
+        @include tablet {
+            width: 40%;
+            height: 300px;
+        }
+
+        &--inner {
+            padding: 0 0.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-bottom: 1rem;
+
+            @include tablet {
+                flex-direction: row;
+            }
+        }
+    }
+
+    &__detailsbox {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+
+        &--title,
+        &--year,
+        &--synopsis,
+        &--genres {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+
+            @include tablet {
+                flex-direction: row;
+                padding: 0 0.75rem;
+            }
+        }
+
+        &--genres {
+            flex-direction: row;
+            // flex-wrap: wrap;
+        }
+    }
+
+    &__genrelist {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    &__genre {
+        display: inline-block;
+        border-radius: 0.5rem;
+        text-align: center;
+        font-size: 0.75rem;
+        height: 1rem;
+        padding: 0.25rem 1rem;
+        margin-bottom: 0.25rem;
+        margin-right: 0.25rem;
+
+        &--28 {
+            // Action
+            background: #f5b7b1;
+        }
+
+        &--12 {
+            // Adventure
+            background: #d2b4de;
+        }
+
+        &--16 {
+            // Animation
+            background: #a9cce3;
+        }
+
+        &--35 {
+            // Comedy
+            background: #a2d9ce;
+        }
+
+        &--80 {
+            // Crime
+            background: #abebc6;
+        }
+
+        &--99 {
+            // Documentary
+            background: #f9e79f;
+        }
+
+        &--18 {
+            // Drama
+            background: #f5cba7;
+        }
+
+        &--10751 {
+            // Family
+            background: #884ea0;
+        }
+
+        &--14 {
+            // Fantasy
+            background: #2471a3;
+        }
+
+        &--36 {
+            // History
+            background: #2471a3;
+        }
+
+        &--27 {
+            // Horror
+            background: #a93226;
+        }
+
+        &--10402 {
+            // Music
+            background: #edbb99;
+        }
+
+        &--9648 {
+            // Mystery
+            background: #a9dfbf;
+        }
+
+        &--10749 {
+            // Romance
+            background: #a3e4d7;
+        }
+
+        &--878 {
+            // Science Fiction
+            background: #aed6f1;
+        }
+
+        &--10770 {
+            // TV Movie
+            background: #fff;
+        }
+
+        &--53 {
+            // Thriller
+            background: #fad7a0;
+        }
+
+        &--10752 {
+            // War
+            background: #d7bde2;
+        }
+
+        &--37 {
+            // Western
+            background: #e6b0aa;
+        }
+    }
+
+    // &__posterbox {}
+
+    &__poster {
+        object-fit: cover;
+        height: 100px;
+        border: 1px solid #f1f1f1;
+        margin-bottom: 1rem;
+
+        @include tablet {
+            height: 170px;
+        }
+
+        &--mobile {
+            height: 150px;
+
+            @include tablet {
+                height: 250px;
+            }
+        }
+    }
+
+    &__text {
+        color: #f1f1f1;
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+        min-height: 1.5rem;
+
+        &--title {
+            min-width: 25%;
+        }
+
+        &--item {
+            width: 100%;
+
+            @include tablet {
+                width: 74%;
+            }
+        }
+    }
+
+    &__actorname {
+        font-size: 0.75rem;
+        font-style: italic;
+        margin: 0.25rem 0 0 0;
+        text-align: center;
+        align-self: middle;
+
+        &--as {
+            margin: 0;
+        }
+
+        &--char {
+            color: red;
+        }
+    }
+
+    &__castpics {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        @include tablet {
+            width: 57%;
+        }
+
+        &--inner {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+
+            @include tablet {
+                width: 100%;
+            }
+        }
+    }
+
+    &__headshotbox {
+        height: 200px;
+        width: 80px;
+        display: flex;
+        border-radius: 0.5rem;
+        flex-direction: column;
+        margin: 0 0.125rem 0.125rem;
+
+        background-color: #f1f1f1;
+
+        @include tablet {
+            height: 275px;
+            width: 120px;
+            margin: 0 0.125rem 0.5rem 0.125rem;
+        }
+    }
+
+    &__headshot {
+        object-fit: cover;
+        height: 100px;
+        border-radius: 0.5rem 0.5rem 0 0;
+
+        @include tablet {
+            height: 170px;
+        }
+
+        &--mobile {
+            height: 150px;
+
+            @include tablet {
+                height: 250px;
+            }
+        }
+
+        &--key {
+            border: 0.1875rem solid blue;
+        }
+    }
+
+    &__hintswrapper {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 1rem 1rem 1rem;
+    }
+}

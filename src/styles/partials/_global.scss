@@ -1,0 +1,10 @@
+@use "./mixins" as *;
+@use "./variables" as *;
+@use "./fontface" as *;
+
+body {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background: #6bb580;
+}

@@ -1,3 +1,6 @@
+// Styles
+import "./YouLost.scss";
+
 function YouLost({ guesses, youLost }) {
   let count = guesses.filter((guess) => guess.correct === true);
 

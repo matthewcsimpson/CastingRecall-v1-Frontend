@@ -1,0 +1,66 @@
+@use "../../styles/partials/global" as *;
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/fontface" as *;
+
+.youwon {
+    width: 100%;
+
+    &__wrapper {
+        width: 90%;
+        background-color: #151515;
+        margin: 0 auto;
+        padding: 0.5rem 0.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 10px solid green;
+
+        @include tablet {
+            max-width: 70rem;
+        }
+    }
+
+    &__heading {
+        color: #f1f1f1;
+        font-size: 2rem;
+        text-align: center;
+
+        @include tablet {
+            font-size: 3rem;
+        }
+
+        @include desktop {
+            font-size: 4rem;
+        }
+    }
+
+    &__subheading {
+        color: #f1f1f1;
+        font-size: 1.5rem;
+        text-align: center;
+
+        @include tablet {
+            font-size: 2.25rem;
+        }
+
+        @include desktop {
+            font-size: 3rem;
+        }
+    }
+
+    &__text {
+        color: #f1f1f1;
+        font-size: 1.5rem;
+        text-align: center;
+
+        @include tablet {
+            font-size: 2.25rem;
+        }
+
+        @include desktop {
+            font-size: 3rem;
+        }
+    }
+}

@@ -1,3 +1,6 @@
+// Styles
+import "./SiteFooter.scss";
+
 function SiteFooter() {
   return (
     <footer className="footer">

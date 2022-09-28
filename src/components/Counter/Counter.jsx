@@ -1,20 +1,24 @@
 /* eslint-disable array-callback-return */
+
+// Styles
+import "./Counter.scss";
+
 function Counter({ guesses }) {
   return (
     <>
       <div className="counter">
         <div className="counter__wrapper">
           <ul className="counter__list">
-            {guesses.map((movie) => {
+            {guesses.map((movie, i) => {
               if (movie.correct === true) {
                 return (
-                  <li key={movie.id} className="counter__item">
+                  <li key={`${i}-${movie.id}`} className="counter__item">
                     <p className="counter__text">✅ {movie.original_title}</p>
                   </li>
                 );
               } else if (movie.correct === false) {
                 return (
-                  <li key={movie.id} className="counter__item">
+                  <li key={`${i}-${movie.id}`} className="counter__item">
                     <p className="counter__text">🟥 {movie.original_title}</p>
                   </li>
                 );
