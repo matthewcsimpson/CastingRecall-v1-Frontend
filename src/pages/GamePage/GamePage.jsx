@@ -86,6 +86,7 @@ function GamePage() {
     } else {
       getSpecificPuzzle("latest");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -106,6 +107,7 @@ function GamePage() {
     }
     console.log("winCounter: ", correctCounter.length, "youWon: ", youWon);
     console.log("guesses: ", guesses.length, "youLost: ", youLost);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses.length]);
 
   useEffect(() => {
