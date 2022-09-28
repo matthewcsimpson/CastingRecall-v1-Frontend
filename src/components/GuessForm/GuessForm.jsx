@@ -12,7 +12,6 @@ import { formatDate } from "../../utilities/utilities";
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
 
 // Variables
-import API from "../../data/api_info.json";
 const dateOptions = {
   year: "numeric",
 };
@@ -24,6 +23,10 @@ function GuessForm({
   youLost,
   handleSubmitGuess,
 }) {
+  // Data
+  const REACT_APP_TMDB_KEY = process.env.REACT_APP_TMDB_KEY;
+  const REACT_APP_TMDB_SEARCH_URL = process.env.REACT_APP_TMDB_SEARCH_URL;
+
   const [searchQuery, setSearchQuery] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
 
@@ -34,7 +37,9 @@ function GuessForm({
   const handleFieldChange = async (event) => {
     await setSearchQuery(event.target.value);
     await axios
-      .get(`${API.api_search_url}&api_key=${API.api_key}&query=${searchQuery}`)
+      .get(
+        `${REACT_APP_TMDB_SEARCH_URL}&api_key=${REACT_APP_TMDB_KEY}&query=${searchQuery}`
+      )
       .then((res) => {
         setSearchResults(res.data.results);
       })
