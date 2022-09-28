@@ -61,8 +61,10 @@ function GamePage() {
       .catch((err) => console.error(err));
   };
 
+  /**
+   *
+   */
   const setLocalDetails = () => {
-    console.log("g: ", guesses);
     if (puzzleData && guesses) {
       const pId = puzzleData.puzzleId;
       const puzzle = {
@@ -71,7 +73,6 @@ function GamePage() {
         youWon: youWon,
         youLost: youLost,
       };
-      console.log(puzzle);
       localStorage.setItem(pId, JSON.stringify(puzzle));
     }
   };
@@ -107,8 +108,6 @@ function GamePage() {
           setGuesses(local.guesses);
           setYouWon(local.youWon);
           setYouLost(local.youLost);
-          console.log("local guesses: ", local);
-          console.log("this fires in getLocalGuesses");
         } else {
           setGuesses([]);
         }
@@ -171,6 +170,9 @@ function GamePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses]);
 
+  /**
+   *  Set details stored in state to localStorate, and then clear, when the puzzleId changes
+   */
   useEffect(() => {
     setLocalDetails();
     setGuesses([]);
@@ -179,14 +181,9 @@ function GamePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [puzzleId]);
 
-  // check all the data
-  // useEffect(() => {
-  //   console.log("genreData: ", genreData);
-  //   console.log("puzzleList: ", puzzleList);
-  //   console.log("puzleId: ", puzzleId);
-  //   console.log("guesses: ", guesses);
-  // }, [genreData, puzzleList, puzzleId, guesses]);
-
+  /**
+   * Load local details
+   */
   useEffect(() => {
     getLocalGuesses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
