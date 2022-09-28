@@ -174,7 +174,7 @@ function GamePage() {
     if (correctCounter.length > 5) {
       setYouWon(true);
     }
-    if (guesses.length > 9) {
+    if (guesses.length > 9 && correctCounter < 6) {
       setYouLost(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
