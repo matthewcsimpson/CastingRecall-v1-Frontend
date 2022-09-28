@@ -95,108 +95,249 @@
     }
 
     &__genre {
+        white-space: nowrap;
+        position: relative;
+        margin: 0 0.3125rem 0.25rem 0.625rem;
         display: inline-block;
-        border-radius: 0.5rem;
-        text-align: center;
-        font-size: 0.75rem;
-        height: 1rem;
-        padding: 0.25rem 1rem;
-        margin-bottom: 0.25rem;
-        margin-right: 0.25rem;
+        height: 1.5625rem;
+        border-radius: 0 0.3125rem 0.3125rem 0;
+        padding: 0 1.5625rem 0 0.9375rem;
+        background: #e8edf0;
+        border: 1px solid;
+        line-height: 1.4375rem;
+
+        &:before {
+            position: absolute;
+            background: #e8edf0;
+            content: "\25CF";
+            color: #f1f1f1;
+            font-size: 0.75rem;
+            line-height: 0.8125rem;
+            text-indent: 0.375rem;
+            top: 0.1875rem;
+            left: -0.625rem;
+            width: 1.125rem;
+            height: 1.125rem;
+            transform: rotate(45deg);
+            border-left: 1px solid;
+            border-bottom: 1px solid;
+        }
+
+        &:after {
+            position: absolute;
+            right: 0;
+            margin: 0.0625rem 0.4375rem;
+            font-weight: bold;
+            font-size: 1.1875rem;
+        }
 
         &--28 {
             // Action
-            background: #f5b7b1;
+            background: $genre-color-action;
+            border-color: $genre-color-action;
+            &:before {
+                background: $genre-color-action;
+                border-color: $genre-color-action;
+                border-color: $genre-color-action;
+            }
         }
 
         &--12 {
             // Adventure
-            background: #d2b4de;
+            background: $genre-color-adventure;
+            border-color: $genre-color-adventure;
+            &:before {
+                background: $genre-color-adventure;
+                border-color: $genre-color-adventure;
+                border-color: $genre-color-adventure;
+            }
         }
 
         &--16 {
             // Animation
-            background: #a9cce3;
+            background: $genre-color-animation;
+            border-color: $genre-color-animation;
+            &:before {
+                background: $genre-color-animation;
+                border-color: $genre-color-animation;
+                border-color: $genre-color-animation;
+            }
         }
 
         &--35 {
             // Comedy
-            background: #a2d9ce;
+            background: $genre-color-comedy;
+            border-color: $genre-color-comedy;
+            &:before {
+                background: $genre-color-comedy;
+                border-color: $genre-color-comedy;
+                border-color: $genre-color-comedy;
+            }
         }
 
         &--80 {
             // Crime
-            background: #abebc6;
+            background: $genre-color-crime;
+            border-color: $genre-color-crime;
+            &:before {
+                background: $genre-color-crime;
+                border-color: $genre-color-crime;
+                border-color: $genre-color-crime;
+            }
         }
 
         &--99 {
             // Documentary
-            background: #f9e79f;
+            background: $genre-color-documentary;
+            border-color: $genre-color-documentary;
+            &:before {
+                background: $genre-color-documentary;
+                border-color: $genre-color-documentary;
+                border-color: $genre-color-documentary;
+            }
         }
 
         &--18 {
             // Drama
-            background: #f5cba7;
+            background: $genre-color-drama;
+            border-color: $genre-color-drama;
+            &:before {
+                background: $genre-color-drama;
+                border-color: $genre-color-drama;
+                border-color: $genre-color-drama;
+            }
         }
 
         &--10751 {
             // Family
-            background: #884ea0;
+            background: $genre-color-family;
+            border-color: $genre-color-family;
+            &:before {
+                background: $genre-color-family;
+                border-color: $genre-color-family;
+                border-color: $genre-color-family;
+            }
         }
 
         &--14 {
             // Fantasy
-            background: #2471a3;
+            background: $genre-color-fantasy;
+            border-color: $genre-color-fantasy;
+            &:before {
+                background: $genre-color-fantasy;
+                border-color: $genre-color-fantasy;
+                border-color: $genre-color-fantasy;
+            }
         }
 
         &--36 {
             // History
-            background: #2471a3;
+            background: $genre-color-history;
+            border-color: $genre-color-history;
+            &:before {
+                background: $genre-color-history;
+                border-color: $genre-color-history;
+                border-color: $genre-color-history;
+            }
         }
 
         &--27 {
             // Horror
-            background: #a93226;
+            background: $genre-color-horror;
+            border-color: $genre-color-horror;
+            &:before {
+                background: $genre-color-horror;
+                border-color: $genre-color-horror;
+                border-color: $genre-color-horror;
+            }
         }
 
         &--10402 {
             // Music
-            background: #edbb99;
+            background: $genre-color-music;
+            border-color: $genre-color-music;
+            &:before {
+                background: $genre-color-music;
+                border-color: $genre-color-music;
+                border-color: $genre-color-music;
+            }
         }
 
         &--9648 {
             // Mystery
-            background: #a9dfbf;
+            background: $genre-color-mystery;
+            border-color: $genre-color-mystery;
+            &:before {
+                background: $genre-color-mystery;
+                border-color: $genre-color-mystery;
+                border-color: $genre-color-mystery;
+            }
         }
 
         &--10749 {
             // Romance
-            background: #a3e4d7;
+            background: $genre-color-romance;
+            border-color: $genre-color-romance;
+            &:before {
+                background: $genre-color-romance;
+                border-color: $genre-color-romance;
+                border-color: $genre-color-romance;
+            }
         }
 
         &--878 {
             // Science Fiction
-            background: #aed6f1;
+            background: $genre-color-scifi;
+            border-color: $genre-color-scifi;
+            &:before {
+                background: $genre-color-scifi;
+                border-color: $genre-color-scifi;
+                border-color: $genre-color-scifi;
+            }
         }
 
         &--10770 {
             // TV Movie
-            background: #fff;
+            background: $genre-color-tv;
+            border-color: $genre-color-tv;
+            &:before {
+                background: $genre-color-tv;
+                border-color: $genre-color-tv;
+                border-color: $genre-color-tv;
+            }
         }
 
         &--53 {
             // Thriller
-            background: #fad7a0;
+            background: $genre-color-thriller;
+            border-color: $genre-color-thriller;
+            &:before {
+                background: $genre-color-thriller;
+                border-color: $genre-color-thriller;
+                border-color: $genre-color-thriller;
+            }
         }
 
         &--10752 {
             // War
-            background: #d7bde2;
+            background: $genre-color-war;
+            border-color: $genre-color-war;
+            &:before {
+                background: $genre-color-war;
+                border-color: $genre-color-war;
+                border-color: $genre-color-war;
+            }
         }
 
         &--37 {
             // Western
-            background: #e6b0aa;
+            background: $genre-color-western;
+            border-color: $genre-color-western;
+            &:before {
+                background: $genre-color-western;
+                border-color: $genre-color-western;
+                border-color: $genre-color-western;
+            }
         }
     }
 
@@ -244,6 +385,7 @@
             width: 100%;
             font-size: 0.75rem;
             font-style: italic;
+            cursor: help;
         }
     }
 
