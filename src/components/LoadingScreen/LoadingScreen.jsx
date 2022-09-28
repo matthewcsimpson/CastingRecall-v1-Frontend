@@ -1,3 +1,6 @@
+// Styles
+import "./LoadingScreen.scss";
+
 // Assets
 import loading from "../../assets/loading-25.gif";
 

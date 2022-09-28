@@ -1,31 +1,14 @@
-// Data
-import API from "../../data/api_info.json";
+// Styles
+import "./SiteNav.scss";
 
 // Libraries
-import { NavLink, useParams } from "react-router-dom";
-import axios from "axios";
-import { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 
-function SiteNav() {
-  const [puzzleList, setPuzzleList] = useState(null);
-  let { puzzleId } = useParams();
-
-  const getPuzzleList = async () => {
-    await axios
-      .get(`${API.api_local_url}/puzzle/list`)
-      .then((res) => setPuzzleList([res.data].flat()))
-      .catch((err) => console.error(err));
-  };
-
-  useEffect(() => {
-    getPuzzleList();
-  }, []);
-
-  if (puzzleList) {
-    if (!puzzleId) {
-      puzzleId = puzzleList[puzzleList.length - 1];
-    }
+function SiteNav({ puzzleId, puzzleList }) {
+  if (!puzzleId) {
+    puzzleId = puzzleList[puzzleList.length - 1];
   }
+
   let index = "";
   if (puzzleList) {
     index = puzzleList.indexOf(puzzleId);
@@ -58,7 +41,7 @@ function SiteNav() {
                   Prev Puzzle
                 </NavLink>
               </li>
-              <li className="nav__item">
+              {/* <li className="nav__item">
                 <NavLink
                   className={"nav item nav__item--link"}
                   to="/how-to-play"
@@ -73,7 +56,7 @@ function SiteNav() {
                 >
                   Puzzle List
                 </NavLink>
-              </li>
+              </li> */}
               <li className="nav__item">
                 <NavLink className={"nav item nav__item--link"} to={`/`}>
                   Latest Puzzle
@@ -95,7 +78,9 @@ function SiteNav() {
                         ? "nav__item nav__item--hidden nav__item--hideifnull"
                         : "nav__item nav__item--hidden"
                     }
-                  ></span>
+                  >
+                    ➡️
+                  </span>
                 </NavLink>
               </li>
             </ul>
