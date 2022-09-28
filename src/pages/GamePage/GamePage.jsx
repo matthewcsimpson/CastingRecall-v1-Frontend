@@ -31,7 +31,7 @@ function GamePage() {
   // ------------------------------------------------------------------------data loading
 
   /**
-   * 1. Function to retrieve genre information from TMDB
+   * Function to retrieve genre information from TMDB
    */
   const getGenres = async () => {
     await axios
@@ -51,7 +51,7 @@ function GamePage() {
   };
 
   /**
-   * 3. Function to retrieve a specific puzzle
+   * Function to retrieve a specific puzzle
    * @param {*} id
    */
   const getSpecificPuzzle = async (id) => {
@@ -59,6 +59,61 @@ function GamePage() {
       .get(`${API.api_local_url}/puzzle/${id}`)
       .then((res) => setPuzzleData(res.data))
       .catch((err) => console.error(err));
+  };
+
+  const setLocalDetails = () => {
+    console.log("g: ", guesses);
+    if (puzzleData && guesses) {
+      const pId = puzzleData.puzzleId;
+      const puzzle = {
+        id: pId,
+        guesses: guesses,
+        youWon: youWon,
+        youLost: youLost,
+      };
+      console.log(puzzle);
+      localStorage.setItem(pId, JSON.stringify(puzzle));
+    }
+  };
+
+  /**
+   * Receive a movie object from the guess form and process it.
+   * @param {*} movie
+   */
+  const handleSubmitGuess = (movie) => {
+    if (puzzleData.puzzle) {
+      let goodGuess = puzzleData.puzzle.find((puzzleMovie) =>
+        puzzleMovie.id === movie.id ? true : false
+      );
+      if (goodGuess) {
+        goodGuess = { ...goodGuess, ...{ correct: true } };
+        setGuesses([...guesses, goodGuess]);
+      } else {
+        let badGuess = { ...movie, ...{ correct: false } };
+        setGuesses([...guesses, badGuess]);
+      }
+    }
+    setLocalDetails();
+  };
+
+  /**
+   * Retrieve guess data stored in localStorage, if any
+   */
+  const getLocalGuesses = () => {
+    if (puzzleData) {
+      let local = JSON.parse(localStorage.getItem(puzzleData.puzzleId));
+      if (local) {
+        if (puzzleData.puzzleId === parseInt(local.id)) {
+          setGuesses(local.guesses);
+          setYouWon(local.youWon);
+          setYouLost(local.youLost);
+          console.log("local guesses: ", local);
+          console.log("this fires in getLocalGuesses");
+        } else {
+          setGuesses([]);
+        }
+      }
+    }
   };
 
   // ------------------------------------------------------------------------useEffects
@@ -77,18 +132,23 @@ function GamePage() {
   }, []);
 
   /**
+   * On Page Load
    * Get the specific puzzle if there is a puzzleId, otherwise get the latest puzzle
    */
   useEffect(() => {
-    console.log(puzzleList);
     if (puzzleId) {
       getSpecificPuzzle(puzzleId);
     } else {
       getSpecificPuzzle("latest");
     }
+    setLocalDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * On puzzleId changing
+   * load puzzle details.  if there is a puzzleId, pull that puzzle.  if else, pull the latest puzzle.
+   */
   useEffect(() => {
     if (puzzleId) {
       getSpecificPuzzle(puzzleId);
@@ -97,6 +157,9 @@ function GamePage() {
     }
   }, [puzzleId]);
 
+  /**
+   * Update the win/lose conditions based on the guesses
+   */
   useEffect(() => {
     let correctCounter = guesses.filter((guess) => guess.correct === true);
     if (correctCounter.length > 5) {
@@ -105,57 +168,31 @@ function GamePage() {
     if (guesses.length > 9) {
       setYouLost(true);
     }
-    console.log("winCounter: ", correctCounter.length, "youWon: ", youWon);
-    console.log("guesses: ", guesses.length, "youLost: ", youLost);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [guesses.length]);
+  }, [guesses]);
 
   useEffect(() => {
+    setLocalDetails();
     setGuesses([]);
     setYouWon(false);
     setYouLost(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [puzzleId]);
 
   // check all the data
-  useEffect(() => {
-    console.log("genreData: ", genreData);
-    console.log("puzzleList: ", puzzleList);
-    console.log("puzleId: ", puzzleId);
-    console.log("guesses: ", guesses);
-  }, [genreData, puzzleList, puzzleId, guesses]);
+  // useEffect(() => {
+  //   console.log("genreData: ", genreData);
+  //   console.log("puzzleList: ", puzzleList);
+  //   console.log("puzleId: ", puzzleId);
+  //   console.log("guesses: ", guesses);
+  // }, [genreData, puzzleList, puzzleId, guesses]);
 
-  // check all the data
   useEffect(() => {
-    const storage = {
-      id: puzzleId,
-      puzzleData: puzzleData,
-      guesses: guesses,
-      youWon: youWon,
-      youLost: youLost,
-    };
-
-    localStorage.setItem(puzzleId, JSON.stringify(storage));
-  }, [puzzleId, puzzleData, guesses, youLost, youWon]);
+    getLocalGuesses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [puzzleData]);
 
   // ------------------------------------------------------------------------functions
-  /**
-   * Receive a movie object from the guess form and process it.
-   * @param {*} movie
-   */
-  const handleSubmitGuess = (movie) => {
-    if (puzzleData.puzzle) {
-      let goodGuess = puzzleData.puzzle.find((puzzleMovie) =>
-        puzzleMovie.id === movie.id ? true : false
-      );
-      if (goodGuess) {
-        goodGuess = { ...goodGuess, ...{ correct: true } };
-        setGuesses([...guesses, goodGuess]);
-      } else {
-        let badGuess = { ...movie, ...{ correct: false } };
-        setGuesses([...guesses, badGuess]);
-      }
-    }
-  };
 
   return (
     <>
