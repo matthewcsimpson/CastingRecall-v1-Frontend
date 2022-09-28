@@ -21,9 +21,6 @@ function GamePage() {
   const REACT_APP_TMDB_KEY = process.env.REACT_APP_TMDB_KEY;
   const REACT_APP_TMDB_GENRE_DETAILS = process.env.REACT_APP_TMDB_GENRE_DETAILS;
   const REACT_APP_API_REMOTE_URL = process.env.REACT_APP_API_REMOTE_URL;
-  const REACT_APP_API_LOCAL_URL = process.env.REACT_APP_API_LOCAL_URL;
-
-  console.log(process.env);
 
   let { puzzleId } = useParams();
   const [genreData, setGenreData] = useState(null);
