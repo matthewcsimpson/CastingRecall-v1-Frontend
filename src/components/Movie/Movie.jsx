@@ -24,12 +24,54 @@ const dateOptions = {
   year: "numeric",
 };
 
-function Movie({ movie, genres, guesses }) {
+function Movie({ movie, genres, guesses, youWon, youLost }) {
   const [movieGuessed, setMovieGuessed] = useState(false);
-  const [revealTitle, setRevealTitle] = useState(true);
-  const [revealYear, setRevealYear] = useState(true);
-  const [revealSynopsis, setRevealSynopsis] = useState(true);
-  const [revealCharNames, setRevealCharNames] = useState(true);
+  const [revealTitle, setRevealTitle] = useState(false);
+  const [revealYear, setRevealYear] = useState(false);
+  const [revealSynopsis, setRevealSynopsis] = useState(false);
+  const [revealCharNames, setRevealCharNames] = useState(false);
+  const [revealHints, setRevealHints] = useState(false);
+
+  /**
+   * Handle revealing the hints
+   * @param {event} e
+   * @param {seet function} setFunc
+   */
+  const handleHintClick = (e, setFunc) => {
+    e.preventDefault();
+    setFunc((prev) => {
+      if (prev === false) {
+        return !prev;
+      } else {
+        return prev;
+      }
+    });
+  };
+
+  const handleEasyMode = (e) => {
+    e.preventDefault();
+    setRevealYear((prev) => {
+      if (prev === false) {
+        return !prev;
+      } else {
+        return prev;
+      }
+    });
+    setRevealSynopsis((prev) => {
+      if (prev === false) {
+        return !prev;
+      } else {
+        return prev;
+      }
+    });
+    setRevealCharNames((prev) => {
+      if (prev === false) {
+        return !prev;
+      } else {
+        return prev;
+      }
+    });
+  };
 
   /**
    * Toggle this movie as guessed when it is guessed
@@ -41,6 +83,15 @@ function Movie({ movie, genres, guesses }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses]);
 
+  useEffect(() => {
+    if ((movieGuessed, youWon || youLost)) {
+      setRevealCharNames(true);
+      setRevealSynopsis(true);
+      setRevealYear(true);
+      setRevealTitle(true);
+    }
+  }, [movieGuessed, youWon, youLost]);
+
   return (
     <>
       <div
@@ -50,6 +101,34 @@ function Movie({ movie, genres, guesses }) {
             : "movie__wrapper"
         }
       >
+        <div className="movie__castpics">
+          <h2 className="movie__heading">Starring:</h2>
+          <div className="movie__castpics--inner">
+            {movie.cast.map((actor) => (
+              <div key={actor.id} className="movie__headshotbox">
+                <img
+                  key={actor.id}
+                  className={"movie__headshot"}
+                  src={
+                    actor.profile_path
+                      ? `${IMG_BASE}${actor.profile_path}`
+                      : profilePic
+                  }
+                  alt={actor.name}
+                />
+                <p className="movie__actorname">{`${actor.name}`}</p>
+                <p className="movie__actorname movie__actorname--as">as</p>
+                {
+                  <p className="movie__actorname movie__actorname--char">
+                    {movieGuessed || revealCharNames
+                      ? removeVoiceFromString(actor.character)
+                      : obscureString(removeVoiceFromString(actor.character))}
+                  </p>
+                }
+              </div>
+            ))}
+          </div>
+        </div>
         <div className="movie__details">
           <h2 className="movie__heading">Movie Details:</h2>
           <div className="movie__details--inner">
@@ -110,33 +189,47 @@ function Movie({ movie, genres, guesses }) {
             </div>
           </div>
         </div>
-        <div className="movie__castpics">
-          <h2 className="movie__heading">Starring:</h2>
-          <div className="movie__castpics--inner">
-            {movie.cast.map((actor) => (
-              <div key={actor.id} className="movie__headshotbox">
-                <img
-                  key={actor.id}
-                  className={"movie__headshot"}
-                  src={
-                    actor.profile_path
-                      ? `${IMG_BASE}${actor.profile_path}`
-                      : profilePic
-                  }
-                  alt={actor.name}
-                />
-                <p className="movie__actorname">{`${actor.name}`}</p>
-                <p className="movie__actorname movie__actorname--as">as</p>
-                {
-                  <p className="movie__actorname movie__actorname--char">
-                    {movieGuessed || revealCharNames
-                      ? removeVoiceFromString(actor.character)
-                      : obscureString(removeVoiceFromString(actor.character))}
-                  </p>
-                }
-              </div>
-            ))}
-          </div>
+        <div className="movie__hintswrapper">
+          <p
+            className="movie__text movie__text--hints"
+            onClick={(e) => {
+              handleHintClick(e, setRevealHints);
+            }}
+          >
+            {revealHints ? `Hints:` : "pssst....need a hint?"}
+          </p>
+          {revealHints ? (
+            <>
+              <button
+                className="movie__hintsbutton movie__hintsbutton--year"
+                onClick={(e) => handleHintClick(e, setRevealYear)}
+                disabled={revealYear}
+              >
+                Year
+              </button>
+              <button
+                className="movie__hintsbutton movie__hintsbutton--names"
+                onClick={(e) => handleHintClick(e, setRevealCharNames)}
+                disabled={revealCharNames}
+              >
+                Names
+              </button>
+              <button
+                className="movie__hintsbutton movie__hintsbutton--synopsis"
+                onClick={(e) => handleHintClick(e, setRevealSynopsis)}
+                disabled={revealSynopsis}
+              >
+                Synopsis
+              </button>
+              <button
+                className="movie__hintsbutton movie__hintsbutton--easy"
+                onClick={(e) => handleEasyMode(e)}
+                disabled={revealSynopsis && revealCharNames && revealYear}
+              >
+                Easy Mode
+              </button>
+            </>
+          ) : null}
         </div>
       </div>
     </>
