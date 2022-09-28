@@ -20,6 +20,7 @@
             max-width: 70rem;
             min-height: 28rem;
             flex-direction: row;
+            flex-wrap: wrap;
             justify-content: space-between;
         }
 
@@ -40,13 +41,13 @@
     }
 
     &__details {
-        order: 1;
+        order: 0;
         display: flex;
         flex-direction: column;
         font-size: 0.9rem;
 
         @include tablet {
-            width: 40%;
+            width: 42%;
             height: 300px;
         }
 
@@ -238,6 +239,12 @@
                 width: 74%;
             }
         }
+
+        &--hints {
+            width: 100%;
+            font-size: 0.75rem;
+            font-style: italic;
+        }
     }
 
     &__actorname {
@@ -320,6 +327,38 @@
     &__hintswrapper {
         width: 100%;
         margin: 0 auto;
-        padding: 0 1rem 1rem 1rem;
+        padding: 0;
+    }
+
+    &__hintsbutton {
+        font-size: 0.75rem;
+        border-radius: 0.5rem;
+
+        &--year,
+        &--names,
+        &--synopsis,
+        &--easy {
+            &:disabled {
+                background-color: rgb(67, 66, 66);
+                color: rgb(42, 42, 42);
+            }
+        }
+
+        &--year {
+            background-color: rgb(70, 64, 244);
+            color: #f1f1f1;
+        }
+        &--names {
+            background-color: rgb(70, 64, 244);
+            color: #f1f1f1;
+        }
+        &--synopsis {
+            background-color: rgb(70, 64, 244);
+            color: #f1f1f1;
+        }
+        &--easy {
+            background-color: rgb(108, 0, 0);
+            color: #f1f1f1;
+        }
     }
 }

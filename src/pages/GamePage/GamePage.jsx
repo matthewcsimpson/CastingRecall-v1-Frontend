@@ -221,6 +221,8 @@ function GamePage() {
               movie={movie}
               genres={genreData}
               guesses={guesses}
+              youWon={youWon}
+              youLost={youLost}
             />
           ))
         ) : (
