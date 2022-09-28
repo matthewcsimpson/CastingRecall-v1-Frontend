@@ -21,13 +21,10 @@ import { useParams } from "react-router-dom";
 
 function GamePage() {
   let { puzzleId } = useParams();
-
   const [genreData, setGenreData] = useState(null);
   const [puzzleList, setPuzzleList] = useState(null);
   const [puzzleData, setPuzzleData] = useState(null);
-
   const [guesses, setGuesses] = useState([]);
-
   const [youLost, setYouLost] = useState(false);
   const [youWon, setYouWon] = useState(false);
 
@@ -111,6 +108,12 @@ function GamePage() {
     console.log("guesses: ", guesses.length, "youLost: ", youLost);
   }, [guesses.length]);
 
+  useEffect(() => {
+    setGuesses([]);
+    setYouWon(false);
+    setYouLost(false);
+  }, [puzzleId]);
+
   // check all the data
   useEffect(() => {
     console.log("genreData: ", genreData);
@@ -118,6 +121,19 @@ function GamePage() {
     console.log("puzleId: ", puzzleId);
     console.log("guesses: ", guesses);
   }, [genreData, puzzleList, puzzleId, guesses]);
+
+  // check all the data
+  useEffect(() => {
+    const storage = {
+      id: puzzleId,
+      puzzleData: puzzleData,
+      guesses: guesses,
+      youWon: youWon,
+      youLost: youLost,
+    };
+
+    localStorage.setItem(puzzleId, JSON.stringify(storage));
+  }, [puzzleId, puzzleData, guesses, youLost, youWon]);
 
   // ------------------------------------------------------------------------functions
   /**
@@ -158,6 +174,8 @@ function GamePage() {
           <Counter guesses={guesses} />
         </>
       ) : null}
+      <YouWon guesses={guesses} youWon={youWon} />
+      <YouLost guesses={guesses} youLost={youLost} />
 
       <div className="movie">
         {puzzleData && genreData ? (
