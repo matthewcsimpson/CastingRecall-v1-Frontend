@@ -22,6 +22,7 @@ function GuessForm({ puzzleData, guesses, correctGuesses, handleGuesses }) {
   // eslint-disable-next-line no-unused-vars
   const [guessIdsArray, setGuessIdsArray] = useState([]);
   const [guessId, setGuessId] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [youLost, setYouLost] = useState(false);
 
   /**
@@ -93,6 +94,7 @@ function GuessForm({ puzzleData, guesses, correctGuesses, handleGuesses }) {
     );
 
     console.log(`guessform youLost: ${checkData}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

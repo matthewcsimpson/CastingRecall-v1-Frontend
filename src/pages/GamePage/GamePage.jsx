@@ -145,6 +145,7 @@ function GamePage() {
    */
   useEffect(() => {
     getLocalGuesses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [puzzleData]);
 
   return (

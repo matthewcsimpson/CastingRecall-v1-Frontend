@@ -14,6 +14,7 @@ function YouLost({ puzzleId, guesses }) {
         JSON.stringify({ puzzleId: puzzleId, youLost: youLost })
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -23,6 +24,7 @@ function YouLost({ puzzleId, guesses }) {
     );
 
     // setYouLost(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [youLost]);
 
   useEffect(() => {
