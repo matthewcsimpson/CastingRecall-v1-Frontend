@@ -1,34 +1,657 @@
-@use './global' as *;
+@use './partials/global' as *;
+@use './partials/mixins' as *;
+@use './partials/variables' as *;
+@use './partials/fontface' as *;
+
+body {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background: #6bb580;
+}
+
+.loading {
+
+
+    &--box {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    &--gif {
+        margin-top: 6rem;
+        max-width: 100px;
+
+        @include tablet {
+            max-width: 200px;
+        }
+    }
+}
+
 
 .header {
     width: 100%;
 
-    border-bottom: 1px solid black &__wrapper {
-        margin: 0 auto;
+    &__wrapper {
         width: 90%;
+        background-color: #151515;
+        margin: 0 auto;
+        padding: 0 .5rem 2rem;
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        @include tablet {
+            max-width: 70rem;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+            gap: 2rem;
+            padding-bottom: 0rem;
+        }
     }
 
     &__heading {
-        color: black
+        display: inline-block;
+        color: #f1f1f1;
+        font-family: "Pacifico";
+        font-size: 3rem;
+        padding: 0;
+        margin: 0;
+        text-align: center;
     }
 
     &__subtitle {
-        color: black;
+        color: #f1f1f1;
+        font-family: "Pacifico";
+        font-size: 1.5rem;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+
     }
 }
 
-.actors {
+.nav {
+    width: 100%;
 
-    &__cards {
+    &__wrapper {
+        border-top: 1px solid #f1f1f1;
+        border-bottom: 1px solid #f1f1f1;
+        background-color: #151515;
+        width: 90%;
+        margin: 0 auto;
+        padding: 0 .5rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+        @include tablet {
+            max-width: 70rem;
+        }
+    }
+
+    &__list {
+        padding: 0;
+        list-style: none;
+        width: 90%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+    }
+
+    &__item {
+        display: inline-block;
+        color: #f1f1f1;
+        font-size: .75rem;
+        font-weight: 600;
+        border-left: 1px solid #f1f1f1;
+        border-right: 1px solid #f1f1f1;
+        padding: 0 .25rem 1rem;
+
+        margin: 0;
+        text-align: center;
+
+        &:first-child {
+            border-left: none;
+        }
+
+        &:last-child {
+            border-right: none;
+        }
+
+        &--hidden {
+            display: none;
+
+            @include tablet {
+                display: contents;
+            }
+        }
+
+        &--hideifnull {
+            visibility: hidden;
+        }
+
+        &--link {
+            text-decoration: none;
+            color: #f1f1f1;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        &--inactivelink {
+            text-decoration: none;
+            color: rgb(100, 100, 100);
+            pointer-events: none;
+            cursor: default;
+        }
+
+        @include tablet {
+            font-size: 1rem;
+            border: none;
+            padding: 0 1rem;
+        }
+    }
+}
+
+.hero {
+    width: 100%;
+
+    &__wrapper {
+        background-color: #151515;
+        width: 90%;
+        margin: 0 auto;
+        padding: 0 .5rem;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+
+        @include tablet {
+            max-width: 70rem;
+        }
+    }
+
+    &__guessform {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 1rem 0;
+
+        @include tablet {
+            width: 80%;
+        }
+    }
+
+    &__guessinput {
+        width: 80%;
+        height: 2rem;
+        font-size: 1rem;
+        border-radius: .5rem;
+        padding: 0 .5rem;
+    }
+
+    &__suggestionpositioning {
+        align-self: flex-start;
+    }
+
+
+    &__searchsuggestions {
+        position: absolute;
+        margin: 0 0 0 2rem;
+
+        @include tablet {
+            margin: 0 0 0 8rem;
+        }
+
+        @include desktop {
+            margin: 0 0 0 10rem;
+        }
+    }
+
+    &__suggestion {
+        list-style: none;
+        font-size: 1rem;
+        background: #FFF;
+        border-bottom: 1px dotted lightgray;
+        padding: .25rem .5rem;
+    }
+
+
+
+
+}
+
+.movie {
+    width: 100%;
+
+    &__wrapper {
+        width: 90%;
+        background-color: #151515;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        margin: 0 auto;
+        padding: 0 .5rem;
+        border-bottom: 1px solid #f1f1f1;
+
+        @include tablet {
+            max-width: 70rem;
+            min-height: 28rem;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        &:first-child {
+            border-top: 1px solid #f1f1f1
+        }
+
+        &--guessed,
+        &--guessed:first-child {
+            border: 10px solid green;
+        }
+    }
+
+    &__heading {
+        margin: .5rem 1rem 1rem;
+        color: #f1f1f1;
+        align-self: flex-start;
+    }
+
+    &__details {
+        order: 1;
+        display: flex;
+        flex-direction: column;
+        font-size: .9rem;
+
+        @include tablet {
+            width: 40%;
+            height: 300px;
+        }
+
+        &--inner {
+            padding: 0 .75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-bottom: 1rem;
+
+            @include tablet {
+                flex-direction: row;
+            }
+        }
+
+    }
+
+    &__detailsbox {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+
+        &--title,
+        &--year,
+        &--synopsis,
+        &--genres {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+
+            @include tablet {
+                flex-direction: row;
+                padding: 0 .75rem;
+
+            }
+        }
+
+        &--genres {
+            flex-direction: row;
+            // flex-wrap: wrap;
+        }
+    }
+
+    &__genrelist {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-around
     }
 
-    &__cardimage {
-        max-width: 6rem;
+    &__genre {
+        display: inline-block;
+        border-radius: .5rem;
+        text-align: center;
+        font-size: .75rem;
+        height: 1rem;
+        padding: .25rem 1rem;
+        margin-bottom: .25rem;
+        margin-right: .25rem;
+
+
+
+        &--28 {
+            // Action
+            background: #F5B7B1;
+        }
+
+        &--12 {
+            // Adventure 
+            background: #D2B4DE;
+        }
+
+        &--16 {
+            // Animation 
+            background: #A9CCE3;
+        }
+
+        &--35 {
+            // Comedy 
+            background: #A2D9CE;
+        }
+
+        &--80 {
+            // Crime 
+            background: #ABEBC6;
+        }
+
+        &--99 {
+            // Documentary 
+            background: #F9E79F;
+        }
+
+        &--18 {
+            // Drama 
+            background: #F5CBA7;
+        }
+
+        &--10751 {
+            // Family 
+            background: #884EA0;
+        }
+
+        &--14 {
+            // Fantasy 
+            background: #2471A3;
+        }
+
+        &--36 {
+            // History 
+            background: #2471A3;
+        }
+
+        &--27 {
+            // Horror    
+            background: #A93226;
+        }
+
+        &--10402 {
+            // Music    
+            background: #EDBB99;
+        }
+
+        &--9648 {
+            // Mystery    
+            background: #A9DFBF;
+        }
+
+        &--10749 {
+            // Romance    
+            background: #A3E4D7;
+        }
+
+        &--878 {
+            // Science Fiction    
+            background: #AED6F1;
+        }
+
+        &--10770 {
+            // TV Movie    
+            background: #FFF;
+        }
+
+        &--53 {
+            // Thriller    
+            background: #FAD7A0;
+        }
+
+        &--10752 {
+            // War    
+            background: #D7BDE2;
+        }
+
+        &--37 {
+            // Western    
+            background: #E6B0AA;
+        }
+    }
+
+    // &__posterbox {}
+
+    &__poster {
+        object-fit: cover;
+        height: 100px;
+        border: 1px solid #f1f1f1;
+        margin-bottom: 1rem;
+
+
+        @include tablet {
+            height: 170px;
+        }
+
+        &--mobile {
+            height: 150px;
+
+            @include tablet {
+                height: 250px;
+            }
+        }
+    }
+
+    &__text {
+        color: #f1f1f1;
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+        min-height: 1.5rem;
+
+        &--title {
+            min-width: 25%;
+        }
+
+        &--item {
+            width: 100%;
+
+            @include tablet {
+                width: 74%;
+            }
+        }
+    }
+
+    &__actorname {
+        font-size: .75rem;
+        font-style: italic;
+        margin: .25rem 0 0 0;
+        text-align: center;
+        align-self: middle;
+
+        &--as {
+            margin: 0;
+        }
+
+        &--char {
+            color: red;
+        }
+    }
+
+
+
+
+    &__castpics {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        @include tablet {
+            width: 57%;
+        }
+
+        &--inner {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: .5rem;
+
+            @include tablet {
+                width: 100%;
+            }
+        }
+    }
+
+    &__headshotbox {
+        height: 200px;
+        width: 80px;
+        display: flex;
+        border-radius: .5rem;
+        flex-direction: column;
+        margin: 0 .125rem .125rem;
+
+        background-color: #f1f1f1;
+
+        @include tablet {
+            height: 275px;
+            width: 120px;
+            margin: 0 .125rem .5rem .125rem;
+        }
+    }
+
+
+
+    &__headshot {
+        object-fit: cover;
+        height: 100px;
+        border-radius: .5rem .5rem 0 0;
+
+        @include tablet {
+            height: 170px;
+        }
+
+        &--mobile {
+            height: 150px;
+
+            @include tablet {
+                height: 250px;
+            }
+        }
+
+        &--key {
+            border: .1875rem solid blue;
+        }
 
     }
+
+    &__hintswrapper {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 1rem 1rem 1rem;
+    }
+}
+
+.footer {
+    width: 100%;
+
+    &__wrapper {
+        width: 90%;
+        background-color: #151515;
+        margin: 0 auto;
+        padding: .5rem .5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+
+        @include tablet {
+            max-width: 70rem;
+        }
+    }
+
+    &__text {
+        color: #f1f1f1;
+        margin: 0;
+        font-size: .75rem;
+        text-align: center;
+
+        @include tablet {
+            font-size: 1rem;
+        }
+
+        &--tiny {
+            margin-top: 2rem;
+            font-size: .5rem;
+        }
+    }
+}
+
+.youwon,
+.youlost {
+    width: 100%;
+
+    &__wrapper {
+        width: 90%;
+        background-color: #151515;
+        margin: 0 auto;
+        padding: .5rem .5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 10px solid green;
+
+        @include tablet {
+            max-width: 70rem;
+        }
+    }
+
+    &__heading {
+        color: #f1f1f1;
+        font-size: 2rem;
+        text-align: center;
+
+        @include tablet {
+            font-size: 3rem;
+        }
+
+        @include desktop {
+            font-size: 4rem;
+        }
+    }
+
+    &__subheading {
+        color: #f1f1f1;
+        font-size: 1.5rem;
+        text-align: center;
+
+        @include tablet {
+            font-size: 2.25rem;
+        }
+
+        @include desktop {
+            font-size: 3rem;
+        }
+    }
+}
+
+.youlost {
+    &__wrapper {
+        border: 10px solid red
+    }
+
+
 }
