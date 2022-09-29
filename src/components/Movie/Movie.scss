@@ -467,14 +467,17 @@
     }
 
     &__hintswrapper {
+        border: 1px solid green;
         width: 100%;
         margin: 0 auto;
-        padding: 0;
+        padding: 0 0 0 1rem;
     }
 
     &__hintsbutton {
         font-size: 0.75rem;
         border-radius: 0.5rem;
+        padding: 0;
+        width: 6rem;
 
         &--year,
         &--names,
