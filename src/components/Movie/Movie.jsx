@@ -231,7 +231,7 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
               </button>
               <button
                 className="movie__hintsbutton movie__hintsbutton--director"
-                onClick={(e) => handleHintClick(e, setrevealDirector)}
+                onClick={(e) => handleHintClick(e, setRevealDirector)}
                 disabled={revealDirector || movieGuessed}
               >
                 Director
