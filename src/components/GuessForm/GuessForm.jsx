@@ -2,7 +2,7 @@
 import "./GuessForm.scss";
 
 // Libraries
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 // Utilities
@@ -17,6 +17,7 @@ const dateOptions = {
 };
 
 function GuessForm({
+  puzzleId,
   puzzleData,
   guessNum,
   youWon,
@@ -49,6 +50,11 @@ function GuessForm({
       })
       .catch((err) => console.error(err));
   };
+
+  useEffect(() => {
+    setSearchResults([]);
+    setSearchQuery([]);
+  }, [puzzleId]);
 
   return (
     <div className="hero">

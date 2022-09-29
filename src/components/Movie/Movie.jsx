@@ -218,14 +218,14 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
               <button
                 className="movie__hintsbutton movie__hintsbutton--year"
                 onClick={(e) => handleHintClick(e, setRevealYear)}
-                disabled={revealYear}
+                disabled={revealYear || movieGuessed}
               >
                 Year
               </button>
               <button
                 className="movie__hintsbutton movie__hintsbutton--director"
                 onClick={(e) => handleHintClick(e, setrevealDirector)}
-                disabled={revealDirector}
+                disabled={revealDirector || movieGuessed}
               >
                 Director
               </button>
@@ -233,14 +233,14 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
               <button
                 className="movie__hintsbutton movie__hintsbutton--synopsis"
                 onClick={(e) => handleHintClick(e, setRevealSynopsis)}
-                disabled={revealSynopsis}
+                disabled={revealSynopsis || movieGuessed}
               >
                 Synopsis
               </button>
               <button
                 className="movie__hintsbutton movie__hintsbutton--names"
                 onClick={(e) => handleHintClick(e, setRevealCharNames)}
-                disabled={revealCharNames}
+                disabled={revealCharNames || movieGuessed}
               >
                 Names
               </button>
@@ -248,10 +248,11 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
                 className="movie__hintsbutton movie__hintsbutton--easy"
                 onClick={(e) => handleEasyMode(e)}
                 disabled={
-                  revealYear &&
-                  revealDirector &&
-                  revealSynopsis &&
-                  revealCharNames
+                  (revealYear &&
+                    revealDirector &&
+                    revealSynopsis &&
+                    revealCharNames) ||
+                  movieGuessed
                 }
               >
                 Easy Mode

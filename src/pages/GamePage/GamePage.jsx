@@ -211,6 +211,7 @@ function GamePage() {
       {puzzleData ? (
         <>
           <GuessForm
+            puzzleId={puzzleId}
             puzzleData={puzzleData}
             guessNum={guesses.length}
             youWon={youWon}
