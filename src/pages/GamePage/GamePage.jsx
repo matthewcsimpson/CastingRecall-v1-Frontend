@@ -171,10 +171,10 @@ function GamePage() {
    */
   useEffect(() => {
     let correctCounter = guesses.filter((guess) => guess.correct === true);
-    if (correctCounter.length > 5) {
+
+    if (correctCounter.length === 6) {
       setYouWon(true);
-    }
-    if (guesses.length > 9 && correctCounter < 6) {
+    } else if (guesses.length === 10) {
       setYouLost(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
