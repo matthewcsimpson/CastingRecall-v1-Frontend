@@ -28,7 +28,7 @@ const dateOptions = {
 function Movie({ movie, genres, guesses, youWon, youLost }) {
   const [movieGuessed, setMovieGuessed] = useState(false);
   const [revealTitle, setRevealTitle] = useState(false);
-  const [revealDirector, setrevealDirector] = useState(false);
+  const [revealDirector, setRevealDirector] = useState(false);
   const [revealYear, setRevealYear] = useState(false);
   const [revealSynopsis, setRevealSynopsis] = useState(false);
   const [revealCharNames, setRevealCharNames] = useState(false);
@@ -53,6 +53,13 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
   const handleEasyMode = (e) => {
     e.preventDefault();
     setRevealYear((prev) => {
+      if (prev === false) {
+        return !prev;
+      } else {
+        return prev;
+      }
+    });
+    setRevealDirector((prev) => {
       if (prev === false) {
         return !prev;
       } else {
