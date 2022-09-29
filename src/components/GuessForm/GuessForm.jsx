@@ -41,7 +41,11 @@ function GuessForm({
         `${REACT_APP_TMDB_SEARCH_URL}&api_key=${REACT_APP_TMDB_KEY}&query=${searchQuery}`
       )
       .then((res) => {
-        setSearchResults(res.data.results);
+        if (event.target.value.length > 0) {
+          setSearchResults(res.data.results);
+        } else {
+          setSearchResults([]);
+        }
       })
       .catch((err) => console.error(err));
   };
