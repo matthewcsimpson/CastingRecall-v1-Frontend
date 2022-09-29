@@ -38,7 +38,7 @@ function GuessForm({
     await setSearchQuery(event.target.value);
     await axios
       .get(
-        `${REACT_APP_TMDB_SEARCH_URL}&api_key=${REACT_APP_TMDB_KEY}&query=${searchQuery}`
+        `${REACT_APP_TMDB_SEARCH_URL}&api_key=${REACT_APP_TMDB_KEY}&page=1&language=en-US&region=US&query=${searchQuery}`
       )
       .then((res) => {
         if (event.target.value.length > 0) {
@@ -82,7 +82,7 @@ function GuessForm({
                             setSearchQuery([]);
                           }}
                         >
-                          {movie.original_title} (
+                          {movie.title} (
                           {formatDate(movie.release_date, dateOptions)})
                         </button>
                       </li>
