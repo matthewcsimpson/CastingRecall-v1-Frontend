@@ -70,6 +70,7 @@
         justify-content: space-evenly;
 
         &--title,
+        &--director,
         &--year,
         &--synopsis,
         &--genres {
@@ -480,6 +481,7 @@
         width: 6rem;
 
         &--year,
+        &--director,
         &--names,
         &--synopsis,
         &--easy {
@@ -493,11 +495,15 @@
             background-color: rgb(70, 64, 244);
             color: #f1f1f1;
         }
-        &--names {
+        &--director {
             background-color: rgb(70, 64, 244);
             color: #f1f1f1;
         }
         &--synopsis {
+            background-color: rgb(70, 64, 244);
+            color: #f1f1f1;
+        }
+        &--names {
             background-color: rgb(70, 64, 244);
             color: #f1f1f1;
         }

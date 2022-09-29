@@ -28,10 +28,9 @@ const dateOptions = {
 function Movie({ movie, genres, guesses, youWon, youLost }) {
   const [movieGuessed, setMovieGuessed] = useState(false);
   const [revealTitle, setRevealTitle] = useState(false);
+  const [revealDirector, setrevealDirector] = useState(false);
   const [revealYear, setRevealYear] = useState(false);
-  // eslint-disable-next-line no-unused-vars
   const [revealSynopsis, setRevealSynopsis] = useState(false);
-  // eslint-disable-next-line no-unused-vars
   const [revealCharNames, setRevealCharNames] = useState(false);
   const [revealHints, setRevealHints] = useState(false);
 
@@ -161,7 +160,14 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
                     : obscureString(movie.title)}
                 </p>
               </div>
-              "
+              <div className="movie__detailsbox--director">
+                <p className="movie__text movie__text--title">Director: </p>
+                <p className="movie__text movie__text--item">
+                  {movieGuessed || revealDirector
+                    ? movie.directors.map((d) => d.name)
+                    : movie.directors.map((d) => obscureString(d.name))}
+                </p>
+              </div>
               <div className="movie__detailsbox--year">
                 <p className="movie__text movie__text--title">Year: </p>
                 <p className="movie__text movie__text--item">
@@ -217,12 +223,13 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
                 Year
               </button>
               <button
-                className="movie__hintsbutton movie__hintsbutton--names"
-                onClick={(e) => handleHintClick(e, setRevealCharNames)}
-                disabled={revealCharNames}
+                className="movie__hintsbutton movie__hintsbutton--director"
+                onClick={(e) => handleHintClick(e, setrevealDirector)}
+                disabled={revealDirector}
               >
-                Names
+                Director
               </button>
+
               <button
                 className="movie__hintsbutton movie__hintsbutton--synopsis"
                 onClick={(e) => handleHintClick(e, setRevealSynopsis)}
@@ -231,9 +238,21 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
                 Synopsis
               </button>
               <button
+                className="movie__hintsbutton movie__hintsbutton--names"
+                onClick={(e) => handleHintClick(e, setRevealCharNames)}
+                disabled={revealCharNames}
+              >
+                Names
+              </button>
+              <button
                 className="movie__hintsbutton movie__hintsbutton--easy"
                 onClick={(e) => handleEasyMode(e)}
-                disabled={revealSynopsis && revealCharNames && revealYear}
+                disabled={
+                  revealYear &&
+                  revealDirector &&
+                  revealSynopsis &&
+                  revealCharNames
+                }
               >
                 Easy Mode
               </button>
