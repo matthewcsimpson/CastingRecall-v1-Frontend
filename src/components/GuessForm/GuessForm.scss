@@ -26,7 +26,7 @@
         width: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        // justify-content: center;
         align-items: center;
         margin: 1rem 0;
 
@@ -37,35 +37,32 @@
 
     &__guessinput {
         width: 80%;
-        height: 2rem;
-        font-size: 1rem;
+        height: 2.5rem;
+        font-size: 1.5rem;
         border-radius: 0.5rem;
-        padding: 0 0.5rem;
+        padding: 0 1rem;
     }
 
     &__suggestionpositioning {
-        align-self: flex-start;
+        width: 80%;
     }
 
     &__searchsuggestions {
         position: absolute;
-        margin: 0 0 0 2rem;
-
-        @include tablet {
-            margin: 0 0 0 8rem;
-        }
-
-        @include desktop {
-            margin: 0 0 0 10rem;
-        }
+        list-style: none;
+        padding: 0;
+        margin: 0;
     }
 
     &__suggestion {
+        width: 100%;
         list-style: none;
-        height: 1.5rem;
-        font-size: 1rem;
+        height: 2.5rem;
+        font-size: 1.5rem;
         background: #fff;
+        color: #151515;
         border-bottom: 1px dotted lightgray;
         padding: 0.25rem 0.5rem;
+        text-align: left;
     }
 }
