@@ -55,7 +55,7 @@ function GamePage() {
   };
 
   /**
-   * Function to retrieve a specific puzzle
+   * Function to retrieve a specific puzzle.
    * @param {*} id
    */
   const getSpecificPuzzle = async (id) => {
@@ -96,12 +96,13 @@ function GamePage() {
       if (goodGuess) {
         goodGuess = { ...goodGuess, ...{ correct: true } };
         setGuesses([...guesses, goodGuess]);
+        setLocalDetails();
       } else {
         let badGuess = { ...movie, ...{ correct: false } };
         setGuesses([...guesses, badGuess]);
+        setLocalDetails();
       }
     }
-    setLocalDetails();
   };
 
   /**
@@ -154,8 +155,9 @@ function GamePage() {
   }, []);
 
   /**
-   * On puzzleId changing
-   * load puzzle details.  if there is a puzzleId, pull that puzzle.  if else, pull the latest puzzle.
+   * On puzzleId changing, load puzzle details.
+   * If there is a puzzleId, get that that puzzle.
+   * If there is no puzzleId, set the id to "latest", which will load the latest puzzle.
    */
   useEffect(() => {
     if (puzzleId) {

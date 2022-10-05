@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 // Styles
 import "./Movie.scss";
 

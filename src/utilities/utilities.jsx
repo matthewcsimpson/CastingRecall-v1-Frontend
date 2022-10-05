@@ -36,7 +36,7 @@ const obscureString = (string) => {
  * @returns
  */
 const shortenString = (string) => {
-  return string.substring(0, 97) + "...";
+  return string.substring(0, 147) + "...";
 };
 
 /**
