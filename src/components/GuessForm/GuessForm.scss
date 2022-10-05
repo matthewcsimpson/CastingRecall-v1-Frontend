@@ -5,6 +5,10 @@
 
 .hero {
     width: 100%;
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    z-index: 20;
 
     &__wrapper {
         background-color: #151515;

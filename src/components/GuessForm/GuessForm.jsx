@@ -66,7 +66,9 @@ function GuessForm({
               className="hero__guessinput"
               type="text"
               value={searchQuery}
-              placeholder={`${10 - guessNum} guesses left`}
+              placeholder={`Enter a guess.  You have ${
+                10 - guessNum
+              } guesses left...`}
               onChange={(event) => {
                 handleFieldChange(event);
               }}
