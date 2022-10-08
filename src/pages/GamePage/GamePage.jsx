@@ -172,13 +172,15 @@ function GamePage() {
    */
   useEffect(() => {
     let correctCounter = guesses.filter((guess) => guess.correct === true);
-    
+
     console.log("guesses useeffect", guesses);
 
     if (correctCounter.length === 6) {
       setYouWon(true);
+      setLocalDetails();
     } else if (guesses.length === 10) {
       setYouLost(true);
+      setLocalDetails();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses]);
