@@ -25,3 +25,5 @@ yarn-error.log*
 src/data/api_info.json
 src/data/temp.json
 src/.env
+
+.vscode
