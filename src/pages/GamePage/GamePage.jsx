@@ -7,7 +7,6 @@ import GuessForm from "../../components/GuessForm/GuessForm";
 import Movie from "../../components/Movie/Movie";
 import Counter from "../../components/Counter/Counter";
 import LoadingScreen from "../../components/LoadingScreen/LoadingScreen";
-
 import YouWon from "../../components/YouWon/YouWon";
 import YouLost from "../../components/YouLost/YouLost";
 
@@ -88,7 +87,7 @@ function GamePage() {
    * Receive a movie object from the guess form and process it.
    * @param {*} movie
    */
-  const handleSubmitGuess = (movie) => {
+  const handleSubmitGuess = async (movie) => {
     if (puzzleData.puzzle) {
       let goodGuess = puzzleData.puzzle.find((puzzleMovie) =>
         puzzleMovie.id === movie.id ? true : false
@@ -102,6 +101,7 @@ function GamePage() {
         setGuesses([...guesses, badGuess]);
         setLocalDetails();
       }
+      console.log("guesses handleSubmitGuess", guesses);
     }
   };
 
@@ -129,16 +129,14 @@ function GamePage() {
    */
   useEffect(() => {
     getGenres();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   /**
    * Get the puzzle list
    */
   useEffect(() => {
     getPuzzleList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   /**
    * On Page Load
@@ -175,10 +173,14 @@ function GamePage() {
   useEffect(() => {
     let correctCounter = guesses.filter((guess) => guess.correct === true);
 
+    console.log("guesses useeffect", guesses);
+
     if (correctCounter.length === 6) {
       setYouWon(true);
+      setLocalDetails();
     } else if (guesses.length === 10) {
       setYouLost(true);
+      setLocalDetails();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses]);

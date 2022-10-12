@@ -63,12 +63,18 @@ function GuessForm({
           <form className="hero__guessform" autoComplete="off">
             <input
               name="search_term"
-              className="hero__guessinput"
+              className={
+                youWon || youLost
+                  ? `hero__guessinput hero__guessinput--complete`
+                  : `hero__guessinput`
+              }
               type="text"
               value={searchQuery}
-              placeholder={`Enter a guess.  You have ${
-                10 - guessNum
-              } guesses left...`}
+              placeholder={
+                youWon || youLost
+                  ? `You finished this game!`
+                  : `Enter a guess.  You have ${10 - guessNum} guesses left...`
+              }
               onChange={(event) => {
                 handleFieldChange(event);
               }}
