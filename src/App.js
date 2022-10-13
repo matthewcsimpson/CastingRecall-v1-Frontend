@@ -7,7 +7,6 @@ import SiteFooter from "./components/SiteFooter/SiteFooter";
 
 // Pages
 import GamePage from "./pages/GamePage/GamePage";
-import HowToPage from "./pages/HowToPage/HowToPage";
 import ListPage from "./pages/ListPage/ListPage";
 
 // Libraries

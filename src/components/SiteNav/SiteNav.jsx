@@ -24,8 +24,8 @@ function SiteNav({ puzzleId, puzzleList }) {
                 <NavLink
                   className={
                     puzzleId === puzzleList[0]
-                      ? "nav item nav__item--inactivelink"
-                      : "nav item nav__item--link"
+                      ? "nav__item nav__item--inactivelink"
+                      : "nav__item nav__item--link"
                   }
                   to={`/puzzle/${puzzleList[index - 1]}`}
                 >
@@ -41,14 +41,15 @@ function SiteNav({ puzzleId, puzzleList }) {
                   Prev Puzzle
                 </NavLink>
               </li>
-              {/* <li className="nav__item">
-                <NavLink
-                  className={"nav item nav__item--link"}
-                  to="/how-to-play"
+              <li className="nav__item">
+                <a
+                  href="https://awesomefriday.ca"
+                  className="nav__item nav__item--link"
                 >
-                  How to Play
-                </NavLink>
+                  AwesomeFriday.ca
+                </a>
               </li>
+              {/* 
               <li className="nav__item">
                 <NavLink
                   className={"nav item nav__item--link"}
@@ -58,7 +59,7 @@ function SiteNav({ puzzleId, puzzleList }) {
                 </NavLink>
               </li> */}
               <li className="nav__item">
-                <NavLink className={"nav item nav__item--link"} to={`/`}>
+                <NavLink className={"nav__item nav__item--link"} to={`/`}>
                   Latest Puzzle
                 </NavLink>
               </li>
@@ -66,8 +67,8 @@ function SiteNav({ puzzleId, puzzleList }) {
                 <NavLink
                   className={
                     puzzleId === puzzleList[puzzleList.length - 1]
-                      ? "nav item nav__item--inactivelink"
-                      : "nav item nav__item--link"
+                      ? "nav__item nav__item--inactivelink"
+                      : "nav__item nav__item--link"
                   }
                   to={`/puzzle/${puzzleList[index + 1]}`}
                 >
