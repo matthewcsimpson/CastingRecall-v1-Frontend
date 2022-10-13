@@ -10,6 +10,12 @@
     }
 }
 
+@mixin largetablet {
+    @media (min-width: $breakpoint-large-tablet) {
+        @content;
+    }
+}
+
 @mixin desktop {
     @media (min-width: $breakpoint-desktop) {
         @content;
