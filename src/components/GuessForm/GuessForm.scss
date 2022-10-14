@@ -15,6 +15,7 @@
         width: 90%;
         margin: 0 auto;
         padding: 0 0.5rem;
+
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -64,9 +65,9 @@
         list-style: none;
         height: 2.5rem;
         font-size: 1.5rem;
-        background: #fff;
-        color: #151515;
-        border-bottom: 1px dotted lightgray;
+        background: $site-suggestion-bg-color;
+        color: $site-suggestion-text-color;
+        border-bottom: 1px dotted $site-suggestion-border-color;
         padding: 0.25rem 0.5rem;
         text-align: left;
     }
