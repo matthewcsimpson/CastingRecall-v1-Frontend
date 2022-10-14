@@ -64,9 +64,6 @@ function GamePage({ puzzleList }) {
       };
       localStorage.setItem(pId, JSON.stringify(puzzle));
     }
-    if (guesses.length > 0) {
-      console.info(guesses[0]);
-    }
   };
 
   /**
@@ -87,7 +84,6 @@ function GamePage({ puzzleList }) {
         setGuesses([...guesses, badGuess]);
         setLocalDetails();
       }
-      console.log("guesses handleSubmitGuess", guesses);
     }
   };
 
@@ -151,8 +147,6 @@ function GamePage({ puzzleList }) {
    */
   useEffect(() => {
     let correctCounter = guesses.filter((guess) => guess.correct === true);
-
-    console.log("guesses useeffect", guesses);
 
     if (correctCounter.length === 6) {
       setYouWon(true);

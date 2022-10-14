@@ -387,6 +387,24 @@
             font-style: italic;
             cursor: help;
         }
+
+        &--directors {
+            &:before {
+                content: ",\00a0";
+            }
+
+            &:first-child:before {
+                content: "";
+            }
+
+            &:last-child:before {
+                content: ",\00a0 &\00a0";
+            }
+
+            &:only-child:before {
+                content: "";
+            }
+        }
     }
 
     &__actorname {
