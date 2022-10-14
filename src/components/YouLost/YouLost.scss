@@ -8,7 +8,7 @@
 
     &__wrapper {
         width: 90%;
-        background-color: #151515;
+        background-color: $site-background-color;
         margin: 0 auto;
         padding: 0.5rem 0.5rem;
         display: flex;
@@ -23,7 +23,7 @@
     }
 
     &__heading {
-        color: #f1f1f1;
+        color: $site-primary-color;
         font-size: 2rem;
         text-align: center;
 
@@ -37,7 +37,7 @@
     }
 
     &__subheading {
-        color: #f1f1f1;
+        color: $site-primary-color;
         font-size: 1.5rem;
         text-align: center;
 
@@ -51,7 +51,7 @@
     }
 
     &__text {
-        color: #f1f1f1;
+        color: $site-primary-color;
         font-size: 1.5rem;
         text-align: center;
 

@@ -168,10 +168,18 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
               </div>
               <div className="movie__detailsbox--director">
                 <p className="movie__text movie__text--title">Director: </p>
-                <p className="movie__text movie__text--item">
+                <p className="movie__text movie__text--item movie__text">
                   {movieGuessed || revealDirector
-                    ? movie.directors.map((d) => d.name)
-                    : movie.directors.map((d) => obscureString(d.name))}
+                    ? movie.directors.map((d) => (
+                        <span key={d.id} className="movie__text--directors">
+                          {d.name}
+                        </span>
+                      ))
+                    : movie.directors.map((d) => (
+                        <span key={d.id} className="movie__text--directors">
+                          {obscureString(d.name)}
+                        </span>
+                      ))}
                 </p>
               </div>
               <div className="movie__detailsbox--year">

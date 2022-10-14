@@ -8,13 +8,13 @@
 
     &__wrapper {
         width: 90%;
-        background-color: #151515;
+        background-color: $site-background-color;
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
         margin: 0 auto;
         padding: 0 0.5rem;
-        border-bottom: 1px solid #f1f1f1;
+        border-bottom: 1px solid $site-primary-color;
 
         @include tablet {
             max-width: 70rem;
@@ -25,7 +25,7 @@
         }
 
         &:first-child {
-            border-top: 1px solid #f1f1f1;
+            border-top: 1px solid $site-primary-color;
         }
 
         &--guessed,
@@ -36,7 +36,7 @@
 
     &__heading {
         margin: 0.5rem 1rem 1rem;
-        color: #f1f1f1;
+        color: $site-primary-color;
         align-self: flex-start;
     }
 
@@ -110,7 +110,7 @@
             position: absolute;
             background: #e8edf0;
             content: "\25CF";
-            color: #f1f1f1;
+            color: $site-primary-color;
             font-size: 0.75rem;
             line-height: 0.8125rem;
             text-indent: 0.375rem;
@@ -344,7 +344,7 @@
     &__poster {
         object-fit: cover;
         height: 100px;
-        border: 1px solid #f1f1f1;
+        border: 1px solid $site-primary-color;
         margin: 0 1rem 1rem 0;
 
         @include tablet {
@@ -362,7 +362,7 @@
     }
 
     &__text {
-        color: #f1f1f1;
+        color: $site-primary-color;
         margin: 0;
         padding: 0;
         display: inline-block;
@@ -386,6 +386,24 @@
             font-size: 0.75rem;
             font-style: italic;
             cursor: help;
+        }
+
+        &--directors {
+            &:before {
+                content: ",\00a0";
+            }
+
+            &:first-child:before {
+                content: "";
+            }
+
+            &:last-child:before {
+                content: ",\00a0 &\00a0";
+            }
+
+            &:only-child:before {
+                content: "";
+            }
         }
     }
 
@@ -435,7 +453,7 @@
         border-radius: 0.5rem;
         flex-direction: column;
         margin: 0rem 0.5rem 0.25rem;
-        background-color: #f1f1f1;
+        background-color: $site-primary-color;
 
         @include tablet {
             height: 275px;
@@ -500,23 +518,23 @@
 
         &--year {
             background-color: rgb(70, 64, 244);
-            color: #f1f1f1;
+            color: $site-primary-color;
         }
         &--director {
             background-color: rgb(70, 64, 244);
-            color: #f1f1f1;
+            color: $site-primary-color;
         }
         &--synopsis {
             background-color: rgb(70, 64, 244);
-            color: #f1f1f1;
+            color: $site-primary-color;
         }
         &--names {
             background-color: rgb(70, 64, 244);
-            color: #f1f1f1;
+            color: $site-primary-color;
         }
         &--easy {
             background-color: rgb(108, 0, 0);
-            color: #f1f1f1;
+            color: $site-primary-color;
         }
     }
 }

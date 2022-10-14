@@ -1,0 +1,55 @@
+@use "../../styles/partials/global" as *;
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/fontface" as *;
+
+.puzzlelist {
+    width: 100%;
+    &__wrapper {
+        width: 90%;
+        background-color: $site-background-color;
+        margin: 0 auto;
+        padding: 0.5rem;
+        border-bottom: 1px solid $site-primary-color;
+
+        @include tablet {
+            max-width: 70rem;
+        }
+    }
+
+    &__heading {
+        color: $site-primary-color;
+    }
+
+    &__puzzlewrapper {
+        display: flex;
+    }
+
+    &__number {
+        flex-basis: 5%;
+    }
+
+    &__text {
+        color: $site-primary-color;
+    }
+
+    &__list {
+        list-style: none;
+    }
+
+    &__listitem {
+        display: inline-block;
+
+        &:after {
+            content: ",\00a0";
+        }
+
+        &:nth-child(5):after {
+            content: ", &\00a0";
+        }
+
+        &:nth-child(6):after {
+            content: "";
+        }
+    }
+}

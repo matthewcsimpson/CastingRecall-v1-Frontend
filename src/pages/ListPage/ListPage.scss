@@ -1,0 +1,6 @@
+.listpage {
+    &__listcontainer {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+}
