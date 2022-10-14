@@ -23,7 +23,7 @@ function SiteNav({ puzzleId, puzzleList }) {
               <li className={`nav__item`}>
                 <NavLink
                   className={
-                    puzzleId === puzzleList[0]
+                    puzzleId === puzzleList[0] || puzzleId === "list"
                       ? "nav__item nav__item--inactivelink"
                       : "nav__item nav__item--link"
                   }
@@ -31,7 +31,7 @@ function SiteNav({ puzzleId, puzzleList }) {
                 >
                   <span
                     className={
-                      puzzleId === puzzleList[0]
+                      puzzleId === puzzleList[0] || puzzleId === "list"
                         ? "nav__item nav__item--hidden nav__item--hideifnull"
                         : "nav__item nav__item--hidden"
                     }
@@ -66,7 +66,8 @@ function SiteNav({ puzzleId, puzzleList }) {
               <li className={`nav__item`}>
                 <NavLink
                   className={
-                    puzzleId === puzzleList[puzzleList.length - 1]
+                    puzzleId === puzzleList[puzzleList.length - 1] ||
+                    puzzleId === "list"
                       ? "nav__item nav__item--inactivelink"
                       : "nav__item nav__item--link"
                   }
@@ -75,7 +76,8 @@ function SiteNav({ puzzleId, puzzleList }) {
                   Next Puzzle{" "}
                   <span
                     className={
-                      puzzleId === puzzleList[puzzleList.length - 1]
+                      puzzleId === puzzleList[puzzleList.length - 1] ||
+                      puzzleId === "list"
                         ? "nav__item nav__item--hidden nav__item--hideifnull"
                         : "nav__item nav__item--hidden"
                     }

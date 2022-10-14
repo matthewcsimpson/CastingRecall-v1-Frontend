@@ -62,6 +62,16 @@ const shortenMultipleCharNames = (string) => {
   }
 };
 
+/**
+ * Return just the first name from a name string
+ * @param {string} string
+ * @returns string
+ */
+const firstNameOnly = (string) => {
+  const split = string.split(" ");
+  return split[0];
+};
+
 export {
   formatDate,
   formatGenre,
@@ -69,4 +79,5 @@ export {
   shortenString,
   removeVoiceFromString,
   shortenMultipleCharNames,
+  firstNameOnly,
 };

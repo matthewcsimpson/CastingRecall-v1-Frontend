@@ -33,7 +33,8 @@ function App() {
    */
   useEffect(() => {
     getPuzzleList();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
