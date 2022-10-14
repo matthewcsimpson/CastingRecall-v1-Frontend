@@ -46,7 +46,7 @@ function SiteNav({ puzzleId, puzzleList }) {
                   href="https://awesomefriday.ca"
                   className="nav__item nav__item--link"
                 >
-                  AwesomeFriday.ca
+                  Awesome Friday!
                 </a>
               </li>
               {/* 

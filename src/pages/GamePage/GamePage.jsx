@@ -213,6 +213,8 @@ function GamePage() {
       ) : (
         <LoadingScreen />
       )}
+      <YouWon guesses={guesses} youWon={youWon} />
+      <YouLost guesses={guesses} youLost={youLost} />
       {puzzleData ? (
         <>
           <GuessForm
@@ -226,8 +228,6 @@ function GamePage() {
           <Counter guesses={guesses} />
         </>
       ) : null}
-      <YouWon guesses={guesses} youWon={youWon} />
-      <YouLost guesses={guesses} youLost={youLost} />
 
       <div className="movie">
         {puzzleData && genreData ? (
