@@ -15,7 +15,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        border: 10px solid red;
+        border: 10px solid rgb(253, 63, 63);
 
         @include tablet {
             max-width: 70rem;
