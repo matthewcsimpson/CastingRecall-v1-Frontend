@@ -1,6 +1,3 @@
-// Styles
-import "./GamePage.scss";
-
 // Components
 import SiteNav from "../../components/SiteNav/SiteNav";
 import GuessForm from "../../components/GuessForm/GuessForm";
@@ -15,7 +12,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-function GamePage() {
+function GamePage({ puzzleList }) {
   // Data
   const REACT_APP_TMDB_KEY = process.env.REACT_APP_TMDB_KEY;
   const REACT_APP_TMDB_GENRE_DETAILS = process.env.REACT_APP_TMDB_GENRE_DETAILS;
@@ -23,7 +20,6 @@ function GamePage() {
 
   let { puzzleId } = useParams();
   const [genreData, setGenreData] = useState(null);
-  const [puzzleList, setPuzzleList] = useState(null);
   const [puzzleData, setPuzzleData] = useState(null);
   const [guesses, setGuesses] = useState([]);
   const [youLost, setYouLost] = useState(false);
@@ -40,16 +36,6 @@ function GamePage() {
         `${REACT_APP_TMDB_GENRE_DETAILS}?api_key=${REACT_APP_TMDB_KEY}&language=en-US`
       )
       .then((res) => setGenreData(res.data.genres))
-      .catch((err) => console.error(err));
-  };
-
-  /**
-   * function to get a list of all puzzles
-   */
-  const getPuzzleList = async () => {
-    await axios
-      .get(`${REACT_APP_API_REMOTE_URL}/puzzle/list`)
-      .then((res) => setPuzzleList([res.data].flat()))
       .catch((err) => console.error(err));
   };
 
@@ -129,13 +115,6 @@ function GamePage() {
    */
   useEffect(() => {
     getGenres();
-  });
-
-  /**
-   * Get the puzzle list
-   */
-  useEffect(() => {
-    getPuzzleList();
   });
 
   /**

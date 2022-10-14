@@ -49,7 +49,7 @@ function SiteNav({ puzzleId, puzzleList }) {
                   Awesome Friday!
                 </a>
               </li>
-              {/* 
+
               <li className="nav__item">
                 <NavLink
                   className={"nav item nav__item--link"}
@@ -57,7 +57,7 @@ function SiteNav({ puzzleId, puzzleList }) {
                 >
                   Puzzle List
                 </NavLink>
-              </li> */}
+              </li>
               <li className="nav__item">
                 <NavLink className={"nav__item nav__item--link"} to={`/`}>
                   Latest Puzzle
