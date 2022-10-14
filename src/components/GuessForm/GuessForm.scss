@@ -11,11 +11,10 @@
     z-index: 20;
 
     &__wrapper {
-        background-color: #151515;
+        background-color: $site-background-color;
         width: 90%;
         margin: 0 auto;
         padding: 0 0.5rem;
-
         display: flex;
         flex-direction: column;
         justify-content: space-between;

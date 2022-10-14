@@ -1,19 +1,18 @@
-@use '../../styles/partials/global' as *;
-@use '../../styles/partials/mixins' as *;
-@use '../../styles/partials/variables' as *;
-@use '../../styles/partials/fontface' as *;
+@use "../../styles/partials/global" as *;
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/fontface" as *;
 
 .counter {
-
     width: 100%;
 
     &__wrapper {
         width: 90%;
-        background-color: #151515;
+        background-color: $site-background-color;
         display: flex;
         justify-content: left;
         margin: 0 auto;
-        padding: 0 .5rem;
+        padding: 0 0.5rem;
 
         @include tablet {
             max-width: 70rem;
@@ -27,19 +26,17 @@
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: flex-start;
-        gap: .25rem;
+        gap: 0.25rem;
     }
 
     &__item {
         margin: 0;
         padding: 0;
-
     }
 
     &__text {
         color: white;
-        margin: 0 .5rem 0 0;
+        margin: 0 0.5rem 0 0;
         padding: 0;
-
     }
 }
