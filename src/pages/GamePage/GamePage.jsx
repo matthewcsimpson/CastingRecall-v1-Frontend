@@ -66,29 +66,22 @@ function GamePage({ puzzleList }) {
     }
   };
 
-  const promiseSetState = (newState, setFunc) => {
-    new Promise((resolve) => {
-      setFunc(newState, resolve);
-    });
-  };
-
   /**
    * Receive a movie object from the guess form and process it.
-   * @param {*} movie
+   * @param {object} movie
    */
   const handleSubmitGuess = (movie) => {
-    console.log("movie", movie);
     if (puzzleData.puzzle) {
       let goodGuess = puzzleData.puzzle.find((puzzleMovie) =>
         puzzleMovie.id === movie.id ? true : false
       );
       if (goodGuess) {
         goodGuess = { ...goodGuess, ...{ correct: true } };
-        // setGuesses([...guesses, goodGuess]);
+        setGuesses([...guesses, goodGuess]);
         console.log("guesses (good)", guesses);
       } else {
         let badGuess = { ...movie, ...{ correct: false } };
-        // setGuesses([...guesses, badGuess]);
+        setGuesses([...guesses, badGuess]);
         console.log("guesses (bad)", guesses);
       }
       setLocalDetails();
@@ -115,11 +108,12 @@ function GamePage({ puzzleList }) {
 
   // ------------------------------------------------------------------------useEffects
   /**
-   * Get the genre list
+   * Get the genre list on page load.
    */
   useEffect(() => {
     getGenres();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /**
    * On Page Load
@@ -162,12 +156,15 @@ function GamePage({ puzzleList }) {
     } else if (guesses.length === 10) {
       setYouLost(true);
       setLocalDetails();
+    } else if (guesses.length > 0) {
+      setLocalDetails();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses]);
 
   /**
-   *  Set details stored in state to localStorate, and then clear, when the puzzleId changes
+   *  Set details stored in state to localStorage, and then clear, when the puzzleId changes
    */
   useEffect(() => {
     setLocalDetails();

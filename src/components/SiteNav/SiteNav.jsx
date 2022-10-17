@@ -59,7 +59,15 @@ function SiteNav({ puzzleId, puzzleList }) {
                 </NavLink>
               </li>
               <li className="nav__item">
-                <NavLink className={"nav__item nav__item--link"} to={`/`}>
+                <NavLink
+                  className={
+                    puzzleId === puzzleList[puzzleList.length - 1] ||
+                    puzzleId === "list"
+                      ? "nav__item nav__item--inactivelink"
+                      : "nav__item nav__item--link"
+                  }
+                  to={`/`}
+                >
                   Latest Puzzle
                 </NavLink>
               </li>
