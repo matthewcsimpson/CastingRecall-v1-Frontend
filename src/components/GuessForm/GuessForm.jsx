@@ -36,10 +36,12 @@ function GuessForm({
    * @param {*} event
    */
   const handleFieldChange = async (event) => {
-    await setSearchQuery(event.target.value);
+    console.log("event.target.value", event.target.value);
+    setSearchQuery(event.target.value);
+    // console.log("searchQuery", searchQuery);
     await axios
       .get(
-        `${REACT_APP_TMDB_SEARCH_URL}&api_key=${REACT_APP_TMDB_KEY}&page=1&language=en-US&region=US&query=${searchQuery}`
+        `${REACT_APP_TMDB_SEARCH_URL}&api_key=${REACT_APP_TMDB_KEY}&page=1&language=en-US&region=US&query=${event.target.value}`
       )
       .then((res) => {
         if (event.target.value.length > 0) {
