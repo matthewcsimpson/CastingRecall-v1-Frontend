@@ -66,24 +66,32 @@ function GamePage({ puzzleList }) {
     }
   };
 
+  const promiseSetState = (newState, setFunc) => {
+    new Promise((resolve) => {
+      setFunc(newState, resolve);
+    });
+  };
+
   /**
    * Receive a movie object from the guess form and process it.
    * @param {*} movie
    */
-  const handleSubmitGuess = async (movie) => {
+  const handleSubmitGuess = (movie) => {
+    console.log("movie", movie);
     if (puzzleData.puzzle) {
       let goodGuess = puzzleData.puzzle.find((puzzleMovie) =>
         puzzleMovie.id === movie.id ? true : false
       );
       if (goodGuess) {
         goodGuess = { ...goodGuess, ...{ correct: true } };
-        setGuesses([...guesses, goodGuess]);
-        setLocalDetails();
+        // setGuesses([...guesses, goodGuess]);
+        console.log("guesses (good)", guesses);
       } else {
         let badGuess = { ...movie, ...{ correct: false } };
-        setGuesses([...guesses, badGuess]);
-        setLocalDetails();
+        // setGuesses([...guesses, badGuess]);
+        console.log("guesses (bad)", guesses);
       }
+      setLocalDetails();
     }
   };
 
