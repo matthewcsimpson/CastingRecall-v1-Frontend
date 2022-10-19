@@ -22,8 +22,11 @@ function GamePage({ puzzleList }) {
   const [genreData, setGenreData] = useState(null);
   const [puzzleData, setPuzzleData] = useState(null);
   const [guesses, setGuesses] = useState([]);
+  const [hintsUsed, setHintsUsed] = useState(0);
   const [youLost, setYouLost] = useState(false);
   const [youWon, setYouWon] = useState(false);
+
+  let maxGuesses = 12;
 
   // ------------------------------------------------------------------------data loading
 
@@ -78,11 +81,9 @@ function GamePage({ puzzleList }) {
       if (goodGuess) {
         goodGuess = { ...goodGuess, ...{ correct: true } };
         setGuesses([...guesses, goodGuess]);
-        console.log("guesses (good)", guesses);
       } else {
         let badGuess = { ...movie, ...{ correct: false } };
         setGuesses([...guesses, badGuess]);
-        console.log("guesses (bad)", guesses);
       }
       setLocalDetails();
     }
@@ -153,15 +154,17 @@ function GamePage({ puzzleList }) {
     if (correctCounter.length === 6) {
       setYouWon(true);
       setLocalDetails();
-    } else if (guesses.length === 10) {
+    } else if (guesses.length + hintsUsed === maxGuesses) {
       setYouLost(true);
       setLocalDetails();
     } else if (guesses.length > 0) {
       setLocalDetails();
     }
 
+    console.log(hintsUsed);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [guesses]);
+  }, [guesses, youWon, youLost, hintsUsed]);
 
   /**
    *  Set details stored in state to localStorage, and then clear, when the puzzleId changes
@@ -179,6 +182,7 @@ function GamePage({ puzzleList }) {
    */
   useEffect(() => {
     getLocalGuesses();
+    setLocalDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [puzzleData]);
 
@@ -199,6 +203,7 @@ function GamePage({ puzzleList }) {
             puzzleId={puzzleId}
             puzzleData={puzzleData}
             guessNum={guesses.length}
+            maxGuesses={maxGuesses}
             youWon={youWon}
             youLost={youLost}
             handleSubmitGuess={(movie) => handleSubmitGuess(movie)}
@@ -215,6 +220,7 @@ function GamePage({ puzzleList }) {
               movie={movie}
               genres={genreData}
               guesses={guesses}
+              setHintsUsed={(num) => setHintsUsed(num)}
               youWon={youWon}
               youLost={youLost}
             />

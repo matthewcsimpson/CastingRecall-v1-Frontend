@@ -24,7 +24,7 @@ const dateOptions = {
   year: "numeric",
 };
 
-function Movie({ movie, genres, guesses, youWon, youLost }) {
+function Movie({ movie, genres, guesses, setHintsUsed, youWon, youLost }) {
   const [movieGuessed, setMovieGuessed] = useState(false);
   const [revealTitle, setRevealTitle] = useState(false);
   const [revealDirector, setRevealDirector] = useState(false);
@@ -79,6 +79,7 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
         return prev;
       }
     });
+    setHintsUsed((prev) => prev + 4);
   };
 
   /**
@@ -269,7 +270,7 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
                   movieGuessed
                 }
               >
-                Easy Mode
+                All
               </button>
             </>
           ) : null}
