@@ -61,8 +61,7 @@ function SiteNav({ puzzleId, puzzleList }) {
               <li className="nav__item">
                 <NavLink
                   className={
-                    puzzleId === puzzleList[puzzleList.length - 1] ||
-                    puzzleId === "list"
+                    puzzleId === puzzleList[puzzleList.length - 1]
                       ? "nav__item nav__item--inactivelink"
                       : "nav__item nav__item--link"
                   }

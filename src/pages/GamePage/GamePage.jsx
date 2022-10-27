@@ -66,7 +66,9 @@ function GamePage({ puzzleList }) {
         guesses: guesses,
         youWon: youWon,
         youLost: youLost,
+        hintsUsed: hintsUsed,
       };
+      console.log("puzzle", puzzle);
       localStorage.setItem(pId, JSON.stringify(puzzle));
     }
   };
@@ -102,6 +104,7 @@ function GamePage({ puzzleList }) {
           setGuesses(local.guesses);
           setYouWon(local.youWon);
           setYouLost(local.youLost);
+          setHintsUsed(local.hintsUsed);
         } else {
           setGuesses([]);
         }
@@ -162,8 +165,14 @@ function GamePage({ puzzleList }) {
     } else if (guesses.length > 0) {
       setLocalDetails();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses, youWon, youLost, hintsUsed]);
+
+  useEffect(() => {
+    setLocalDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setHintsUsed, hintsUsed]);
 
   /**
    *  Set details stored in state to localStorage, and then clear, when the puzzleId changes

@@ -55,7 +55,7 @@ function Movie({
         return prev;
       }
     });
-    if (actualHint) {
+    if (actualHint === true) {
       setHintsUsed(1);
     }
   };
@@ -73,12 +73,55 @@ function Movie({
   };
 
   /**
+   * Function to read hints data stored in localStorage
+   */
+  const getLocalHints = () => {
+    if (movie) {
+      const hintsId = `${puzzleId}-${movie.id}`;
+      let local = JSON.parse(localStorage.getItem(hintsId));
+      if (local) {
+        setRevealHints(local.revealHints);
+        setRevealYear(local.revealYear);
+        setRevealDirector(local.revealDirector);
+        setRevealSynopsis(local.revealSynopsis);
+        setRevealCharNames(local.revealCharNames);
+      }
+    }
+  };
+
+  /**
+   * Function to write hints data to localStorage.
+   */
+  const setLocalHints = () => {
+    if (movie) {
+      const hintsId = `${puzzleId}-${movie.id}`;
+      const hints = {
+        id: hintsId,
+        revealHints: revealHints,
+        revealYear: revealYear,
+        revealDirector: revealDirector,
+        revealSynopsis: revealSynopsis,
+        revealCharNames: revealCharNames,
+      };
+      localStorage.setItem(hintsId, JSON.stringify(hints));
+    }
+  };
+
+  // ------------------------------------------------------------------------useEffects
+
+  useEffect(() => {
+    getLocalHints();
+    setLocalHints();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  /**
    * Toggle this movie as guessed when it is guessed
    */
   useEffect(() => {
     setMovieGuessed(
       guesses.find((guess) => (guess.id === movie.id ? true : false))
     );
+    setLocalHints();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses]);
 
@@ -87,20 +130,24 @@ function Movie({
    */
   useEffect(() => {
     if (movieGuessed || youWon || youLost) {
-      setRevealCharNames(true);
-      setRevealSynopsis(true);
       setRevealYear(true);
+      setRevealDirector(true);
+      setRevealSynopsis(true);
+      setRevealCharNames(true);
       setRevealTitle(true);
     }
   }, [movieGuessed, youWon, youLost]);
 
-  /**
-   * TEMP
-   */
   useEffect(() => {
-    console.log(`${puzzleId}-${movie.id}`);
+    setLocalHints();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [
+    revealYear,
+    revealDirector,
+    revealSynopsis,
+    revealCharNames,
+    revealHints,
+  ]);
 
   return (
     <>

@@ -2,7 +2,7 @@
 import "./styles/style.scss";
 
 // Components
-import Header from "./components/SiteHeader/SiteHeader";
+import SiteHeader from "./components/SiteHeader/SiteHeader";
 import SiteFooter from "./components/SiteFooter/SiteFooter";
 
 // Pages
@@ -38,7 +38,7 @@ function App() {
 
   return (
     <>
-      <Header />
+      <SiteHeader />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<GamePage puzzleList={puzzleList} />} />
