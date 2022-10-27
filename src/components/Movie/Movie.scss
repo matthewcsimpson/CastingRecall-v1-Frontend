@@ -461,10 +461,6 @@
             margin: 0rem 0.25rem 0.25rem;
         }
 
-        @include largetablet {
-            margin: 0rem 0.5rem 0.25rem;
-        }
-
         @include desktop {
             width: 110px;
             margin: 0rem 0.25rem 0.125rem;
