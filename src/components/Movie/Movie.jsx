@@ -24,7 +24,15 @@ const dateOptions = {
   year: "numeric",
 };
 
-function Movie({ movie, genres, guesses, setHintsUsed, youWon, youLost }) {
+function Movie({
+  puzzleId,
+  movie,
+  genres,
+  guesses,
+  setHintsUsed,
+  youWon,
+  youLost,
+}) {
   const [movieGuessed, setMovieGuessed] = useState(false);
   const [revealTitle, setRevealTitle] = useState(false);
   const [revealDirector, setRevealDirector] = useState(false);
@@ -74,14 +82,25 @@ function Movie({ movie, genres, guesses, setHintsUsed, youWon, youLost }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses]);
 
+  /**
+   * useEffect to reveal all details when the movie is guessed or the player runs out of guesses.
+   */
   useEffect(() => {
-    if ((movieGuessed, youWon || youLost)) {
+    if (movieGuessed || youWon || youLost) {
       setRevealCharNames(true);
       setRevealSynopsis(true);
       setRevealYear(true);
       setRevealTitle(true);
     }
   }, [movieGuessed, youWon, youLost]);
+
+  /**
+   * TEMP
+   */
+  useEffect(() => {
+    console.log(`${puzzleId}-${movie.id}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -215,14 +234,14 @@ function Movie({ movie, genres, guesses, setHintsUsed, youWon, youLost }) {
               <button
                 className="movie__hintsbutton movie__hintsbutton--year"
                 onClick={(e) => handleHintClick(e, setRevealYear, true)}
-                disabled={revealYear || movieGuessed}
+                disabled={revealYear || movieGuessed || youWon || youLost}
               >
                 Year
               </button>
               <button
                 className="movie__hintsbutton movie__hintsbutton--director"
                 onClick={(e) => handleHintClick(e, setRevealDirector, true)}
-                disabled={revealDirector || movieGuessed}
+                disabled={revealDirector || movieGuessed || youWon || youLost}
               >
                 Director
               </button>
@@ -230,14 +249,14 @@ function Movie({ movie, genres, guesses, setHintsUsed, youWon, youLost }) {
               <button
                 className="movie__hintsbutton movie__hintsbutton--synopsis"
                 onClick={(e) => handleHintClick(e, setRevealSynopsis, true)}
-                disabled={revealSynopsis || movieGuessed}
+                disabled={revealSynopsis || movieGuessed || youWon || youLost}
               >
                 Synopsis
               </button>
               <button
                 className="movie__hintsbutton movie__hintsbutton--names"
                 onClick={(e) => handleHintClick(e, setRevealCharNames, true)}
-                disabled={revealCharNames || movieGuessed}
+                disabled={revealCharNames || movieGuessed || youWon || youLost}
               >
                 Names
               </button>
@@ -249,7 +268,9 @@ function Movie({ movie, genres, guesses, setHintsUsed, youWon, youLost }) {
                   revealDirector ||
                   revealSynopsis ||
                   revealCharNames ||
-                  movieGuessed
+                  movieGuessed ||
+                  youWon ||
+                  youLost
                 }
               >
                 All

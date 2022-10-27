@@ -49,7 +49,9 @@ function GamePage({ puzzleList }) {
   const getSpecificPuzzle = async (id) => {
     await axios
       .get(`${REACT_APP_API_REMOTE_URL}/puzzle/${id}`)
-      .then((res) => setPuzzleData(res.data))
+      .then((res) => {
+        setPuzzleData(res.data);
+      })
       .catch((err) => console.error(err));
   };
 
@@ -160,9 +162,6 @@ function GamePage({ puzzleList }) {
     } else if (guesses.length > 0) {
       setLocalDetails();
     }
-
-    console.log(hintsUsed);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses, youWon, youLost, hintsUsed]);
 
@@ -218,6 +217,7 @@ function GamePage({ puzzleList }) {
           puzzleData.puzzle.map((movie, i) => (
             <Movie
               key={`${i}-${movie.id}`}
+              puzzleId={puzzleData.puzzleId}
               movie={movie}
               genres={genreData}
               guesses={guesses}
