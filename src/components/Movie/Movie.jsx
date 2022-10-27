@@ -36,9 +36,9 @@ function Movie({ movie, genres, guesses, setHintsUsed, youWon, youLost }) {
   /**
    * Handle revealing the hints
    * @param {event} e
-   * @param {seet function} setFunc
+   * @param {setStatefunction} setFunc
    */
-  const handleHintClick = (e, setFunc) => {
+  const handleHintClick = (e, setFunc, actualHint) => {
     e.preventDefault();
     setFunc((prev) => {
       if (prev === false) {
@@ -47,39 +47,21 @@ function Movie({ movie, genres, guesses, setHintsUsed, youWon, youLost }) {
         return prev;
       }
     });
+    if (actualHint) {
+      setHintsUsed(1);
+    }
   };
 
+  /**
+   * Handle revealing all hints.
+   * @param {event} e
+   */
   const handleEasyMode = (e) => {
     e.preventDefault();
-    setRevealYear((prev) => {
-      if (prev === false) {
-        return !prev;
-      } else {
-        return prev;
-      }
-    });
-    setRevealDirector((prev) => {
-      if (prev === false) {
-        return !prev;
-      } else {
-        return prev;
-      }
-    });
-    setRevealSynopsis((prev) => {
-      if (prev === false) {
-        return !prev;
-      } else {
-        return prev;
-      }
-    });
-    setRevealCharNames((prev) => {
-      if (prev === false) {
-        return !prev;
-      } else {
-        return prev;
-      }
-    });
-    setHintsUsed((prev) => prev + 4);
+    handleHintClick(e, setRevealYear, true);
+    handleHintClick(e, setRevealDirector, true);
+    handleHintClick(e, setRevealSynopsis, true);
+    handleHintClick(e, setRevealCharNames, true);
   };
 
   /**
@@ -223,7 +205,7 @@ function Movie({ movie, genres, guesses, setHintsUsed, youWon, youLost }) {
           <p
             className="movie__text movie__text--hints"
             onClick={(e) => {
-              handleHintClick(e, setRevealHints);
+              handleHintClick(e, setRevealHints, false);
             }}
           >
             {revealHints ? `Hints:` : "pssst....need a hint?"}
@@ -232,14 +214,14 @@ function Movie({ movie, genres, guesses, setHintsUsed, youWon, youLost }) {
             <>
               <button
                 className="movie__hintsbutton movie__hintsbutton--year"
-                onClick={(e) => handleHintClick(e, setRevealYear)}
+                onClick={(e) => handleHintClick(e, setRevealYear, true)}
                 disabled={revealYear || movieGuessed}
               >
                 Year
               </button>
               <button
                 className="movie__hintsbutton movie__hintsbutton--director"
-                onClick={(e) => handleHintClick(e, setRevealDirector)}
+                onClick={(e) => handleHintClick(e, setRevealDirector, true)}
                 disabled={revealDirector || movieGuessed}
               >
                 Director
@@ -247,14 +229,14 @@ function Movie({ movie, genres, guesses, setHintsUsed, youWon, youLost }) {
 
               <button
                 className="movie__hintsbutton movie__hintsbutton--synopsis"
-                onClick={(e) => handleHintClick(e, setRevealSynopsis)}
+                onClick={(e) => handleHintClick(e, setRevealSynopsis, true)}
                 disabled={revealSynopsis || movieGuessed}
               >
                 Synopsis
               </button>
               <button
                 className="movie__hintsbutton movie__hintsbutton--names"
-                onClick={(e) => handleHintClick(e, setRevealCharNames)}
+                onClick={(e) => handleHintClick(e, setRevealCharNames, true)}
                 disabled={revealCharNames || movieGuessed}
               >
                 Names
@@ -263,10 +245,10 @@ function Movie({ movie, genres, guesses, setHintsUsed, youWon, youLost }) {
                 className="movie__hintsbutton movie__hintsbutton--easy"
                 onClick={(e) => handleEasyMode(e)}
                 disabled={
-                  (revealYear &&
-                    revealDirector &&
-                    revealSynopsis &&
-                    revealCharNames) ||
+                  revealYear ||
+                  revealDirector ||
+                  revealSynopsis ||
+                  revealCharNames ||
                   movieGuessed
                 }
               >

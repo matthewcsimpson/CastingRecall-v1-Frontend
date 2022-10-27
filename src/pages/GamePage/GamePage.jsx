@@ -54,7 +54,7 @@ function GamePage({ puzzleList }) {
   };
 
   /**
-   *
+   * Write all the puzzle data in state to local storage.
    */
   const setLocalDetails = () => {
     if (puzzleData && guesses) {
@@ -203,6 +203,7 @@ function GamePage({ puzzleList }) {
             puzzleId={puzzleId}
             puzzleData={puzzleData}
             guessNum={guesses.length}
+            hintsUsed={hintsUsed}
             maxGuesses={maxGuesses}
             youWon={youWon}
             youLost={youLost}
@@ -220,7 +221,7 @@ function GamePage({ puzzleList }) {
               movie={movie}
               genres={genreData}
               guesses={guesses}
-              setHintsUsed={(num) => setHintsUsed(num)}
+              setHintsUsed={(num) => setHintsUsed((prev) => prev + num)}
               youWon={youWon}
               youLost={youLost}
             />
