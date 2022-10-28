@@ -24,7 +24,7 @@ const dateOptions = {
   year: "numeric",
 };
 
-function Movie({ movie, genres, guesses, youWon, youLost }) {
+function Movie({ puzzleId, movie, genres, guesses, youWon, youLost }) {
   const [movieGuessed, setMovieGuessed] = useState(false);
   const [revealTitle, setRevealTitle] = useState(false);
   const [revealDirector, setRevealDirector] = useState(false);
@@ -36,9 +36,10 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
   /**
    * Handle revealing the hints
    * @param {event} e
-   * @param {seet function} setFunc
+   * @param {setStatefunction} setFunc
+   * @param {boolean} actualHint
    */
-  const handleHintClick = (e, setFunc) => {
+  const handleHintClick = (e, setFunc, actualHint) => {
     e.preventDefault();
     setFunc((prev) => {
       if (prev === false) {
@@ -49,37 +50,19 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
     });
   };
 
+  /**
+   * Handle revealing all hints.
+   * @param {event} e
+   */
   const handleEasyMode = (e) => {
     e.preventDefault();
-    setRevealYear((prev) => {
-      if (prev === false) {
-        return !prev;
-      } else {
-        return prev;
-      }
-    });
-    setRevealDirector((prev) => {
-      if (prev === false) {
-        return !prev;
-      } else {
-        return prev;
-      }
-    });
-    setRevealSynopsis((prev) => {
-      if (prev === false) {
-        return !prev;
-      } else {
-        return prev;
-      }
-    });
-    setRevealCharNames((prev) => {
-      if (prev === false) {
-        return !prev;
-      } else {
-        return prev;
-      }
-    });
+    handleHintClick(e, setRevealYear, true);
+    handleHintClick(e, setRevealDirector, true);
+    handleHintClick(e, setRevealSynopsis, true);
+    handleHintClick(e, setRevealCharNames, true);
   };
+
+  // ------------------------------------------------------------------------useEffects
 
   /**
    * Toggle this movie as guessed when it is guessed
@@ -91,14 +74,32 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses]);
 
+  /**
+   * useEffect to reveal all details when the movie is guessed or the player runs out of guesses.
+   */
   useEffect(() => {
-    if ((movieGuessed, youWon || youLost)) {
-      setRevealCharNames(true);
-      setRevealSynopsis(true);
+    if (movieGuessed || youWon || youLost) {
       setRevealYear(true);
+      setRevealDirector(true);
+      setRevealSynopsis(true);
+      setRevealCharNames(true);
       setRevealTitle(true);
     }
   }, [movieGuessed, youWon, youLost]);
+
+  /**
+   * Set local hints to local storage if the puzzleId, or any hints status, changes.
+   */
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    puzzleId,
+    revealYear,
+    revealDirector,
+    revealSynopsis,
+    revealCharNames,
+    revealHints,
+  ]);
 
   return (
     <>
@@ -222,39 +223,41 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
           <p
             className="movie__text movie__text--hints"
             onClick={(e) => {
-              handleHintClick(e, setRevealHints);
+              handleHintClick(e, setRevealHints, false);
             }}
           >
-            {revealHints ? `Hints:` : "pssst....need a hint?"}
+            {revealHints
+              ? `Warning: hints will cost you one guess each!`
+              : "pssst....need a hint?"}
           </p>
           {revealHints ? (
             <>
               <button
                 className="movie__hintsbutton movie__hintsbutton--year"
-                onClick={(e) => handleHintClick(e, setRevealYear)}
-                disabled={revealYear || movieGuessed}
+                onClick={(e) => handleHintClick(e, setRevealYear, true)}
+                disabled={revealYear || movieGuessed || youWon || youLost}
               >
                 Year
               </button>
               <button
                 className="movie__hintsbutton movie__hintsbutton--director"
-                onClick={(e) => handleHintClick(e, setRevealDirector)}
-                disabled={revealDirector || movieGuessed}
+                onClick={(e) => handleHintClick(e, setRevealDirector, true)}
+                disabled={revealDirector || movieGuessed || youWon || youLost}
               >
                 Director
               </button>
 
               <button
                 className="movie__hintsbutton movie__hintsbutton--synopsis"
-                onClick={(e) => handleHintClick(e, setRevealSynopsis)}
-                disabled={revealSynopsis || movieGuessed}
+                onClick={(e) => handleHintClick(e, setRevealSynopsis, true)}
+                disabled={revealSynopsis || movieGuessed || youWon || youLost}
               >
                 Synopsis
               </button>
               <button
                 className="movie__hintsbutton movie__hintsbutton--names"
-                onClick={(e) => handleHintClick(e, setRevealCharNames)}
-                disabled={revealCharNames || movieGuessed}
+                onClick={(e) => handleHintClick(e, setRevealCharNames, true)}
+                disabled={revealCharNames || movieGuessed || youWon || youLost}
               >
                 Names
               </button>
@@ -262,14 +265,16 @@ function Movie({ movie, genres, guesses, youWon, youLost }) {
                 className="movie__hintsbutton movie__hintsbutton--easy"
                 onClick={(e) => handleEasyMode(e)}
                 disabled={
-                  (revealYear &&
-                    revealDirector &&
-                    revealSynopsis &&
-                    revealCharNames) ||
-                  movieGuessed
+                  revealYear ||
+                  revealDirector ||
+                  revealSynopsis ||
+                  revealCharNames ||
+                  movieGuessed ||
+                  youWon ||
+                  youLost
                 }
               >
-                Easy Mode
+                All
               </button>
             </>
           ) : null}

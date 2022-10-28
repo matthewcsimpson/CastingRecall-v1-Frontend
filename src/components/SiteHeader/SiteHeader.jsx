@@ -1,7 +1,7 @@
 // Styles
 import "./SiteHeader.scss";
 
-function Header() {
+function SiteHeader() {
   return (
     <header className="header">
       <div className="header__wrapper">
@@ -28,4 +28,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default SiteHeader;

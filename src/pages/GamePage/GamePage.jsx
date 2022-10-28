@@ -25,7 +25,9 @@ function GamePage({ puzzleList }) {
   const [youLost, setYouLost] = useState(false);
   const [youWon, setYouWon] = useState(false);
 
-  // ------------------------------------------------------------------------data loading
+  let maxGuesses = 10;
+
+  // ------------------------------------------------------------------------functions/data loading
 
   /**
    * Function to retrieve genre information from TMDB
@@ -46,24 +48,10 @@ function GamePage({ puzzleList }) {
   const getSpecificPuzzle = async (id) => {
     await axios
       .get(`${REACT_APP_API_REMOTE_URL}/puzzle/${id}`)
-      .then((res) => setPuzzleData(res.data))
+      .then((res) => {
+        setPuzzleData(res.data);
+      })
       .catch((err) => console.error(err));
-  };
-
-  /**
-   *
-   */
-  const setLocalDetails = () => {
-    if (puzzleData && guesses) {
-      const pId = puzzleData.puzzleId;
-      const puzzle = {
-        id: pId,
-        guesses: guesses,
-        youWon: youWon,
-        youLost: youLost,
-      };
-      localStorage.setItem(pId, JSON.stringify(puzzle));
-    }
   };
 
   /**
@@ -78,13 +66,27 @@ function GamePage({ puzzleList }) {
       if (goodGuess) {
         goodGuess = { ...goodGuess, ...{ correct: true } };
         setGuesses([...guesses, goodGuess]);
-        console.log("guesses (good)", guesses);
       } else {
         let badGuess = { ...movie, ...{ correct: false } };
         setGuesses([...guesses, badGuess]);
-        console.log("guesses (bad)", guesses);
       }
       setLocalDetails();
+    }
+  };
+
+  /**
+   * Write all the puzzle data in state to local storage.
+   */
+  const setLocalDetails = () => {
+    if (puzzleData && guesses) {
+      const pId = puzzleData.puzzleId;
+      const puzzle = {
+        id: pId,
+        guesses: guesses,
+        youWon: youWon,
+        youLost: youLost,
+      };
+      localStorage.setItem(pId, JSON.stringify(puzzle));
     }
   };
 
@@ -153,7 +155,7 @@ function GamePage({ puzzleList }) {
     if (correctCounter.length === 6) {
       setYouWon(true);
       setLocalDetails();
-    } else if (guesses.length === 10) {
+    } else if (guesses.length === maxGuesses) {
       setYouLost(true);
       setLocalDetails();
     } else if (guesses.length > 0) {
@@ -161,7 +163,7 @@ function GamePage({ puzzleList }) {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [guesses]);
+  }, [guesses, youWon, youLost]);
 
   /**
    *  Set details stored in state to localStorage, and then clear, when the puzzleId changes
@@ -179,10 +181,9 @@ function GamePage({ puzzleList }) {
    */
   useEffect(() => {
     getLocalGuesses();
+    setLocalDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [puzzleData]);
-
-  // ------------------------------------------------------------------------functions
 
   return (
     <>
@@ -199,6 +200,7 @@ function GamePage({ puzzleList }) {
             puzzleId={puzzleId}
             puzzleData={puzzleData}
             guessNum={guesses.length}
+            maxGuesses={maxGuesses}
             youWon={youWon}
             youLost={youLost}
             handleSubmitGuess={(movie) => handleSubmitGuess(movie)}
@@ -212,6 +214,7 @@ function GamePage({ puzzleList }) {
           puzzleData.puzzle.map((movie, i) => (
             <Movie
               key={`${i}-${movie.id}`}
+              puzzleId={puzzleData.puzzleId}
               movie={movie}
               genres={genreData}
               guesses={guesses}

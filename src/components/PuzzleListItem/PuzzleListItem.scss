@@ -23,14 +23,29 @@
 
     &__puzzlewrapper {
         display: flex;
+        flex-direction: column;
+
+        @include tablet {
+            flex-direction: row;
+        }
     }
 
-    &__number {
-        flex-basis: 5%;
+    &__number,
+    &__progress {
+        flex-basis: 10%;
+        font-weight: bold;
     }
 
     &__text {
         color: $site-primary-color;
+    }
+
+    &__nameswrapper {
+        flex-basis: 38%;
+    }
+
+    &__status {
+        flex-basis: 38%;
     }
 
     &__list {

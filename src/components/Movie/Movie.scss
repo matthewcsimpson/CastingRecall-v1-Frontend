@@ -35,7 +35,7 @@
     }
 
     &__heading {
-        margin: 0.5rem 1rem 1rem;
+        margin: 0.5rem 1rem 1rem 0rem;
         color: $site-primary-color;
         align-self: flex-start;
     }
@@ -45,28 +45,28 @@
         display: flex;
         flex-direction: column;
         font-size: 0.9rem;
+        width: 100%;
 
         @include tablet {
-            width: 45%;
+            width: 50%;
         }
 
         &--inner {
-            padding: 0 0.75rem;
+            // padding: 0 0.75rem;
             display: flex;
             flex-direction: row;
             justify-content: center;
-            margin-bottom: 1rem;
-
-            @include tablet {
-                // flex-direction: row;
-            }
+            margin: 0 auto 1rem;
+            height: 100%;
+            width: 95%;
         }
     }
 
     &__detailsbox {
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly;
+        padding-left: 5%;
+        width: 74%;
 
         &--title,
         &--director,
@@ -76,16 +76,12 @@
             display: flex;
             flex-direction: column;
             margin: 0;
+            font-size: 0.75rem;
+            height: 100%;
 
             @include desktop {
-                flex-direction: row;
                 padding: 0 0.75rem;
             }
-        }
-
-        &--genres {
-            flex-direction: row;
-            // flex-wrap: wrap;
         }
     }
 
@@ -100,8 +96,8 @@
         margin: 0 0.3125rem 0.25rem 0.625rem;
         display: inline-block;
         height: 1.5625rem;
-        border-radius: 0 0.3125rem 0.3125rem 0;
-        padding: 0 1.5625rem 0 0.9375rem;
+        border-radius: 0.0625rem 0.3125rem 0.3125rem 0.0625rem;
+        padding: 0 0.5rem 0 0.75rem;
         background: #e8edf0;
         border: 1px solid;
         line-height: 1.4375rem;
@@ -123,13 +119,13 @@
             border-bottom: 1px solid;
         }
 
-        &:after {
-            position: absolute;
-            right: 0;
-            margin: 0.0625rem 0.4375rem;
-            font-weight: bold;
-            font-size: 1.1875rem;
-        }
+        // &:after {
+        //     position: absolute;
+        //     right: 0;
+        //     margin: 0.0625rem 0.4375rem;
+        //     font-weight: bold;
+        //     font-size: 1.1875rem;
+        // }
 
         &--28 {
             // Action
@@ -341,24 +337,16 @@
         }
     }
 
+    &__posterbox {
+        width: 25%;
+    }
+
     &__poster {
+        display: block;
         object-fit: cover;
-        height: 100px;
+        width: 100%;
         border: 1px solid $site-primary-color;
-        margin: 0 1rem 1rem 0;
-
-        @include tablet {
-            height: 170px;
-            margin: 0;
-        }
-
-        &--mobile {
-            height: 150px;
-
-            @include tablet {
-                height: 250px;
-            }
-        }
+        margin: 0 auto 0 auto;
     }
 
     &__text {
@@ -375,10 +363,7 @@
 
         &--item {
             width: 100%;
-
-            @include tablet {
-                width: 74%;
-            }
+            margin-bottom: 3%;
         }
 
         &--hints {
@@ -408,7 +393,7 @@
     }
 
     &__actorname {
-        font-size: 0.75rem;
+        font-size: 0.65rem;
         font-style: italic;
         margin: 0.25rem 0 0 0;
         text-align: center;
@@ -430,49 +415,41 @@
         width: 100%;
 
         @include tablet {
-            width: 54%;
+            width: 49%;
         }
 
         &--inner {
             display: flex;
             flex-direction: row;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             justify-content: center;
-            width: 80%;
-
-            @include tablet {
-                width: 100%;
-            }
+            width: 95%;
         }
     }
 
     &__headshotbox {
         height: 200px;
-        width: 80px;
+        width: 19%;
         display: flex;
         border-radius: 0.5rem;
         flex-direction: column;
-        margin: 0rem 0.5rem 0.25rem;
+        margin: 0rem 0.5% 0.25rem;
         background-color: $site-primary-color;
 
         @include tablet {
             height: 275px;
-            width: 110px;
-            margin: 0rem 0.25rem 0.25rem;
-        }
 
-        @include largetablet {
-            margin: 0rem 0.5rem 0.25rem;
+            margin: 0rem 0.125rem 0.125rem;
         }
 
         @include desktop {
-            width: 110px;
-            margin: 0rem 0.25rem 0.125rem;
+            margin: 0rem 0.25rem 0.25rem;
         }
     }
 
     &__headshot {
         object-fit: cover;
+        object-position: center 20%;
         height: 100px;
         border-radius: 0.5rem 0.5rem 0 0;
 
@@ -496,7 +473,7 @@
     &__hintswrapper {
         width: 100%;
         margin: 0 auto;
-        padding: 0 0 0 1rem;
+        // padding: 0 0 0 1rem;
     }
 
     &__hintsbutton {

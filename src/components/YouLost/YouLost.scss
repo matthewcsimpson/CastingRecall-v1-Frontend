@@ -5,6 +5,10 @@
 
 .youlost {
     width: 100%;
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0px;
+    z-index: 100;
 
     &__wrapper {
         width: 90%;
@@ -24,43 +28,42 @@
 
     &__heading {
         color: $site-primary-color;
-        font-size: 2rem;
+        font-size: 1.5rem;
         text-align: center;
+        margin: 0;
 
         @include tablet {
-            font-size: 3rem;
-        }
-
-        @include desktop {
-            font-size: 4rem;
+            font-size: 2rem;
         }
     }
 
     &__subheading {
         color: $site-primary-color;
-        font-size: 1.5rem;
+        font-size: 1rem;
         text-align: center;
+        margin: 0;
 
         @include tablet {
-            font-size: 2.25rem;
+            font-size: 1.5rem;
         }
 
         @include desktop {
-            font-size: 3rem;
+            font-size: 2rem;
         }
     }
 
     &__text {
         color: $site-primary-color;
-        font-size: 1.5rem;
+        font-size: 1rem;
         text-align: center;
+        margin: 0;
 
         @include tablet {
-            font-size: 2.25rem;
+            font-size: 1.5rem;
         }
 
         @include desktop {
-            font-size: 3rem;
+            font-size: 2rem;
         }
     }
 }
