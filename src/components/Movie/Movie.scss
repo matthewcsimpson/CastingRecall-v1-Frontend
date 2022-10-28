@@ -62,21 +62,11 @@
         }
     }
 
-    &__posterbox {
-        width: 30%;
-        @include tablet {
-            width: 40%;
-        }
-    }
-
     &__detailsbox {
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly;
-        width: 69%;
-        @include tablet {
-            width: 59%;
-        }
+        padding-left: 5%;
+        width: 74%;
 
         &--title,
         &--director,
@@ -86,16 +76,12 @@
             display: flex;
             flex-direction: column;
             margin: 0;
+            font-size: 0.75rem;
+            height: 100%;
 
             @include desktop {
-                flex-direction: row;
                 padding: 0 0.75rem;
             }
-        }
-
-        &--genres {
-            flex-direction: row;
-            // flex-wrap: wrap;
         }
     }
 
@@ -110,8 +96,8 @@
         margin: 0 0.3125rem 0.25rem 0.625rem;
         display: inline-block;
         height: 1.5625rem;
-        border-radius: 0 0.3125rem 0.3125rem 0;
-        padding: 0 1.5625rem 0 0.9375rem;
+        border-radius: 0.0625rem 0.3125rem 0.3125rem 0.0625rem;
+        padding: 0 0.5rem 0 0.75rem;
         background: #e8edf0;
         border: 1px solid;
         line-height: 1.4375rem;
@@ -133,13 +119,13 @@
             border-bottom: 1px solid;
         }
 
-        &:after {
-            position: absolute;
-            right: 0;
-            margin: 0.0625rem 0.4375rem;
-            font-weight: bold;
-            font-size: 1.1875rem;
-        }
+        // &:after {
+        //     position: absolute;
+        //     right: 0;
+        //     margin: 0.0625rem 0.4375rem;
+        //     font-weight: bold;
+        //     font-size: 1.1875rem;
+        // }
 
         &--28 {
             // Action
@@ -351,24 +337,16 @@
         }
     }
 
+    &__posterbox {
+        width: 25%;
+    }
+
     &__poster {
+        display: block;
         object-fit: cover;
-        height: 100px;
+        width: 100%;
         border: 1px solid $site-primary-color;
-        margin: 0 1rem 1rem 0;
-
-        @include tablet {
-            height: 170px;
-            margin: 0 1rem 1rem 0;
-        }
-
-        &--mobile {
-            height: 150px;
-
-            @include tablet {
-                height: 250px;
-            }
-        }
+        margin: 0 auto 0 auto;
     }
 
     &__text {
@@ -385,8 +363,7 @@
 
         &--item {
             width: 100%;
-            @include tablet {
-            }
+            margin-bottom: 3%;
         }
 
         &--hints {
@@ -462,11 +439,11 @@
         @include tablet {
             height: 275px;
 
-            margin: 0rem 0.25rem 0.25rem;
+            margin: 0rem 0.125rem 0.125rem;
         }
 
         @include desktop {
-            margin: 0rem 0.25rem 0.125rem;
+            margin: 0rem 0.25rem 0.25rem;
         }
     }
 

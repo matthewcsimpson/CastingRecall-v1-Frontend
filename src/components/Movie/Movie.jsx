@@ -274,7 +274,9 @@ function Movie({
               handleHintClick(e, setRevealHints, false);
             }}
           >
-            {revealHints ? `Hints:` : "pssst....need a hint?"}
+            {revealHints
+              ? `Warning: hints will cost you one guess each!`
+              : "pssst....need a hint?"}
           </p>
           {revealHints ? (
             <>
