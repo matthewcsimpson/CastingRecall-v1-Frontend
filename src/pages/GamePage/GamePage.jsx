@@ -22,13 +22,12 @@ function GamePage({ puzzleList }) {
   const [genreData, setGenreData] = useState(null);
   const [puzzleData, setPuzzleData] = useState(null);
   const [guesses, setGuesses] = useState([]);
-  const [hintsUsed, setHintsUsed] = useState(0);
   const [youLost, setYouLost] = useState(false);
   const [youWon, setYouWon] = useState(false);
 
-  let maxGuesses = 12;
+  let maxGuesses = 10;
 
-  // ------------------------------------------------------------------------data loading
+  // ------------------------------------------------------------------------functions/data loading
 
   /**
    * Function to retrieve genre information from TMDB
@@ -56,24 +55,6 @@ function GamePage({ puzzleList }) {
   };
 
   /**
-   * Write all the puzzle data in state to local storage.
-   */
-  const setLocalDetails = () => {
-    if (puzzleData && guesses) {
-      const pId = puzzleData.puzzleId;
-      const puzzle = {
-        id: pId,
-        guesses: guesses,
-        youWon: youWon,
-        youLost: youLost,
-        hintsUsed: hintsUsed,
-      };
-      console.log("puzzle", puzzle);
-      localStorage.setItem(pId, JSON.stringify(puzzle));
-    }
-  };
-
-  /**
    * Receive a movie object from the guess form and process it.
    * @param {object} movie
    */
@@ -94,6 +75,22 @@ function GamePage({ puzzleList }) {
   };
 
   /**
+   * Write all the puzzle data in state to local storage.
+   */
+  const setLocalDetails = () => {
+    if (puzzleData && guesses) {
+      const pId = puzzleData.puzzleId;
+      const puzzle = {
+        id: pId,
+        guesses: guesses,
+        youWon: youWon,
+        youLost: youLost,
+      };
+      localStorage.setItem(pId, JSON.stringify(puzzle));
+    }
+  };
+
+  /**
    * Retrieve guess data stored in localStorage, if any
    */
   const getLocalGuesses = () => {
@@ -104,7 +101,6 @@ function GamePage({ puzzleList }) {
           setGuesses(local.guesses);
           setYouWon(local.youWon);
           setYouLost(local.youLost);
-          setHintsUsed(local.hintsUsed);
         } else {
           setGuesses([]);
         }
@@ -159,7 +155,7 @@ function GamePage({ puzzleList }) {
     if (correctCounter.length === 6) {
       setYouWon(true);
       setLocalDetails();
-    } else if (guesses.length + hintsUsed === maxGuesses) {
+    } else if (guesses.length === maxGuesses) {
       setYouLost(true);
       setLocalDetails();
     } else if (guesses.length > 0) {
@@ -167,12 +163,7 @@ function GamePage({ puzzleList }) {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [guesses, youWon, youLost, hintsUsed]);
-
-  useEffect(() => {
-    setLocalDetails();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setHintsUsed, hintsUsed]);
+  }, [guesses, youWon, youLost]);
 
   /**
    *  Set details stored in state to localStorage, and then clear, when the puzzleId changes
@@ -194,8 +185,6 @@ function GamePage({ puzzleList }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [puzzleData]);
 
-  // ------------------------------------------------------------------------functions
-
   return (
     <>
       {puzzleList ? (
@@ -211,7 +200,6 @@ function GamePage({ puzzleList }) {
             puzzleId={puzzleId}
             puzzleData={puzzleData}
             guessNum={guesses.length}
-            hintsUsed={hintsUsed}
             maxGuesses={maxGuesses}
             youWon={youWon}
             youLost={youLost}
@@ -230,7 +218,6 @@ function GamePage({ puzzleList }) {
               movie={movie}
               genres={genreData}
               guesses={guesses}
-              setHintsUsed={(num) => setHintsUsed((prev) => prev + num)}
               youWon={youWon}
               youLost={youLost}
             />

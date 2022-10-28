@@ -20,7 +20,6 @@ function GuessForm({
   puzzleId,
   puzzleData,
   guessNum,
-  hintsUsed,
   maxGuesses,
   youWon,
   youLost,
@@ -76,7 +75,7 @@ function GuessForm({
                 youWon || youLost
                   ? `You finished this game!`
                   : `Enter a guess.  You have ${
-                      maxGuesses - hintsUsed - guessNum
+                      maxGuesses - guessNum
                     } guesses left...`
               }
               onChange={(event) => {

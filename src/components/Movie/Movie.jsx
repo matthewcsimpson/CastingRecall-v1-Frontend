@@ -24,15 +24,7 @@ const dateOptions = {
   year: "numeric",
 };
 
-function Movie({
-  puzzleId,
-  movie,
-  genres,
-  guesses,
-  setHintsUsed,
-  youWon,
-  youLost,
-}) {
+function Movie({ puzzleId, movie, genres, guesses, youWon, youLost }) {
   const [movieGuessed, setMovieGuessed] = useState(false);
   const [revealTitle, setRevealTitle] = useState(false);
   const [revealDirector, setRevealDirector] = useState(false);
@@ -45,6 +37,7 @@ function Movie({
    * Handle revealing the hints
    * @param {event} e
    * @param {setStatefunction} setFunc
+   * @param {boolean} actualHint
    */
   const handleHintClick = (e, setFunc, actualHint) => {
     e.preventDefault();
@@ -55,9 +48,6 @@ function Movie({
         return prev;
       }
     });
-    if (actualHint === true) {
-      setHintsUsed(1);
-    }
   };
 
   /**
@@ -72,48 +62,8 @@ function Movie({
     handleHintClick(e, setRevealCharNames, true);
   };
 
-  /**
-   * Function to read hints data stored in localStorage
-   */
-  const getLocalHints = () => {
-    if (movie) {
-      const hintsId = `${puzzleId}-${movie.id}`;
-      let local = JSON.parse(localStorage.getItem(hintsId));
-      if (local) {
-        setRevealHints(local.revealHints);
-        setRevealYear(local.revealYear);
-        setRevealDirector(local.revealDirector);
-        setRevealSynopsis(local.revealSynopsis);
-        setRevealCharNames(local.revealCharNames);
-      }
-    }
-  };
-
-  /**
-   * Function to write hints data to localStorage.
-   */
-  const setLocalHints = () => {
-    if (movie) {
-      const hintsId = `${puzzleId}-${movie.id}`;
-      const hints = {
-        id: hintsId,
-        revealHints: revealHints,
-        revealYear: revealYear,
-        revealDirector: revealDirector,
-        revealSynopsis: revealSynopsis,
-        revealCharNames: revealCharNames,
-      };
-      localStorage.setItem(hintsId, JSON.stringify(hints));
-    }
-  };
-
   // ------------------------------------------------------------------------useEffects
 
-  useEffect(() => {
-    getLocalHints();
-    setLocalHints();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   /**
    * Toggle this movie as guessed when it is guessed
    */
@@ -121,7 +71,6 @@ function Movie({
     setMovieGuessed(
       guesses.find((guess) => (guess.id === movie.id ? true : false))
     );
-    setLocalHints();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses]);
 
@@ -138,10 +87,13 @@ function Movie({
     }
   }, [movieGuessed, youWon, youLost]);
 
+  /**
+   * Set local hints to local storage if the puzzleId, or any hints status, changes.
+   */
   useEffect(() => {
-    setLocalHints();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    puzzleId,
     revealYear,
     revealDirector,
     revealSynopsis,

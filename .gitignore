@@ -27,3 +27,4 @@ src/data/temp.json
 src/.env
 
 .vscode
+src/assets/temp.jsx
