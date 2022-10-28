@@ -5,6 +5,9 @@ import "./Movie.scss";
 import questionmarkimg from "../../assets/question.jpg";
 import profilePic from "../../assets/profile-placeholder.jpg";
 
+// Components
+import Hints from "../Hints/Hints";
+
 // Libraries
 import { useEffect, useState } from "react";
 
@@ -24,7 +27,15 @@ const dateOptions = {
   year: "numeric",
 };
 
-function Movie({ puzzleId, movie, genres, guesses, youWon, youLost }) {
+function Movie({
+  puzzleId,
+  movie,
+  genres,
+  guesses,
+  youWon,
+  youLost,
+  reallyWantHints,
+}) {
   const [movieGuessed, setMovieGuessed] = useState(false);
   const [revealTitle, setRevealTitle] = useState(false);
   const [revealDirector, setRevealDirector] = useState(false);
@@ -219,66 +230,25 @@ function Movie({ puzzleId, movie, genres, guesses, youWon, youLost }) {
             </div>
           </div>
         </div>
-        <div className="movie__hintswrapper">
-          <p
-            className="movie__text movie__text--hints"
-            onClick={(e) => {
-              handleHintClick(e, setRevealHints, false);
-            }}
-          >
-            {revealHints
-              ? `Warning: hints will cost you one guess each!`
-              : "pssst....need a hint?"}
-          </p>
-          {revealHints ? (
-            <>
-              <button
-                className="movie__hintsbutton movie__hintsbutton--year"
-                onClick={(e) => handleHintClick(e, setRevealYear, true)}
-                disabled={revealYear || movieGuessed || youWon || youLost}
-              >
-                Year
-              </button>
-              <button
-                className="movie__hintsbutton movie__hintsbutton--director"
-                onClick={(e) => handleHintClick(e, setRevealDirector, true)}
-                disabled={revealDirector || movieGuessed || youWon || youLost}
-              >
-                Director
-              </button>
-
-              <button
-                className="movie__hintsbutton movie__hintsbutton--synopsis"
-                onClick={(e) => handleHintClick(e, setRevealSynopsis, true)}
-                disabled={revealSynopsis || movieGuessed || youWon || youLost}
-              >
-                Synopsis
-              </button>
-              <button
-                className="movie__hintsbutton movie__hintsbutton--names"
-                onClick={(e) => handleHintClick(e, setRevealCharNames, true)}
-                disabled={revealCharNames || movieGuessed || youWon || youLost}
-              >
-                Names
-              </button>
-              <button
-                className="movie__hintsbutton movie__hintsbutton--easy"
-                onClick={(e) => handleEasyMode(e)}
-                disabled={
-                  revealYear ||
-                  revealDirector ||
-                  revealSynopsis ||
-                  revealCharNames ||
-                  movieGuessed ||
-                  youWon ||
-                  youLost
-                }
-              >
-                All
-              </button>
-            </>
-          ) : null}
-        </div>
+        {reallyWantHints && (
+          <Hints
+            handleHintClick={handleHintClick}
+            setRevealHints={setRevealHints}
+            revealHints={revealHints}
+            setRevealYear={setRevealYear}
+            revealYear={revealYear}
+            setRevealDirector={setRevealDirector}
+            revealDirector={revealDirector}
+            setRevealSynopsis={setRevealSynopsis}
+            revealSynopsis={revealSynopsis}
+            setRevealCharNames={setRevealCharNames}
+            revealCharNames={revealCharNames}
+            handleEasyMode={handleEasyMode}
+            movieGuessed={movieGuessed}
+            youWon={youWon}
+            youLost={youLost}
+          />
+        )}
       </div>
     </>
   );
