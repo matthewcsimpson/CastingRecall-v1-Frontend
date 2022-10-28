@@ -428,7 +428,7 @@
     }
 
     &__headshotbox {
-        height: 200px;
+        height: 100%;
         width: 19%;
         display: flex;
         border-radius: 0.5rem;
@@ -437,7 +437,7 @@
         background-color: $site-primary-color;
 
         @include tablet {
-            height: 275px;
+            height: 100%;
 
             margin: 0rem 0.125rem 0.125rem;
         }
