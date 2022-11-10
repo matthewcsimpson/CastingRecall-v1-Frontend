@@ -4,6 +4,7 @@
  *
  * @param {string} timestamp;
  * @param {Object} dateOptions;
+ * @returns formatted date string
  */
 const formatDate = (timestamp, options) => {
   let date = new Date(timestamp);
@@ -13,7 +14,7 @@ const formatDate = (timestamp, options) => {
 /**
  * Return the genre name based on the genre ID# provide by TMDB.
  * @param {number} id
- * @returns
+ * @returns genre name as a string.
  */
 const formatGenre = (id, genres) => {
   let genreName = genres.find((genre) => {
@@ -24,6 +25,8 @@ const formatGenre = (id, genres) => {
 
 /**
  * Obscure the characters of a string
+ * @param {string} string
+ * @returns string with all characters replaced
  */
 const obscureString = (string) => {
   const regex = /([A-Za-z0-9])/gi;
@@ -33,7 +36,7 @@ const obscureString = (string) => {
 /**
  * Shortens a string to 200 chars with ellipses on the end.
  * @param {string} string
- * @returns
+ * @returns shortened string
  */
 const shortenString = (string) => {
   return string.substring(0, 147) + "...";
@@ -42,7 +45,7 @@ const shortenString = (string) => {
 /**
  * removes the substring `(voice)` from a character name
  * @param {string} string
- * @returns
+ * @returns a string without the substring (voice)
  */
 const removeVoiceFromString = (string) => {
   return string.replace("(voice)", "");
@@ -51,7 +54,7 @@ const removeVoiceFromString = (string) => {
 /**
  * Shortens the character name string if there are multiple characters
  * @param {*} string
- * @returns
+ * @returns a string with two names separated by a /, maximum.
  */
 const shortenMultipleCharNames = (string) => {
   const split = string.split(" / ");
@@ -65,7 +68,7 @@ const shortenMultipleCharNames = (string) => {
 /**
  * Return just the first name from a name string
  * @param {string} string
- * @returns string
+ * @returns string with only the first name from a full name.
  */
 const firstNameOnly = (string) => {
   const split = string.split(" ");

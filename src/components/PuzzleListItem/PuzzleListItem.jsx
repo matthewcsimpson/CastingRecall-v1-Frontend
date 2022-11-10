@@ -61,12 +61,12 @@ function PuzzleListItem({ puzznum, puzzle }) {
     <>
       <div className="puzzlelist">
         <div className="puzzlelist__wrapper">
-          <div className="puzzlelist__puzzlewrapper">
-            <p className="puzzlelist__number puzzlelist__text">
-              Puzzle #{puzznum + 1}:
-            </p>
-            <div className="puzzlelist__nameswrapper">
-              <NavLink to={`/puzzle/${puzzle}`}>
+          <NavLink to={`/puzzle/${puzzle}`}>
+            <div className="puzzlelist__puzzlewrapper">
+              <p className="puzzlelist__number puzzlelist__text">
+                Puzzle #{puzznum + 1}:
+              </p>
+              <div className="puzzlelist__nameswrapper">
                 {puzzleData &&
                   puzzleData.puzzle.map((movie) => (
                     <p
@@ -76,13 +76,15 @@ function PuzzleListItem({ puzznum, puzzle }) {
                       {firstNameOnly(movie.keyPerson.name)}
                     </p>
                   ))}
-              </NavLink>
+              </div>
+              <p className="puzzlelist__progress puzzlelist__text">
+                Progress:{" "}
+              </p>
+              <p className="puzzlelist__status puzzlelist__text">
+                {status && status}
+              </p>
             </div>
-            <p className="puzzlelist__progress puzzlelist__text">Progress: </p>
-            <p className="puzzlelist__status puzzlelist__text">
-              {status && status}
-            </p>
-          </div>
+          </NavLink>
         </div>
       </div>
     </>
