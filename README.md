@@ -4,7 +4,6 @@ Can you guess the movie based on the cast?  That's the hook of _Casting ReCall_.
 
 This game was built using React.js, React Router, JavaScript, HTML, SCSS, and Axios
 
-The game is curently deployed and can be played here: <https://castingrecall.herokuapp.com>
 ## Related
 
 Here is the back end API for this project: 
