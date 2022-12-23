@@ -2,7 +2,7 @@
 
 Can you guess the movie based on the cast?  That's the hook of _Casting ReCall_.  The game presents you with six cast lineups, and you have ten guesses to get them all!  
 
-This game was built using React.js, React Router, JavaScript, HTML, SCSS, and Axios
+This game was built using React.js, React Router, JavaScript, HTML, SCSS, and Axios and is currently deployed at <https://castingrecall.herokuapp.com>
 
 ## Related
 
