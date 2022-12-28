@@ -6,10 +6,10 @@ function SiteFooter() {
     <footer className="footer">
       <div className="footer__wrapper">
         <p className="footer__text">
-          Designed &amp; Coded by{" "}
+          Designed &amp; Coded by 
           <a
             className="footer__text footer__text--link"
-            href="https://www.mattsimpson.name"
+            href="https://github.com/matthewcsimpson/"
             target="_blank"
             rel="noreferrer"
           >
