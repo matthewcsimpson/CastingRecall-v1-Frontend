@@ -1,4 +1,4 @@
-# Casting Call - A Movie Guessing Game
+# Casting Recall - A Movie Guessing Game
 
 Can you guess the movie based on the cast?  That's the hook of _Casting ReCall_.  The game presents you with six cast lineups, and you have ten guesses to get them all!  
 
