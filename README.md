@@ -1,14 +1,10 @@
-# Casting Recall - A Movie Guessing Game
+## Casting Recall - A Movie Guessing Game
 
 Can you guess the movie based on the cast?  That's the hook of _Casting ReCall_.  The game presents you with six cast lineups, and you have ten guesses to get them all!  
 
-This game was built using React.js, React Router, JavaScript, HTML, SCSS, and Axios and is currently deployed at <https://castingrecall.herokuapp.com>
+This game was built using `React.js`, with `JavaScript`, `HTML`, `SCSS`,  `React Router`, and `Axios` and is currently deployed at <https://castingrecall.herokuapp.com>
 
-## Related
-
-Here is the back end API for this project: 
-
-[Casting ReCall - Node.js Back End](https://github.com/matthewcsimpson/castingrecall-server)
+_Be sure to check out the back end repo: [Casting ReCall - Node.js Back End](https://github.com/matthewcsimpson/castingrecall-server)._
 
 ## Run Locally 
 
@@ -30,9 +26,4 @@ You will need to provide a TMDB API key.
 `REACT_APP_API_REMOTE_URL`=`{YOUR DEPLOYMENT HERE}`
 
 ## Screenshot
-
-![App Screenshot](https://raw.githubusercontent.com/matthewcsimpson/castingrecall/main/src/data/screen.jpg?token=GHSAT0AAAAAABZEKBUWPRL2WDEGBFQ6VZUYYZVIKJQ)
-
-## Author
-
-- [@MatthewCSimpson](https://www.github.com/matthewcsimpson)
+<img alt="Casting ReCall - A Movie Guessing Game" src="https://github.com/user-attachments/assets/c2f92a79-37e4-4fbb-9953-a68c9480cfd8" />
