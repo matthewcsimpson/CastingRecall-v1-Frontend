@@ -1,6 +1,6 @@
 import "./Hints.scss";
 
-function Hints({
+const Hints = ({
   handleHintClick,
   setRevealHints,
   revealHints,
@@ -16,7 +16,7 @@ function Hints({
   movieGuessed,
   youWon,
   youLost,
-}) {
+}) => {
   return (
     <div className="hintswrapper">
       <p
@@ -77,6 +77,6 @@ function Hints({
       ) : null}
     </div>
   );
-}
+};
 
 export default Hints;

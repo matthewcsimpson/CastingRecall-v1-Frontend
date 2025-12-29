@@ -13,7 +13,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 
-function App() {
+const App = () => {
   const [puzzleList, setPuzzleList] = useState(null);
   const REACT_APP_API_REMOTE_URL = process.env.REACT_APP_API_REMOTE_URL;
 
@@ -55,6 +55,6 @@ function App() {
       <SiteFooter />
     </>
   );
-}
+};
 
 export default App;

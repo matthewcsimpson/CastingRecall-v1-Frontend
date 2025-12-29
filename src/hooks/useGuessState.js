@@ -1,12 +1,34 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-const DEFAULT_MAX_GUESSES = 10;
+export const MAX_GUESSES = 10;
+
+export const getStoredGuessState = (puzzleId, { silent = false } = {}) => {
+  if (!puzzleId) {
+    return null;
+  }
+
+  try {
+    const raw = localStorage.getItem(puzzleId);
+    const stored = raw ? JSON.parse(raw) : null;
+
+    if (!stored || String(stored.id) !== String(puzzleId)) {
+      return null;
+    }
+
+    return stored;
+  } catch (err) {
+    if (!silent) {
+      console.error(err);
+    }
+    return { __error: true };
+  }
+};
 
 const useGuessState = (puzzleData) => {
   const [guesses, setGuesses] = useState([]);
   const [youWon, setYouWon] = useState(false);
   const [youLost, setYouLost] = useState(false);
-  const maxGuesses = DEFAULT_MAX_GUESSES;
+  const maxGuesses = MAX_GUESSES;
 
   const { correctCount, incorrectCount } = useMemo(() => {
     return guesses.reduce(
@@ -62,24 +84,13 @@ const useGuessState = (puzzleData) => {
   }, [correctCount, incorrectCount, maxGuesses, totalGuesses, youLost, youWon]);
 
   useEffect(() => {
-    if (!puzzleData?.puzzleId) {
-      setGuesses([]);
-      setYouWon(false);
-      setYouLost(false);
+    const stored = getStoredGuessState(puzzleData?.puzzleId);
+
+    if (stored && !stored.__error) {
+      setGuesses(stored.guesses || []);
+      setYouWon(Boolean(stored.youWon));
+      setYouLost(Boolean(stored.youLost));
       return;
-    }
-
-    try {
-      const local = JSON.parse(localStorage.getItem(puzzleData.puzzleId));
-
-      if (local && String(local.id) === String(puzzleData.puzzleId)) {
-        setGuesses(local.guesses || []);
-        setYouWon(Boolean(local.youWon));
-        setYouLost(Boolean(local.youLost));
-        return;
-      }
-    } catch (err) {
-      console.error(err);
     }
 
     setGuesses([]);

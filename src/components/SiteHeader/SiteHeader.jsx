@@ -1,7 +1,7 @@
 // Styles
 import "./SiteHeader.scss";
 
-function SiteHeader() {
+const SiteHeader = () => {
   return (
     <header className="header">
       <div className="header__wrapper">
@@ -26,6 +26,6 @@ function SiteHeader() {
       </div>
     </header>
   );
-}
+};
 
 export default SiteHeader;

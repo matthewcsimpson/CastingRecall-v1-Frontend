@@ -16,7 +16,7 @@ const dateOptions = {
   year: "numeric",
 };
 
-function GuessForm({
+const GuessForm = ({
   puzzleId,
   puzzleData,
   guessNum,
@@ -24,7 +24,7 @@ function GuessForm({
   youWon,
   youLost,
   handleSubmitGuess,
-}) {
+}) => {
   // Data
   const REACT_APP_TMDB_KEY = process.env.REACT_APP_TMDB_KEY;
   const REACT_APP_TMDB_SEARCH_URL = process.env.REACT_APP_TMDB_SEARCH_URL;
@@ -134,6 +134,6 @@ function GuessForm({
       </div>
     </div>
   );
-}
+};
 
 export default GuessForm;

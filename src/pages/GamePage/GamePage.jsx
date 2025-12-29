@@ -15,7 +15,7 @@ import { useParams } from "react-router-dom";
 // Hooks
 import { useGenres, usePuzzleData, useGuessState } from "../../hooks";
 
-function GamePage({ puzzleList }) {
+const GamePage = ({ puzzleList }) => {
   // Data
   const REACT_APP_TMDB_KEY = process.env.REACT_APP_TMDB_KEY;
   const REACT_APP_TMDB_GENRE_DETAILS = process.env.REACT_APP_TMDB_GENRE_DETAILS;
@@ -78,6 +78,6 @@ function GamePage({ puzzleList }) {
       </div>
     </>
   );
-}
+};
 
 export default GamePage;

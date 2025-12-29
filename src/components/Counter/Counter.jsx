@@ -3,7 +3,7 @@
 // Styles
 import "./Counter.scss";
 
-function Counter({ guesses }) {
+const Counter = ({ guesses }) => {
   return (
     <>
       <div className="counter">
@@ -29,6 +29,6 @@ function Counter({ guesses }) {
       </div>
     </>
   );
-}
+};
 
 export default Counter;

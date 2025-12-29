@@ -1,7 +1,7 @@
 // Styles
 import "./SiteFooter.scss";
 
-function SiteFooter() {
+const SiteFooter = () => {
   return (
     <footer className="footer">
       <div className="footer__wrapper">
@@ -26,6 +26,6 @@ function SiteFooter() {
       </div>
     </footer>
   );
-}
+};
 
 export default SiteFooter;

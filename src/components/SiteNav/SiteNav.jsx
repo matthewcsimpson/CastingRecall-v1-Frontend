@@ -4,16 +4,16 @@ import "./SiteNav.scss";
 // Libraries
 import { NavLink } from "react-router-dom";
 
-function SiteNav({ puzzleId, puzzleList }) {
+const SiteNav = ({ puzzleId, puzzleList }) => {
   const puzzleIds = Array.isArray(puzzleList)
     ? puzzleList.map((puzzle) => puzzle.puzzleId)
     : [];
 
-  if (!puzzleId && puzzleIds.length > 0) {
-    puzzleId = puzzleIds[puzzleIds.length - 1];
-  }
+  const effectivePuzzleId =
+    puzzleId ??
+    (puzzleIds.length > 0 ? puzzleIds[puzzleIds.length - 1] : undefined);
 
-  const resolvedId = String(puzzleId ?? "");
+  const resolvedId = String(effectivePuzzleId ?? "");
   const index = puzzleIds.findIndex((id) => String(id) === resolvedId);
   const activeIndex = index === -1 ? puzzleIds.length - 1 : index;
   const isListView = resolvedId === "list";
@@ -99,6 +99,6 @@ function SiteNav({ puzzleId, puzzleList }) {
       ) : null}
     </>
   );
-}
+};
 
 export default SiteNav;

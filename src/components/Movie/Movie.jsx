@@ -27,7 +27,7 @@ const dateOptions = {
   year: "numeric",
 };
 
-function Movie({
+const Movie = ({
   puzzleId,
   movie,
   genres,
@@ -35,7 +35,7 @@ function Movie({
   youWon,
   youLost,
   reallyWantHints,
-}) {
+}) => {
   const [revealTitle, setRevealTitle] = useState(false);
   const [revealDirector, setRevealDirector] = useState(false);
   const [revealYear, setRevealYear] = useState(false);
@@ -301,6 +301,6 @@ function Movie({
       </div>
     </>
   );
-}
+};
 
 export default Movie;

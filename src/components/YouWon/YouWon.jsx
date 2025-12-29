@@ -1,7 +1,7 @@
 // Styles
 import "./YouWon.scss";
 
-function YouWon({ guesses, youWon }) {
+const YouWon = ({ guesses, youWon }) => {
   return (
     <>
       {youWon && (
@@ -14,6 +14,6 @@ function YouWon({ guesses, youWon }) {
       )}
     </>
   );
-}
+};
 
 export default YouWon;

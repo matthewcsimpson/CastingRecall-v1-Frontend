@@ -7,7 +7,7 @@ import { firstNameOnly } from "../../utilities/utilities";
 // Libraries
 import { NavLink } from "react-router-dom";
 
-function PuzzleListItem({ puzznum, puzzleId, keyPeople, status }) {
+const PuzzleListItem = ({ puzznum, puzzleId, keyPeople, status }) => {
   const progressText = status || "Not yet attempted!";
 
   return (
@@ -42,6 +42,6 @@ function PuzzleListItem({ puzznum, puzzleId, keyPeople, status }) {
       </div>
     </>
   );
-}
+};
 
 export default PuzzleListItem;
