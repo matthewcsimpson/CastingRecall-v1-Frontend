@@ -9,7 +9,7 @@ import profilePic from "../../assets/profile-placeholder.jpg";
 import Hints from "../Hints/Hints";
 
 // Libraries
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 // Utility Functions
 import {
@@ -36,13 +36,29 @@ function Movie({
   youLost,
   reallyWantHints,
 }) {
-  const [movieGuessed, setMovieGuessed] = useState(false);
   const [revealTitle, setRevealTitle] = useState(false);
   const [revealDirector, setRevealDirector] = useState(false);
   const [revealYear, setRevealYear] = useState(false);
   const [revealSynopsis, setRevealSynopsis] = useState(false);
   const [revealCharNames, setRevealCharNames] = useState(false);
   const [revealHints, setRevealHints] = useState(false);
+
+  const hintsStorageKey = useMemo(() => {
+    if (!puzzleId) {
+      return null;
+    }
+    return `${puzzleId}-${movie.id}-hints`;
+  }, [movie.id, puzzleId]);
+
+  const movieGuessed = useMemo(() => {
+    if (!Array.isArray(guesses)) {
+      return false;
+    }
+
+    return guesses.some(
+      (guess) => guess.id === movie.id && guess.correct === true
+    );
+  }, [guesses, movie.id]);
 
   /**
    * Handle revealing the hints
@@ -79,16 +95,6 @@ function Movie({
    * Toggle this movie as guessed when it is guessed
    */
   useEffect(() => {
-    setMovieGuessed(
-      guesses.find((guess) => (guess.id === movie.id ? true : false))
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [guesses]);
-
-  /**
-   * useEffect to reveal all details when the movie is guessed or the player runs out of guesses.
-   */
-  useEffect(() => {
     if (movieGuessed || youWon || youLost) {
       setRevealYear(true);
       setRevealDirector(true);
@@ -98,18 +104,61 @@ function Movie({
     }
   }, [movieGuessed, youWon, youLost]);
 
-  /**
-   * Set local hints to local storage if the puzzleId, or any hints status, changes.
-   */
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!hintsStorageKey) {
+      return;
+    }
+
+    try {
+      const stored = JSON.parse(localStorage.getItem(hintsStorageKey));
+
+      if (stored) {
+        setRevealYear(Boolean(stored.revealYear));
+        setRevealDirector(Boolean(stored.revealDirector));
+        setRevealSynopsis(Boolean(stored.revealSynopsis));
+        setRevealCharNames(Boolean(stored.revealCharNames));
+        setRevealTitle(Boolean(stored.revealTitle));
+        setRevealHints(Boolean(stored.revealHints));
+      } else {
+        setRevealYear(false);
+        setRevealDirector(false);
+        setRevealSynopsis(false);
+        setRevealCharNames(false);
+        setRevealTitle(false);
+        setRevealHints(false);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [hintsStorageKey]);
+
+  useEffect(() => {
+    if (!hintsStorageKey) {
+      return;
+    }
+
+    const payload = {
+      revealYear,
+      revealDirector,
+      revealSynopsis,
+      revealCharNames,
+      revealTitle,
+      revealHints,
+    };
+
+    try {
+      localStorage.setItem(hintsStorageKey, JSON.stringify(payload));
+    } catch (err) {
+      console.error(err);
+    }
   }, [
-    puzzleId,
-    revealYear,
-    revealDirector,
-    revealSynopsis,
+    hintsStorageKey,
     revealCharNames,
+    revealDirector,
     revealHints,
+    revealSynopsis,
+    revealTitle,
+    revealYear,
   ]);
 
   return (

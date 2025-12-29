@@ -1,15 +1,17 @@
 // Components
-import SiteNav from "../../components/SiteNav/SiteNav";
-import GuessForm from "../../components/GuessForm/GuessForm";
-import Movie from "../../components/Movie/Movie";
-import Counter from "../../components/Counter/Counter";
-import LoadingScreen from "../../components/LoadingScreen/LoadingScreen";
-import YouWon from "../../components/YouWon/YouWon";
-import YouLost from "../../components/YouLost/YouLost";
+import {
+  Counter,
+  GuessForm,
+  LoadingScreen,
+  Movie,
+  SiteNav,
+  YouLost,
+  YouWon,
+} from "../../components/";
 
 // Libraries
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 function GamePage({ puzzleList }) {
@@ -25,88 +27,98 @@ function GamePage({ puzzleList }) {
   const [youLost, setYouLost] = useState(false);
   const [youWon, setYouWon] = useState(false);
 
-  let maxGuesses = 10;
+  const maxGuesses = 10;
 
   // ------------------------------------------------------------------------functions/data loading
 
   /**
    * Function to retrieve genre information from TMDB
    */
-  const getGenres = async () => {
-    await axios
-      .get(
+  const getGenres = useCallback(async () => {
+    try {
+      const response = await axios.get(
         `${REACT_APP_TMDB_GENRE_DETAILS}?api_key=${REACT_APP_TMDB_KEY}&language=en-US`
-      )
-      .then((res) => setGenreData(res.data.genres))
-      .catch((err) => console.error(err));
-  };
+      );
+      setGenreData(response.data.genres);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [REACT_APP_TMDB_GENRE_DETAILS, REACT_APP_TMDB_KEY]);
 
   /**
    * Function to retrieve a specific puzzle.
    * @param {*} id
    */
-  const getSpecificPuzzle = async (id) => {
-    await axios
-      .get(`${REACT_APP_API_REMOTE_URL}/puzzle/${id}`)
-      .then((res) => {
-        setPuzzleData(res.data);
-      })
-      .catch((err) => console.error(err));
-  };
+  const getSpecificPuzzle = useCallback(
+    async (id, signal) => {
+      try {
+        const response = await axios.get(
+          `${REACT_APP_API_REMOTE_URL}/puzzle/${id}`,
+          { signal }
+        );
+        setPuzzleData(response.data);
+      } catch (err) {
+        if (axios.isCancel(err)) {
+          return;
+        }
+        if (err.name === "CanceledError") {
+          return;
+        }
+        console.error(err);
+      }
+    },
+    [REACT_APP_API_REMOTE_URL]
+  );
 
   /**
    * Receive a movie object from the guess form and process it.
    * @param {object} movie
    */
   const handleSubmitGuess = (movie) => {
-    if (puzzleData.puzzle) {
-      let goodGuess = puzzleData.puzzle.find((puzzleMovie) =>
-        puzzleMovie.id === movie.id ? true : false
-      );
-      if (goodGuess) {
-        goodGuess = { ...goodGuess, ...{ correct: true } };
-        setGuesses([...guesses, goodGuess]);
-      } else {
-        let badGuess = { ...movie, ...{ correct: false } };
-        setGuesses([...guesses, badGuess]);
-      }
-      setLocalDetails();
+    if (!puzzleData?.puzzle) {
+      return;
     }
-  };
 
-  /**
-   * Write all the puzzle data in state to local storage.
-   */
-  const setLocalDetails = () => {
-    if (puzzleData && guesses) {
-      const pId = puzzleData.puzzleId;
-      const puzzle = {
-        id: pId,
-        guesses: guesses,
-        youWon: youWon,
-        youLost: youLost,
-      };
-      localStorage.setItem(pId, JSON.stringify(puzzle));
-    }
+    setGuesses((prevGuesses) => {
+      const match = puzzleData.puzzle.find(
+        (puzzleMovie) => puzzleMovie.id === movie.id
+      );
+
+      if (match) {
+        return [...prevGuesses, { ...match, correct: true }];
+      }
+
+      return [...prevGuesses, { ...movie, correct: false }];
+    });
   };
 
   /**
    * Retrieve guess data stored in localStorage, if any
    */
-  const getLocalGuesses = () => {
-    if (puzzleData) {
-      let local = JSON.parse(localStorage.getItem(puzzleData.puzzleId));
-      if (local) {
-        if (puzzleData.puzzleId === parseInt(local.id)) {
-          setGuesses(local.guesses);
-          setYouWon(local.youWon);
-          setYouLost(local.youLost);
-        } else {
-          setGuesses([]);
-        }
-      }
+  const getLocalGuesses = useCallback(() => {
+    if (!puzzleData) {
+      return;
     }
-  };
+
+    try {
+      const local = JSON.parse(localStorage.getItem(puzzleData.puzzleId));
+
+      if (local && String(puzzleData.puzzleId) === String(local.id)) {
+        setGuesses(local.guesses || []);
+        setYouWon(Boolean(local.youWon));
+        setYouLost(Boolean(local.youLost));
+      } else {
+        setGuesses([]);
+        setYouWon(false);
+        setYouLost(false);
+      }
+    } catch (err) {
+      console.error(err);
+      setGuesses([]);
+      setYouWon(false);
+      setYouLost(false);
+    }
+  }, [puzzleData]);
 
   // ------------------------------------------------------------------------useEffects
   /**
@@ -114,66 +126,45 @@ function GamePage({ puzzleList }) {
    */
   useEffect(() => {
     getGenres();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getGenres]);
 
   /**
-   * On Page Load
-   * Get the specific puzzle if there is a puzzleId, otherwise get the latest puzzle
+   * Load puzzle details when the puzzle id changes.
    */
   useEffect(() => {
-    if (puzzleId) {
-      getSpecificPuzzle(puzzleId);
-    } else {
-      getSpecificPuzzle("latest");
-    }
-    getLocalGuesses();
-    setLocalDetails();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const controller = new AbortController();
+    const activePuzzleId = puzzleId || "latest";
 
-  /**
-   * On puzzleId changing, load puzzle details.
-   * If there is a puzzleId, get that that puzzle.
-   * If there is no puzzleId, set the id to "latest", which will load the latest puzzle.
-   */
-  useEffect(() => {
-    if (puzzleId) {
-      getSpecificPuzzle(puzzleId);
-    } else {
-      getSpecificPuzzle("latest");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [puzzleId]);
+    getSpecificPuzzle(activePuzzleId, controller.signal);
+
+    return () => {
+      controller.abort();
+    };
+  }, [getSpecificPuzzle, puzzleId]);
 
   /**
    * Update the win/lose conditions based on the guesses
    */
   useEffect(() => {
-    let correctCounter = guesses.filter((guess) => guess.correct === true);
+    const correctCounter = guesses.filter((guess) => guess.correct === true);
 
-    if (correctCounter.length === 6) {
+    if (correctCounter.length === 6 && !youWon) {
       setYouWon(true);
-      setLocalDetails();
-    } else if (guesses.length === maxGuesses) {
+    } else if (guesses.length === maxGuesses && !youLost) {
       setYouLost(true);
-      setLocalDetails();
-    } else if (guesses.length > 0) {
-      setLocalDetails();
+    } else if (guesses.length === 0) {
+      setYouWon(false);
+      setYouLost(false);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [guesses, youWon, youLost]);
+  }, [guesses, maxGuesses, youLost, youWon]);
 
   /**
    *  Set details stored in state to localStorage, and then clear, when the puzzleId changes
    */
   useEffect(() => {
-    setLocalDetails();
     setGuesses([]);
     setYouWon(false);
     setYouLost(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [puzzleId]);
 
   /**
@@ -181,13 +172,30 @@ function GamePage({ puzzleList }) {
    */
   useEffect(() => {
     getLocalGuesses();
-    setLocalDetails();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [puzzleData]);
+  }, [getLocalGuesses, puzzleData]);
+
+  useEffect(() => {
+    if (!puzzleData) {
+      return;
+    }
+
+    const payload = {
+      id: puzzleData.puzzleId,
+      guesses,
+      youWon,
+      youLost,
+    };
+
+    try {
+      localStorage.setItem(puzzleData.puzzleId, JSON.stringify(payload));
+    } catch (err) {
+      console.error(err);
+    }
+  }, [guesses, puzzleData, youLost, youWon]);
 
   return (
     <>
-      {puzzleList ? (
+      {Array.isArray(puzzleList) && puzzleList.length > 0 ? (
         <SiteNav puzzleId={puzzleId} puzzleList={puzzleList} />
       ) : (
         <LoadingScreen />

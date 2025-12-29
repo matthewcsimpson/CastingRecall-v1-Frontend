@@ -24,7 +24,7 @@ function App() {
   const getPuzzleList = async () => {
     await axios
       .get(`${REACT_APP_API_REMOTE_URL}/puzzle/list`)
-      .then((res) => setPuzzleList([res.data].flat()))
+      .then((res) => setPuzzleList(res.data || []))
       .catch((err) => console.error(err));
   };
 

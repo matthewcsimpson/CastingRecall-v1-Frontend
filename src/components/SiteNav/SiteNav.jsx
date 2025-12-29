@@ -5,33 +5,42 @@ import "./SiteNav.scss";
 import { NavLink } from "react-router-dom";
 
 function SiteNav({ puzzleId, puzzleList }) {
-  if (!puzzleId) {
-    puzzleId = puzzleList[puzzleList.length - 1];
+  const puzzleIds = Array.isArray(puzzleList)
+    ? puzzleList.map((puzzle) => puzzle.puzzleId)
+    : [];
+
+  if (!puzzleId && puzzleIds.length > 0) {
+    puzzleId = puzzleIds[puzzleIds.length - 1];
   }
 
-  let index = "";
-  if (puzzleList) {
-    index = puzzleList.indexOf(puzzleId);
-  }
+  const resolvedId = String(puzzleId ?? "");
+  const index = puzzleIds.findIndex((id) => String(id) === resolvedId);
+  const activeIndex = index === -1 ? puzzleIds.length - 1 : index;
+  const isListView = resolvedId === "list";
+  const prevId = activeIndex > 0 ? puzzleIds[activeIndex - 1] : puzzleIds[0];
+  const nextId =
+    activeIndex >= 0 && activeIndex < puzzleIds.length - 1
+      ? puzzleIds[activeIndex + 1]
+      : puzzleIds[puzzleIds.length - 1];
 
   return (
     <>
-      {puzzleList && puzzleId ? (
+      {puzzleIds.length > 0 && resolvedId ? (
         <div className="nav">
           <div className="nav__wrapper">
             <ul className="nav__list">
               <li className={`nav__item`}>
                 <NavLink
                   className={
-                    puzzleId === puzzleList[0] || puzzleId === "list"
+                    resolvedId === String(puzzleIds[0]) || isListView
                       ? "nav__item nav__item--inactivelink"
                       : "nav__item nav__item--link"
                   }
-                  to={`/puzzle/${puzzleList[index - 1]}`}
+                  to={`/puzzle/${prevId}`}
                 >
                   <span
                     className={
-                      puzzleId === puzzleList[0] || puzzleId === "list"
+                      resolvedId === String(puzzleIds[0]) || isListView
                         ? "nav__item nav__item--hidden nav__item--hideifnull"
                         : "nav__item nav__item--hidden"
                     }
@@ -41,15 +50,6 @@ function SiteNav({ puzzleId, puzzleList }) {
                   Prev Puzzle
                 </NavLink>
               </li>
-              <li className="nav__item">
-                <a
-                  href="https://awesomefriday.ca"
-                  className="nav__item nav__item--link"
-                >
-                  Awesome Friday!
-                </a>
-              </li>
-
               <li className="nav__item">
                 <NavLink
                   className={"nav item nav__item--link"}
@@ -61,7 +61,7 @@ function SiteNav({ puzzleId, puzzleList }) {
               <li className="nav__item">
                 <NavLink
                   className={
-                    puzzleId === puzzleList[puzzleList.length - 1]
+                    resolvedId === String(puzzleIds[puzzleIds.length - 1])
                       ? "nav__item nav__item--inactivelink"
                       : "nav__item nav__item--link"
                   }
@@ -73,18 +73,18 @@ function SiteNav({ puzzleId, puzzleList }) {
               <li className={`nav__item`}>
                 <NavLink
                   className={
-                    puzzleId === puzzleList[puzzleList.length - 1] ||
-                    puzzleId === "list"
+                    resolvedId === String(puzzleIds[puzzleIds.length - 1]) ||
+                    isListView
                       ? "nav__item nav__item--inactivelink"
                       : "nav__item nav__item--link"
                   }
-                  to={`/puzzle/${puzzleList[index + 1]}`}
+                  to={`/puzzle/${nextId}`}
                 >
                   Next Puzzle{" "}
                   <span
                     className={
-                      puzzleId === puzzleList[puzzleList.length - 1] ||
-                      puzzleId === "list"
+                      resolvedId === String(puzzleIds[puzzleIds.length - 1]) ||
+                      isListView
                         ? "nav__item nav__item--hidden nav__item--hideifnull"
                         : "nav__item nav__item--hidden"
                     }

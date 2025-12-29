@@ -17,10 +17,12 @@ const formatDate = (timestamp, options) => {
  * @returns genre name as a string.
  */
 const formatGenre = (id, genres) => {
-  let genreName = genres.find((genre) => {
-    return genre.id === id ? genre.name : null;
-  });
-  return genreName.name;
+  if (!Array.isArray(genres)) {
+    return "Unknown";
+  }
+
+  const genreName = genres.find((genre) => genre.id === id);
+  return genreName?.name || "Unknown";
 };
 
 /**
@@ -39,7 +41,16 @@ const obscureString = (string) => {
  * @returns shortened string
  */
 const shortenString = (string) => {
-  return string.substring(0, 147) + "...";
+  if (!string) {
+    return "";
+  }
+
+  const limit = 147;
+  if (string.length <= limit) {
+    return string;
+  }
+
+  return `${string.substring(0, limit)}...`;
 };
 
 /**
@@ -71,6 +82,10 @@ const shortenMultipleCharNames = (string) => {
  * @returns string with only the first name from a full name.
  */
 const firstNameOnly = (string) => {
+  if (!string) {
+    return "";
+  }
+
   const split = string.split(" ");
   return split[0];
 };

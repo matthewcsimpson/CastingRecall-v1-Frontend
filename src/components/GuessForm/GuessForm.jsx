@@ -2,7 +2,7 @@
 import "./GuessForm.scss";
 
 // Libraries
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 
 // Utilities
@@ -29,32 +29,52 @@ function GuessForm({
   const REACT_APP_TMDB_KEY = process.env.REACT_APP_TMDB_KEY;
   const REACT_APP_TMDB_SEARCH_URL = process.env.REACT_APP_TMDB_SEARCH_URL;
 
-  const [searchQuery, setSearchQuery] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+
+  const trimmedQuery = useMemo(() => searchQuery.trim(), [searchQuery]);
 
   /**
    * Function to handle fom field input one char at a time.
    * @param {*} event
    */
-  const handleFieldChange = async (event) => {
+  const handleFieldChange = (event) => {
     setSearchQuery(event.target.value);
-    await axios
-      .get(
-        `${REACT_APP_TMDB_SEARCH_URL}&api_key=${REACT_APP_TMDB_KEY}&page=1&language=en-US&region=US&query=${event.target.value}`
-      )
-      .then((res) => {
-        if (event.target.value.length > 0) {
-          setSearchResults(res.data.results);
-        } else {
-          setSearchResults([]);
-        }
-      })
-      .catch((err) => console.error(err));
   };
 
   useEffect(() => {
+    if (!trimmedQuery) {
+      setSearchResults([]);
+      return;
+    }
+
+    const controller = new AbortController();
+    const debounce = setTimeout(async () => {
+      try {
+        const response = await axios.get(
+          `${REACT_APP_TMDB_SEARCH_URL}&api_key=${REACT_APP_TMDB_KEY}&page=1&language=en-US&region=US&query=${encodeURIComponent(
+            trimmedQuery
+          )}`,
+          { signal: controller.signal }
+        );
+        setSearchResults(response.data.results || []);
+      } catch (err) {
+        if (axios.isCancel?.(err) || err.name === "CanceledError") {
+          return;
+        }
+        console.error(err);
+      }
+    }, 300);
+
+    return () => {
+      controller.abort();
+      clearTimeout(debounce);
+    };
+  }, [REACT_APP_TMDB_KEY, REACT_APP_TMDB_SEARCH_URL, trimmedQuery]);
+
+  useEffect(() => {
     setSearchResults([]);
-    setSearchQuery([]);
+    setSearchQuery("");
   }, [puzzleId]);
 
   return (
@@ -96,7 +116,7 @@ function GuessForm({
                             event.preventDefault();
                             handleSubmitGuess(movie);
                             setSearchResults([]);
-                            setSearchQuery([]);
+                            setSearchQuery("");
                           }}
                         >
                           {movie.title} (
