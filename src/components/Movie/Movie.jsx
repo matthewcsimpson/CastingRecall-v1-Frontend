@@ -6,7 +6,7 @@ import questionmarkimg from "../../assets/question.jpg";
 import profilePic from "../../assets/profile-placeholder.jpg";
 
 // Components
-import Hints from "../Hints/Hints";
+import { Hints } from "..";
 
 // Libraries
 import { useEffect, useMemo, useState } from "react";

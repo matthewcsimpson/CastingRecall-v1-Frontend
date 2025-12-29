@@ -2,8 +2,7 @@
 import "./styles/style.scss";
 
 // Components
-import SiteHeader from "./components/SiteHeader/SiteHeader";
-import SiteFooter from "./components/SiteFooter/SiteFooter";
+import { SiteFooter, SiteHeader } from "./components";
 
 // Pages
 import GamePage from "./pages/GamePage/GamePage";

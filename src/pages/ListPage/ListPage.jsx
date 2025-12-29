@@ -2,9 +2,7 @@
 import "./ListPage.scss";
 
 // Components
-import SiteNav from "../../components/SiteNav/SiteNav";
-import LoadingScreen from "../../components/LoadingScreen/LoadingScreen";
-import PuzzleListItem from "../../components/PuzzleListItem/PuzzleListItem";
+import { LoadingScreen, PuzzleListItem, SiteNav } from "../../components";
 
 // Libraries
 import { useMemo } from "react";

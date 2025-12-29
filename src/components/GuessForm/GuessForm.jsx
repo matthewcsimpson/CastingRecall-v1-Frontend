@@ -9,7 +9,7 @@ import axios from "axios";
 import { formatDate } from "../../utilities/utilities";
 
 // Components
-import LoadingScreen from "../LoadingScreen/LoadingScreen";
+import { LoadingScreen } from "..";
 
 // Variables
 const dateOptions = {
