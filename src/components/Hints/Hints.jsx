@@ -1,3 +1,5 @@
+import "./Hints.scss";
+
 function Hints({
   handleHintClick,
   setRevealHints,
@@ -16,7 +18,7 @@ function Hints({
   youLost,
 }) {
   return (
-    <div className="movie__hintswrapper">
+    <div className="hintswrapper">
       <p
         className="movie__text movie__text--hints"
         onClick={(e) => {
