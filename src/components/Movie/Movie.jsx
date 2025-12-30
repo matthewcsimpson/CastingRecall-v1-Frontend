@@ -5,7 +5,7 @@ import "./Movie.scss";
 import { ActorHeadshot, Hints, MovieDetails } from "..";
 
 // Libraries
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 // Utility Functions
 import {
@@ -59,9 +59,11 @@ const Movie = ({
     }
 
     return movie.cast.map((actor) => {
-      const sanitizedCharacter = removeVoiceFromString(
-        shortenMultipleCharNames(actor.character)
-      );
+      const characterName =
+        typeof actor?.character === "string" ? actor.character : "";
+      const sanitizedCharacter = characterName
+        ? removeVoiceFromString(shortenMultipleCharNames(characterName))
+        : "";
 
       return {
         ...actor,
@@ -70,6 +72,9 @@ const Movie = ({
     });
   }, [movie?.cast]);
   const revealCharNamesVisible = revealAll || revealCharNames;
+
+  const hydratedHintsRef = useRef(null);
+  const [hintsHydrated, setHintsHydrated] = useState(false);
 
   /**
    * Handle revealing the hints
@@ -122,30 +127,36 @@ const Movie = ({
 
   useEffect(() => {
     if (!hintsStorageKey) {
+      hydratedHintsRef.current = null;
+      setHintsHydrated(false);
       return;
     }
 
-    const stored = loadLocalJson(hintsStorageKey);
+    setHintsHydrated(false);
 
-    if (stored) {
-      setRevealYear(Boolean(stored.revealYear));
-      setRevealDirector(Boolean(stored.revealDirector));
-      setRevealSynopsis(Boolean(stored.revealSynopsis));
-      setRevealCharNames(Boolean(stored.revealCharNames));
-      setRevealTitle(Boolean(stored.revealTitle));
-      setRevealHints(Boolean(stored.revealHints));
-    } else {
-      setRevealYear(false);
-      setRevealDirector(false);
-      setRevealSynopsis(false);
-      setRevealCharNames(false);
-      setRevealTitle(false);
-      setRevealHints(false);
-    }
+    const stored = loadLocalJson(hintsStorageKey);
+    const nextState = {
+      revealYear: Boolean(stored?.revealYear),
+      revealDirector: Boolean(stored?.revealDirector),
+      revealSynopsis: Boolean(stored?.revealSynopsis),
+      revealCharNames: Boolean(stored?.revealCharNames),
+      revealTitle: Boolean(stored?.revealTitle),
+      revealHints: Boolean(stored?.revealHints),
+    };
+
+    setRevealYear(nextState.revealYear);
+    setRevealDirector(nextState.revealDirector);
+    setRevealSynopsis(nextState.revealSynopsis);
+    setRevealCharNames(nextState.revealCharNames);
+    setRevealTitle(nextState.revealTitle);
+    setRevealHints(nextState.revealHints);
+
+    hydratedHintsRef.current = nextState;
+    setHintsHydrated(true);
   }, [hintsStorageKey]);
 
   useEffect(() => {
-    if (!hintsStorageKey) {
+    if (!hintsStorageKey || !hintsHydrated) {
       return;
     }
 
@@ -158,15 +169,27 @@ const Movie = ({
       revealHints,
     };
 
+    if (
+      hydratedHintsRef.current &&
+      Object.keys(payload).every(
+        (key) => hydratedHintsRef.current[key] === payload[key]
+      )
+    ) {
+      return;
+    }
+
+    hydratedHintsRef.current = payload;
+
     saveLocalJson(hintsStorageKey, payload);
   }, [
     hintsStorageKey,
-    revealCharNames,
-    revealDirector,
-    revealHints,
-    revealSynopsis,
-    revealTitle,
+    hintsHydrated,
     revealYear,
+    revealDirector,
+    revealSynopsis,
+    revealCharNames,
+    revealTitle,
+    revealHints,
   ]);
 
   return (

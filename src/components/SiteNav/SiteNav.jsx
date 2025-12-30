@@ -2,9 +2,28 @@
 import "./SiteNav.scss";
 
 // Libraries
-import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+// Components
+import SiteNavItem from "../SiteNavItem/SiteNavItem.jsx";
+import HowToPlayModal from "../HowToPlayModal/HowToPlayModal.jsx";
 
 const SiteNav = ({ puzzleId, puzzleList }) => {
+  const [isHowToOpen, setIsHowToOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isHowToOpen) {
+      return;
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isHowToOpen]);
+
   const puzzleIds = Array.isArray(puzzleList)
     ? puzzleList.map((puzzle) => puzzle.puzzleId)
     : [];
@@ -23,80 +42,51 @@ const SiteNav = ({ puzzleId, puzzleList }) => {
       ? puzzleIds[activeIndex + 1]
       : puzzleIds[puzzleIds.length - 1];
 
+  const handleOpenHowTo = () => {
+    setIsHowToOpen(true);
+  };
+
+  const handleCloseHowTo = () => {
+    setIsHowToOpen(false);
+  };
+
   return (
     <>
       {puzzleIds.length > 0 && resolvedId ? (
         <div className="nav">
           <div className="nav__wrapper">
             <ul className="nav__list">
-              <li className={`nav__item`}>
-                <NavLink
-                  className={
-                    resolvedId === String(puzzleIds[0]) || isListView
-                      ? "nav__item nav__item--inactivelink"
-                      : "nav__item nav__item--link"
-                  }
-                  to={`/puzzle/${prevId}`}
-                >
-                  <span
-                    className={
-                      resolvedId === String(puzzleIds[0]) || isListView
-                        ? "nav__item nav__item--hidden nav__item--hideifnull"
-                        : "nav__item nav__item--hidden"
-                    }
-                  >
-                    ⬅️
-                  </span>{" "}
-                  Prev Puzzle
-                </NavLink>
-              </li>
-              <li className="nav__item">
-                <NavLink
-                  className={"nav item nav__item--link"}
-                  to="/puzzle/list"
-                >
-                  Puzzle List
-                </NavLink>
-              </li>
-              <li className="nav__item">
-                <NavLink
-                  className={
-                    resolvedId === String(puzzleIds[puzzleIds.length - 1])
-                      ? "nav__item nav__item--inactivelink"
-                      : "nav__item nav__item--link"
-                  }
-                  to={`/`}
-                >
-                  Latest Puzzle
-                </NavLink>
-              </li>
-              <li className={`nav__item`}>
-                <NavLink
-                  className={
-                    resolvedId === String(puzzleIds[puzzleIds.length - 1]) ||
-                    isListView
-                      ? "nav__item nav__item--inactivelink"
-                      : "nav__item nav__item--link"
-                  }
-                  to={`/puzzle/${nextId}`}
-                >
-                  Next Puzzle{" "}
-                  <span
-                    className={
-                      resolvedId === String(puzzleIds[puzzleIds.length - 1]) ||
-                      isListView
-                        ? "nav__item nav__item--hidden nav__item--hideifnull"
-                        : "nav__item nav__item--hidden"
-                    }
-                  >
-                    ➡️
-                  </span>
-                </NavLink>
-              </li>
+              <SiteNavItem
+                to={`/puzzle/${prevId}`}
+                label="Prev Puzzle"
+                icon="⬅️"
+                iconPosition="left"
+                disabled={resolvedId === String(puzzleIds[0]) || isListView}
+              />
+              <SiteNavItem to="/puzzle/list" label="Puzzle List" />
+              <SiteNavItem label="How to Play" onClick={handleOpenHowTo} />
+              <SiteNavItem
+                to={`/`}
+                label="Latest Puzzle"
+                disabled={
+                  resolvedId === String(puzzleIds[puzzleIds.length - 1])
+                }
+              />
+              <SiteNavItem
+                to={`/puzzle/${nextId}`}
+                label="Next Puzzle"
+                icon="➡️"
+                iconPosition="right"
+                disabled={
+                  resolvedId === String(puzzleIds[puzzleIds.length - 1]) ||
+                  isListView
+                }
+              />
             </ul>
           </div>
         </div>
       ) : null}
+      <HowToPlayModal isOpen={isHowToOpen} onClose={handleCloseHowTo} />
     </>
   );
 };
