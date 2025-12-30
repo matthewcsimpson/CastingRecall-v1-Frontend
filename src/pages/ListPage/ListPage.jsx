@@ -2,28 +2,36 @@
 import "./ListPage.scss";
 
 // Components
-import SiteNav from "../../components/SiteNav/SiteNav";
-import LoadingScreen from "../../components/LoadingScreen/LoadingScreen";
-import PuzzleListItem from "../../components/PuzzleListItem/PuzzleListItem";
+import { LoadingScreen, PuzzleListItem, SiteNav } from "../../components";
 
-// Libraries
+// Hooks
+import { usePuzzleStatuses } from "../../hooks";
 
-function ListPage({ puzzleList }) {
+const ListPage = ({ puzzleList }) => {
+  const hasPuzzles = Array.isArray(puzzleList) && puzzleList.length > 0;
+  const statusByPuzzleId = usePuzzleStatuses(puzzleList);
+
   return (
     <>
-      {puzzleList ? (
+      {hasPuzzles ? (
         <SiteNav puzzleId={"list"} puzzleList={puzzleList} />
       ) : (
         <LoadingScreen />
       )}
       <div className="listpage__listcontainer">
-        {puzzleList &&
-          puzzleList.map((puzzle, i) => (
-            <PuzzleListItem key={puzzle} puzznum={i} puzzle={puzzle} />
+        {hasPuzzles &&
+          puzzleList.map(({ puzzleId, keyPeople }, index) => (
+            <PuzzleListItem
+              key={puzzleId}
+              puzznum={index}
+              puzzleId={puzzleId}
+              keyPeople={keyPeople}
+              status={statusByPuzzleId[puzzleId]}
+            />
           ))}
       </div>
     </>
   );
-}
+};
 
 export default ListPage;

@@ -1,7 +1,7 @@
 // Styles
 import "./YouLost.scss";
 
-function YouLost({ guesses, youLost }) {
+const YouLost = ({ guesses, youLost }) => {
   let count = guesses.filter((guess) => guess.correct === true);
 
   return (
@@ -20,6 +20,6 @@ function YouLost({ guesses, youLost }) {
       )}
     </>
   );
-}
+};
 
 export default YouLost;

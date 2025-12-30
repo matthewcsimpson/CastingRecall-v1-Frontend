@@ -1,20 +1,24 @@
 ## Casting Recall - A Movie Guessing Game
 
-Can you guess the movie based on the cast?  That's the hook of _Casting ReCall_.  The game presents you with six cast lineups, and you have ten guesses to get them all!  
+Can you guess the movie based on the cast? That's the hook of _Casting ReCall_. The game presents you with six cast lineups, and you have ten guesses to get them all!
 
 This game was built using `React.js`, with `JavaScript`, `HTML`, `SCSS`,  `React Router`, and `Axios` and is currently deployed at <https://castingrecall.herokuapp.com>
 
-_Be sure to check out the back end repo: [Casting ReCall - Node.js Back End](https://github.com/matthewcsimpson/castingrecall-server)._
+## Related
 
-## Run Locally 
+Here is the back end API for this project:
 
-1. Once you have cloned this repository make sure to run `npm i` to install any dependancies you might be missing. 
-2. Make sure you download [castingcall-server](https://github.com/matthewcsimpson/castingcall-server) and do the same. 
-3. You will need an api key for The Movie Database, which you can create [at their developer site](https://www.themoviedb.org/documentation/api). 
+[Casting ReCall - Node.js Back End](https://github.com/matthewcsimpson/castingrecall-server)
+
+## Run Locally
+
+1. Once you have cloned this repository make sure to run `npm i` to install any dependancies you might be missing.
+2. Make sure you download [castingcall-server](https://github.com/matthewcsimpson/castingcall-server) and do the same.
+3. You will need an api key for The Movie Database, which you can create [at their developer site](https://www.themoviedb.org/documentation/api).
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file.  
+To run this project, you will need to add the following environment variables to your .env file.
 
 You will need to provide a TMDB API key.
 #  TMDB
@@ -26,4 +30,13 @@ You will need to provide a TMDB API key.
 `REACT_APP_API_REMOTE_URL`=`{YOUR DEPLOYMENT HERE}`
 
 ## Screenshot
-<img alt="Casting ReCall - A Movie Guessing Game" src="https://github.com/user-attachments/assets/c2f92a79-37e4-4fbb-9953-a68c9480cfd8" />
+
+![App Screenshot](https://raw.githubusercontent.com/matthewcsimpson/castingrecall/main/src/data/screen.jpg?token=GHSAT0AAAAAABZEKBUWPRL2WDEGBFQ6VZUYYZVIKJQ)
+
+## Author
+
+- [@MatthewCSimpson](https://www.github.com/matthewcsimpson)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

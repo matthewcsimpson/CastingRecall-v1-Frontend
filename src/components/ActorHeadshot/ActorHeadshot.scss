@@ -1,0 +1,63 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.actorname {
+    font-size: 0.65rem;
+    font-style: italic;
+    margin: 0.25rem 0 0 0;
+    text-align: center;
+    align-self: middle;
+
+    &--as {
+        margin: 0;
+    }
+
+    &--char {
+        color: red;
+    }
+}
+
+.headshotbox {
+    height: 100%;
+    min-height: 175px;
+    width: 19%;
+    display: flex;
+    border-radius: 0.5rem;
+    flex-direction: column;
+    margin: 0rem 0.5% 0.25rem;
+    background-color: $primary-colour;
+
+    @include tablet {
+        height: 100%;
+        min-height: 225px;
+
+        margin: 0rem 0.125rem 0.125rem;
+    }
+
+    @include desktop {
+        margin: 0rem 0.25rem 0.25rem;
+    }
+}
+
+.headshot {
+    object-fit: cover;
+    object-position: center 20%;
+    height: 100px;
+    border-radius: 0.5rem 0.5rem 0 0;
+
+    @include tablet {
+        height: 150px;
+    }
+
+    &--mobile {
+        height: 150px;
+
+        @include tablet {
+            height: 250px;
+        }
+    }
+
+    &--key {
+        border: 0.1875rem solid blue;
+    }
+}

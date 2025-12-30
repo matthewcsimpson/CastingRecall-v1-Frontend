@@ -1,7 +1,7 @@
 // Styles
 import "./SiteHeader.scss";
 
-function SiteHeader() {
+const SiteHeader = () => {
   return (
     <header className="header">
       <div className="header__wrapper">
@@ -19,13 +19,13 @@ function SiteHeader() {
           <div className="header__clapperbottom--white"></div>
           <div className="header__clapperbottom--white"></div>
         </div>
-        <h1 className="header__heading">Casting ReCall - Beta</h1>
+        <h1 className="header__heading">Casting ReCall</h1>
         <p className="header__subtitle">
           Can you guess the movie based on who starred in it?
         </p>
       </div>
     </header>
   );
-}
+};
 
 export default SiteHeader;

@@ -8,13 +8,14 @@
 
     &__wrapper {
         width: 90%;
-        background-color: $site-background-color;
+        background-color: $background-colour;
         margin: 0 auto;
         padding: 0.5rem 0.5rem;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        gap: 0.5rem;
 
         @include tablet {
             max-width: 70rem;
@@ -22,7 +23,7 @@
     }
 
     &__text {
-        color: $site-primary-color;
+        color: $primary-colour;
         margin: 0;
         font-size: 0.75rem;
         text-align: center;

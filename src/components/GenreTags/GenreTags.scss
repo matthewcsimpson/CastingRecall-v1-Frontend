@@ -1,0 +1,245 @@
+@use "../../styles/partials/variables" as *;
+
+.genrelist {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.genre {
+    white-space: nowrap;
+    position: relative;
+    margin: 0 0.3125rem 0.25rem 0.625rem;
+    display: inline-block;
+    height: 1.5625rem;
+    border-radius: 0.0625rem 0.3125rem 0.3125rem 0.0625rem;
+    padding: 0 0.5rem 0 0.75rem;
+    background: $genre-colour-default;
+    border: 1px solid;
+    line-height: 1.4375rem;
+
+    &:before {
+        position: absolute;
+        background: $genre-colour-default;
+        content: "\25CF";
+        color: $primary-colour;
+        font-size: 0.75rem;
+        line-height: 0.8125rem;
+        text-indent: 0.375rem;
+        top: 0.1875rem;
+        left: -0.625rem;
+        width: 1.125rem;
+        height: 1.125rem;
+        transform: rotate(45deg);
+        border-left: 1px solid;
+        border-bottom: 1px solid;
+    }
+
+    &--28 {
+        // Action
+        background: $genre-colour-action;
+        border-color: $genre-colour-action;
+        &:before {
+            background: $genre-colour-action;
+            border-color: $genre-colour-action;
+            border-color: $genre-colour-action;
+        }
+    }
+
+    &--12 {
+        // Adventure
+        background: $genre-colour-adventure;
+        border-color: $genre-colour-adventure;
+        &:before {
+            background: $genre-colour-adventure;
+            border-color: $genre-colour-adventure;
+            border-color: $genre-colour-adventure;
+        }
+    }
+
+    &--16 {
+        // Animation
+        background: $genre-colour-animation;
+        border-color: $genre-colour-animation;
+        &:before {
+            background: $genre-colour-animation;
+            border-color: $genre-colour-animation;
+            border-color: $genre-colour-animation;
+        }
+    }
+
+    &--35 {
+        // Comedy
+        background: $genre-colour-comedy;
+        border-color: $genre-colour-comedy;
+        &:before {
+            background: $genre-colour-comedy;
+            border-color: $genre-colour-comedy;
+            border-color: $genre-colour-comedy;
+        }
+    }
+
+    &--80 {
+        // Crime
+        background: $genre-colour-crime;
+        border-color: $genre-colour-crime;
+        &:before {
+            background: $genre-colour-crime;
+            border-color: $genre-colour-crime;
+            border-color: $genre-colour-crime;
+        }
+    }
+
+    &--99 {
+        // Documentary
+        background: $genre-colour-documentary;
+        border-color: $genre-colour-documentary;
+        &:before {
+            background: $genre-colour-documentary;
+            border-color: $genre-colour-documentary;
+            border-color: $genre-colour-documentary;
+        }
+    }
+
+    &--18 {
+        // Drama
+        background: $genre-colour-drama;
+        border-color: $genre-colour-drama;
+        &:before {
+            background: $genre-colour-drama;
+            border-color: $genre-colour-drama;
+            border-color: $genre-colour-drama;
+        }
+    }
+
+    &--10751 {
+        // Family
+        background: $genre-colour-family;
+        border-color: $genre-colour-family;
+        &:before {
+            background: $genre-colour-family;
+            border-color: $genre-colour-family;
+            border-color: $genre-colour-family;
+        }
+    }
+
+    &--14 {
+        // Fantasy
+        background: $genre-colour-fantasy;
+        border-color: $genre-colour-fantasy;
+        &:before {
+            background: $genre-colour-fantasy;
+            border-color: $genre-colour-fantasy;
+            border-color: $genre-colour-fantasy;
+        }
+    }
+
+    &--36 {
+        // History
+        background: $genre-colour-history;
+        border-color: $genre-colour-history;
+        &:before {
+            background: $genre-colour-history;
+            border-color: $genre-colour-history;
+            border-color: $genre-colour-history;
+        }
+    }
+
+    &--27 {
+        // Horror
+        background: $genre-colour-horror;
+        border-color: $genre-colour-horror;
+        &:before {
+            background: $genre-colour-horror;
+            border-color: $genre-colour-horror;
+            border-color: $genre-colour-horror;
+        }
+    }
+
+    &--10402 {
+        // Music
+        background: $genre-colour-music;
+        border-color: $genre-colour-music;
+        &:before {
+            background: $genre-colour-music;
+            border-color: $genre-colour-music;
+            border-color: $genre-colour-music;
+        }
+    }
+
+    &--9648 {
+        // Mystery
+        background: $genre-colour-mystery;
+        border-color: $genre-colour-mystery;
+        &:before {
+            background: $genre-colour-mystery;
+            border-color: $genre-colour-mystery;
+            border-color: $genre-colour-mystery;
+        }
+    }
+
+    &--10749 {
+        // Romance
+        background: $genre-colour-romance;
+        border-color: $genre-colour-romance;
+        &:before {
+            background: $genre-colour-romance;
+            border-color: $genre-colour-romance;
+            border-color: $genre-colour-romance;
+        }
+    }
+
+    &--878 {
+        // Science Fiction
+        background: $genre-colour-scifi;
+        border-color: $genre-colour-scifi;
+        &:before {
+            background: $genre-colour-scifi;
+            border-color: $genre-colour-scifi;
+            border-color: $genre-colour-scifi;
+        }
+    }
+
+    &--10770 {
+        // TV Movie
+        background: $genre-colour-tv;
+        border-color: $genre-colour-tv;
+        &:before {
+            background: $genre-colour-tv;
+            border-color: $genre-colour-tv;
+            border-color: $genre-colour-tv;
+        }
+    }
+
+    &--53 {
+        // Thriller
+        background: $genre-colour-thriller;
+        border-color: $genre-colour-thriller;
+        &:before {
+            background: $genre-colour-thriller;
+            border-color: $genre-colour-thriller;
+            border-color: $genre-colour-thriller;
+        }
+    }
+
+    &--10752 {
+        // War
+        background: $genre-colour-war;
+        border-color: $genre-colour-war;
+        &:before {
+            background: $genre-colour-war;
+            border-color: $genre-colour-war;
+            border-color: $genre-colour-war;
+        }
+    }
+
+    &--37 {
+        // Western
+        background: $genre-colour-western;
+        border-color: $genre-colour-western;
+        &:before {
+            background: $genre-colour-western;
+            border-color: $genre-colour-western;
+            border-color: $genre-colour-western;
+        }
+    }
+}

@@ -2,103 +2,93 @@
 import "./SiteNav.scss";
 
 // Libraries
-import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-function SiteNav({ puzzleId, puzzleList }) {
-  if (!puzzleId) {
-    puzzleId = puzzleList[puzzleList.length - 1];
-  }
+// Components
+import SiteNavItem from "../SiteNavItem/SiteNavItem.jsx";
+import HowToPlayModal from "../HowToPlayModal/HowToPlayModal.jsx";
 
-  let index = "";
-  if (puzzleList) {
-    index = puzzleList.indexOf(puzzleId);
-  }
+const SiteNav = ({ puzzleId, puzzleList }) => {
+  const [isHowToOpen, setIsHowToOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isHowToOpen) {
+      return;
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isHowToOpen]);
+
+  const puzzleIds = Array.isArray(puzzleList)
+    ? puzzleList.map((puzzle) => puzzle.puzzleId)
+    : [];
+
+  const effectivePuzzleId =
+    puzzleId ??
+    (puzzleIds.length > 0 ? puzzleIds[puzzleIds.length - 1] : undefined);
+
+  const resolvedId = String(effectivePuzzleId ?? "");
+  const index = puzzleIds.findIndex((id) => String(id) === resolvedId);
+  const activeIndex = index === -1 ? puzzleIds.length - 1 : index;
+  const isListView = resolvedId === "list";
+  const prevId = activeIndex > 0 ? puzzleIds[activeIndex - 1] : puzzleIds[0];
+  const nextId =
+    activeIndex >= 0 && activeIndex < puzzleIds.length - 1
+      ? puzzleIds[activeIndex + 1]
+      : puzzleIds[puzzleIds.length - 1];
+
+  const handleOpenHowTo = () => {
+    setIsHowToOpen(true);
+  };
+
+  const handleCloseHowTo = () => {
+    setIsHowToOpen(false);
+  };
 
   return (
     <>
-      {puzzleList && puzzleId ? (
+      {puzzleIds.length > 0 && resolvedId ? (
         <div className="nav">
           <div className="nav__wrapper">
             <ul className="nav__list">
-              <li className={`nav__item`}>
-                <NavLink
-                  className={
-                    puzzleId === puzzleList[0] || puzzleId === "list"
-                      ? "nav__item nav__item--inactivelink"
-                      : "nav__item nav__item--link"
-                  }
-                  to={`/puzzle/${puzzleList[index - 1]}`}
-                >
-                  <span
-                    className={
-                      puzzleId === puzzleList[0] || puzzleId === "list"
-                        ? "nav__item nav__item--hidden nav__item--hideifnull"
-                        : "nav__item nav__item--hidden"
-                    }
-                  >
-                    ⬅️
-                  </span>{" "}
-                  Prev Puzzle
-                </NavLink>
-              </li>
-              <li className="nav__item">
-                <a
-                  href="https://awesomefriday.ca"
-                  className="nav__item nav__item--link"
-                >
-                  Awesome Friday!
-                </a>
-              </li>
-
-              <li className="nav__item">
-                <NavLink
-                  className={"nav item nav__item--link"}
-                  to="/puzzle/list"
-                >
-                  Puzzle List
-                </NavLink>
-              </li>
-              <li className="nav__item">
-                <NavLink
-                  className={
-                    puzzleId === puzzleList[puzzleList.length - 1]
-                      ? "nav__item nav__item--inactivelink"
-                      : "nav__item nav__item--link"
-                  }
-                  to={`/`}
-                >
-                  Latest Puzzle
-                </NavLink>
-              </li>
-              <li className={`nav__item`}>
-                <NavLink
-                  className={
-                    puzzleId === puzzleList[puzzleList.length - 1] ||
-                    puzzleId === "list"
-                      ? "nav__item nav__item--inactivelink"
-                      : "nav__item nav__item--link"
-                  }
-                  to={`/puzzle/${puzzleList[index + 1]}`}
-                >
-                  Next Puzzle{" "}
-                  <span
-                    className={
-                      puzzleId === puzzleList[puzzleList.length - 1] ||
-                      puzzleId === "list"
-                        ? "nav__item nav__item--hidden nav__item--hideifnull"
-                        : "nav__item nav__item--hidden"
-                    }
-                  >
-                    ➡️
-                  </span>
-                </NavLink>
-              </li>
+              <SiteNavItem
+                to={`/puzzle/${prevId}`}
+                label="Prev Puzzle"
+                icon="⬅️"
+                iconPosition="left"
+                disabled={resolvedId === String(puzzleIds[0]) || isListView}
+              />
+              <SiteNavItem to="/puzzle/list" label="Puzzle List" />
+              <SiteNavItem label="How to Play" onClick={handleOpenHowTo} />
+              <SiteNavItem
+                to={`/`}
+                label="Latest Puzzle"
+                disabled={
+                  resolvedId === String(puzzleIds[puzzleIds.length - 1])
+                }
+              />
+              <SiteNavItem
+                to={`/puzzle/${nextId}`}
+                label="Next Puzzle"
+                icon="➡️"
+                iconPosition="right"
+                disabled={
+                  resolvedId === String(puzzleIds[puzzleIds.length - 1]) ||
+                  isListView
+                }
+              />
             </ul>
           </div>
         </div>
       ) : null}
+      <HowToPlayModal isOpen={isHowToOpen} onClose={handleCloseHowTo} />
     </>
   );
-}
+};
 
 export default SiteNav;
