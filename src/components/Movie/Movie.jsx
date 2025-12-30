@@ -1,33 +1,21 @@
 // Styles
 import "./Movie.scss";
 
-// Assets
-import questionmarkimg from "../../assets/question.jpg";
-import profilePic from "../../assets/profile-placeholder.jpg";
-
 // Components
-import Hints from "../Hints/Hints";
+import { ActorHeadshot, Hints, MovieDetails } from "..";
 
 // Libraries
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 // Utility Functions
 import {
-  formatDate,
-  formatGenre,
-  obscureString,
-  shortenString,
   shortenMultipleCharNames,
   removeVoiceFromString,
-} from "../../utilities/utilities";
+  loadLocalJson,
+  saveLocalJson,
+} from "../../utilities";
 
-// variables
-const IMG_BASE = "https://image.tmdb.org/t/p/w500/";
-const dateOptions = {
-  year: "numeric",
-};
-
-function Movie({
+const Movie = ({
   puzzleId,
   movie,
   genres,
@@ -35,8 +23,8 @@ function Movie({
   youWon,
   youLost,
   reallyWantHints,
-}) {
-  const [movieGuessed, setMovieGuessed] = useState(false);
+  onHintSpend,
+}) => {
   const [revealTitle, setRevealTitle] = useState(false);
   const [revealDirector, setRevealDirector] = useState(false);
   const [revealYear, setRevealYear] = useState(false);
@@ -44,33 +32,89 @@ function Movie({
   const [revealCharNames, setRevealCharNames] = useState(false);
   const [revealHints, setRevealHints] = useState(false);
 
-  /**
-   * Handle revealing the hints
-   * @param {event} e
-   * @param {setStatefunction} setFunc
-   * @param {boolean} actualHint
-   */
-  const handleHintClick = (e, setFunc, actualHint) => {
-    e.preventDefault();
-    setFunc((prev) => {
-      if (prev === false) {
-        return !prev;
-      } else {
-        return prev;
-      }
+  const hintsStorageKey = useMemo(() => {
+    if (!puzzleId) {
+      return null;
+    }
+    return `${puzzleId}-${movie.id}-hints`;
+  }, [movie.id, puzzleId]);
+
+  const movieGuessed = useMemo(() => {
+    if (!Array.isArray(guesses)) {
+      return false;
+    }
+
+    return guesses.some(
+      (guess) => guess.id === movie.id && guess.correct === true
+    );
+  }, [guesses, movie.id]);
+
+  const revealAll = useMemo(
+    () => movieGuessed || youWon || youLost,
+    [movieGuessed, youWon, youLost]
+  );
+
+  const processedCast = useMemo(() => {
+    if (!Array.isArray(movie?.cast)) {
+      return [];
+    }
+
+    return movie.cast.map((actor) => {
+      const characterName =
+        typeof actor?.character === "string" ? actor.character : "";
+      const sanitizedCharacter = characterName
+        ? removeVoiceFromString(shortenMultipleCharNames(characterName))
+        : "";
+
+      return {
+        ...actor,
+        sanitizedCharacter,
+      };
     });
-  };
+  }, [movie?.cast]);
+  const revealCharNamesVisible = revealAll || revealCharNames;
+
+  const hydratedHintsRef = useRef(null);
+  const [hintsHydrated, setHintsHydrated] = useState(false);
 
   /**
-   * Handle revealing all hints.
-   * @param {event} e
+   * Handle revealing the hints
+   * @param {event} e React synthetic event
+   * @param {setStatefunction} setFunc State setter for reveal flag
+   * @param {boolean} actualHint Flag to indicate if this is a spendable hint
+   * @param {boolean} currentState Current reveal value for the hint
+   * @param {string} [hintKey] Identifier used for hint bookkeeping
    */
-  const handleEasyMode = (e) => {
+  const handleHintClick = (
+    e,
+    setFunc,
+    actualHint,
+    currentState,
+    hintKey = null
+  ) => {
     e.preventDefault();
-    handleHintClick(e, setRevealYear, true);
-    handleHintClick(e, setRevealDirector, true);
-    handleHintClick(e, setRevealSynopsis, true);
-    handleHintClick(e, setRevealCharNames, true);
+
+    if (actualHint) {
+      if (currentState) {
+        return;
+      }
+
+      if (typeof onHintSpend === "function") {
+        const spent = onHintSpend(movie.id, hintKey);
+
+        if (!spent) {
+          return;
+        }
+      }
+    }
+
+    setFunc((prev) => {
+      if (prev === true) {
+        return prev;
+      }
+
+      return true;
+    });
   };
 
   // ------------------------------------------------------------------------useEffects
@@ -79,36 +123,79 @@ function Movie({
    * Toggle this movie as guessed when it is guessed
    */
   useEffect(() => {
-    setMovieGuessed(
-      guesses.find((guess) => (guess.id === movie.id ? true : false))
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [guesses]);
-
-  /**
-   * useEffect to reveal all details when the movie is guessed or the player runs out of guesses.
-   */
-  useEffect(() => {
-    if (movieGuessed || youWon || youLost) {
+    if (revealAll) {
       setRevealYear(true);
       setRevealDirector(true);
       setRevealSynopsis(true);
       setRevealCharNames(true);
       setRevealTitle(true);
     }
-  }, [movieGuessed, youWon, youLost]);
+  }, [revealAll]);
 
-  /**
-   * Set local hints to local storage if the puzzleId, or any hints status, changes.
-   */
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!hintsStorageKey) {
+      hydratedHintsRef.current = null;
+      setHintsHydrated(false);
+      return;
+    }
+
+    setHintsHydrated(false);
+
+    const stored = loadLocalJson(hintsStorageKey);
+    const nextState = {
+      revealYear: Boolean(stored?.revealYear),
+      revealDirector: Boolean(stored?.revealDirector),
+      revealSynopsis: Boolean(stored?.revealSynopsis),
+      revealCharNames: Boolean(stored?.revealCharNames),
+      revealTitle: Boolean(stored?.revealTitle),
+      revealHints: Boolean(stored?.revealHints),
+    };
+
+    setRevealYear(nextState.revealYear);
+    setRevealDirector(nextState.revealDirector);
+    setRevealSynopsis(nextState.revealSynopsis);
+    setRevealCharNames(nextState.revealCharNames);
+    setRevealTitle(nextState.revealTitle);
+    setRevealHints(nextState.revealHints);
+
+    hydratedHintsRef.current = nextState;
+    setHintsHydrated(true);
+  }, [hintsStorageKey]);
+
+  useEffect(() => {
+    if (!hintsStorageKey || !hintsHydrated) {
+      return;
+    }
+
+    const payload = {
+      revealYear,
+      revealDirector,
+      revealSynopsis,
+      revealCharNames,
+      revealTitle,
+      revealHints,
+    };
+
+    if (
+      hydratedHintsRef.current &&
+      Object.keys(payload).every(
+        (key) => hydratedHintsRef.current[key] === payload[key]
+      )
+    ) {
+      return;
+    }
+
+    hydratedHintsRef.current = payload;
+
+    saveLocalJson(hintsStorageKey, payload);
   }, [
-    puzzleId,
+    hintsStorageKey,
+    hintsHydrated,
     revealYear,
     revealDirector,
     revealSynopsis,
     revealCharNames,
+    revealTitle,
     revealHints,
   ]);
 
@@ -124,112 +211,24 @@ function Movie({
         <div className="movie__castpics">
           <h2 className="movie__heading">Starring:</h2>
           <div className="movie__castpics--inner">
-            {movie.cast.map((actor) => (
-              <div key={actor.id} className="movie__headshotbox">
-                <img
-                  key={actor.id}
-                  className={"movie__headshot"}
-                  src={
-                    actor.profile_path
-                      ? `${IMG_BASE}${actor.profile_path}`
-                      : profilePic
-                  }
-                  alt={actor.name}
-                />
-                <p className="movie__actorname">{`${actor.name}`}</p>
-                <p className="movie__actorname movie__actorname--as">as</p>
-                {
-                  <p className="movie__actorname movie__actorname--char">
-                    {movieGuessed || revealCharNames
-                      ? removeVoiceFromString(
-                          shortenMultipleCharNames(actor.character)
-                        )
-                      : obscureString(
-                          removeVoiceFromString(
-                            shortenMultipleCharNames(actor.character)
-                          )
-                        )}
-                  </p>
-                }
-              </div>
+            {processedCast.map((actor) => (
+              <ActorHeadshot
+                key={actor.id}
+                actor={actor}
+                revealCharNamesVisible={revealCharNamesVisible}
+              />
             ))}
           </div>
         </div>
-        <div className="movie__details">
-          <h2 className="movie__heading">Movie Details:</h2>
-          <div className="movie__details--inner">
-            <div className="movie__posterbox">
-              <img
-                alt={movieGuessed ? movie.original_title : "hidden!"}
-                className="movie__poster"
-                src={
-                  movieGuessed
-                    ? `${IMG_BASE}${movie.poster_path}`
-                    : questionmarkimg
-                }
-              />
-            </div>
-            <div className="movie__detailsbox">
-              <div className="movie__detailsbox--title">
-                <p className="movie__text movie__text--title">Title: </p>
-                <p className="movie__text movie__text--item">
-                  {movieGuessed || revealTitle
-                    ? movie.title
-                    : obscureString(movie.title)}
-                </p>
-              </div>
-              <div className="movie__detailsbox--director">
-                <p className="movie__text movie__text--title">Director: </p>
-                <p className="movie__text movie__text--item movie__text">
-                  {movieGuessed || revealDirector
-                    ? movie.directors.map((d) => (
-                        <span key={d.id} className="movie__text--directors">
-                          {d.name}
-                        </span>
-                      ))
-                    : movie.directors.map((d) => (
-                        <span key={d.id} className="movie__text--directors">
-                          {obscureString(d.name)}
-                        </span>
-                      ))}
-                </p>
-              </div>
-              <div className="movie__detailsbox--year">
-                <p className="movie__text movie__text--title">Year: </p>
-                <p className="movie__text movie__text--item">
-                  {movieGuessed || revealYear
-                    ? formatDate(movie.release_date, dateOptions)
-                    : obscureString(
-                        formatDate(movie.release_date, dateOptions)
-                      )}
-                </p>
-              </div>
-              <div className="movie__detailsbox--synopsis">
-                <p className="movie__text movie__text--title">Synopsis: </p>
-                <p className="movie__text movie__text--item">
-                  {movieGuessed || revealSynopsis
-                    ? shortenString(movie.overview)
-                    : shortenString(obscureString(movie.overview))}
-                </p>
-              </div>
-              <div className="movie__detailsbox--genres">
-                <p className="movie__text movie__text--title">Genres: </p>
-                <p className="movie__genrelist">
-                  {movie.genre_ids.map((id) => {
-                    return (
-                      <span
-                        key={id}
-                        className={`movie__genre movie__genre--${id}`}
-                      >
-                        {formatGenre(id, genres)}
-                      </span>
-                    );
-                  })}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <MovieDetails
+          movie={movie}
+          genres={genres}
+          revealAll={revealAll}
+          revealTitle={revealTitle}
+          revealDirector={revealDirector}
+          revealYear={revealYear}
+          revealSynopsis={revealSynopsis}
+        />
         {reallyWantHints && (
           <Hints
             handleHintClick={handleHintClick}
@@ -243,7 +242,6 @@ function Movie({
             revealSynopsis={revealSynopsis}
             setRevealCharNames={setRevealCharNames}
             revealCharNames={revealCharNames}
-            handleEasyMode={handleEasyMode}
             movieGuessed={movieGuessed}
             youWon={youWon}
             youLost={youLost}
@@ -252,6 +250,6 @@ function Movie({
       </div>
     </>
   );
-}
+};
 
 export default Movie;

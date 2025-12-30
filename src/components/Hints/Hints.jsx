@@ -1,4 +1,6 @@
-function Hints({
+import "./Hints.scss";
+
+const Hints = ({
   handleHintClick,
   setRevealHints,
   revealHints,
@@ -10,71 +12,83 @@ function Hints({
   revealSynopsis,
   setRevealCharNames,
   revealCharNames,
-  handleEasyMode,
   movieGuessed,
   youWon,
   youLost,
-}) {
+}) => {
   return (
-    <div className="movie__hintswrapper">
+    <div className="hints">
       <p
-        className="movie__text movie__text--hints"
+        className="hints__text hints__text--hints"
         onClick={(e) => {
-          handleHintClick(e, setRevealHints, false);
+          handleHintClick(e, setRevealHints, false, revealHints);
         }}
       >
-        {revealHints ? `Hints` : "pssst....need a hint?"}
+        {revealHints
+          ? `Reminder: hints use one guess!`
+          : "pssst....need a hint?"}
       </p>
       {revealHints ? (
-        <>
+        <div className="hints__buttons">
           <button
-            className="movie__hintsbutton movie__hintsbutton--year"
-            onClick={(e) => handleHintClick(e, setRevealYear, true)}
+            className="hints__hintsbutton"
+            onClick={(e) =>
+              handleHintClick(e, setRevealYear, true, revealYear, "year")
+            }
             disabled={revealYear || movieGuessed || youWon || youLost}
           >
             Year
           </button>
           <button
-            className="movie__hintsbutton movie__hintsbutton--director"
-            onClick={(e) => handleHintClick(e, setRevealDirector, true)}
+            className="hints__hintsbutton"
+            onClick={(e) =>
+              handleHintClick(
+                e,
+                setRevealDirector,
+                true,
+                revealDirector,
+                "director"
+              )
+            }
             disabled={revealDirector || movieGuessed || youWon || youLost}
           >
             Director
           </button>
 
           <button
-            className="movie__hintsbutton movie__hintsbutton--synopsis"
-            onClick={(e) => handleHintClick(e, setRevealSynopsis, true)}
+            className="hints__hintsbutton"
+            onClick={(e) =>
+              handleHintClick(
+                e,
+                setRevealSynopsis,
+                true,
+                revealSynopsis,
+                "synopsis"
+              )
+            }
             disabled={revealSynopsis || movieGuessed || youWon || youLost}
           >
             Synopsis
           </button>
           <button
-            className="movie__hintsbutton movie__hintsbutton--names"
-            onClick={(e) => handleHintClick(e, setRevealCharNames, true)}
+            className="hints__hintsbutton"
+            onClick={(e) =>
+              handleHintClick(
+                e,
+                setRevealCharNames,
+                true,
+                revealCharNames,
+                "names"
+              )
+            }
             disabled={revealCharNames || movieGuessed || youWon || youLost}
           >
             Names
           </button>
-          <button
-            className="movie__hintsbutton movie__hintsbutton--easy"
-            onClick={(e) => handleEasyMode(e)}
-            disabled={
-              revealYear ||
-              revealDirector ||
-              revealSynopsis ||
-              revealCharNames ||
-              movieGuessed ||
-              youWon ||
-              youLost
-            }
-          >
-            All
-          </button>
-        </>
+        </div>
       ) : null}
     </div>
   );
-}
+};
 
 export default Hints;

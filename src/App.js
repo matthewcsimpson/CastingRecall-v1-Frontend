@@ -2,8 +2,7 @@
 import "./styles/style.scss";
 
 // Components
-import SiteHeader from "./components/SiteHeader/SiteHeader";
-import SiteFooter from "./components/SiteFooter/SiteFooter";
+import { SiteFooter, SiteHeader } from "./components";
 
 // Pages
 import GamePage from "./pages/GamePage/GamePage";
@@ -14,7 +13,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 
-function App() {
+const App = () => {
   const [puzzleList, setPuzzleList] = useState(null);
   const REACT_APP_API_REMOTE_URL = process.env.REACT_APP_API_REMOTE_URL;
 
@@ -22,10 +21,15 @@ function App() {
    * function to get a list of all puzzles
    */
   const getPuzzleList = async () => {
-    await axios
-      .get(`${REACT_APP_API_REMOTE_URL}/puzzle/list`)
-      .then((res) => setPuzzleList([res.data].flat()))
-      .catch((err) => console.error(err));
+    try {
+      const res = await axios.get(`${REACT_APP_API_REMOTE_URL}/puzzle/list`);
+      const puzzles = Array.isArray(res.data)
+        ? res.data
+        : [res.data].filter(Boolean);
+      setPuzzleList(puzzles);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   /**
@@ -56,6 +60,6 @@ function App() {
       <SiteFooter />
     </>
   );
-}
+};
 
 export default App;
