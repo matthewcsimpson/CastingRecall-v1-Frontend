@@ -36,6 +36,9 @@ export const shortenString = (value) => {
  * @returns {string} String without the "(voice)" marker.
  */
 export const removeVoiceFromString = (value) => {
+  if (!value) {
+    return "";
+  }
   return value.replace("(voice)", "");
 };
 
@@ -45,6 +48,9 @@ export const removeVoiceFromString = (value) => {
  * @returns {string} Single or truncated multi-name representation.
  */
 export const shortenMultipleCharNames = (value) => {
+  if (!value) {
+    return "";
+  }
   const split = value.split(" / ");
   if (split.length > 1) {
     return `${split[0]} / ${split[1]}`;
