@@ -3,6 +3,11 @@
 // Styles
 import "./Counter.scss";
 
+/**
+ * Component to display the list of guesses with their statuses.
+ * @param {object[]} guesses Array of guess objects containing movie details and correctness.
+ * @returns
+ */
 const Counter = ({ guesses }) => {
   return (
     <>

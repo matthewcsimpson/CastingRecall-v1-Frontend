@@ -1,31 +1,18 @@
 // Styles
 import "./Movie.scss";
 
-// Assets
-import questionmarkimg from "../../assets/question.jpg";
-import profilePic from "../../assets/profile-placeholder.jpg";
-
 // Components
-import { GenreTags, Hints } from "..";
+import { ActorHeadshot, Hints, MovieDetails } from "..";
 
 // Libraries
 import { useEffect, useMemo, useState } from "react";
 
 // Utility Functions
 import {
-  formatDate,
-  formatGenre,
-  obscureString,
-  shortenString,
   shortenMultipleCharNames,
   removeVoiceFromString,
-} from "../../utilities/utilities";
-
-// variables
-const IMG_BASE = "https://image.tmdb.org/t/p/w500/";
-const dateOptions = {
-  year: "numeric",
-};
+} from "../../utilities";
+import { loadLocalJson, saveLocalJson } from "../../utilities/storage";
 
 const Movie = ({
   puzzleId,
@@ -60,6 +47,29 @@ const Movie = ({
       (guess) => guess.id === movie.id && guess.correct === true
     );
   }, [guesses, movie.id]);
+
+  const revealAll = useMemo(
+    () => movieGuessed || youWon || youLost,
+    [movieGuessed, youWon, youLost]
+  );
+
+  const processedCast = useMemo(() => {
+    if (!Array.isArray(movie?.cast)) {
+      return [];
+    }
+
+    return movie.cast.map((actor) => {
+      const sanitizedCharacter = removeVoiceFromString(
+        shortenMultipleCharNames(actor.character)
+      );
+
+      return {
+        ...actor,
+        sanitizedCharacter,
+      };
+    });
+  }, [movie?.cast]);
+  const revealCharNamesVisible = revealAll || revealCharNames;
 
   /**
    * Handle revealing the hints
@@ -101,40 +111,36 @@ const Movie = ({
    * Toggle this movie as guessed when it is guessed
    */
   useEffect(() => {
-    if (movieGuessed || youWon || youLost) {
+    if (revealAll) {
       setRevealYear(true);
       setRevealDirector(true);
       setRevealSynopsis(true);
       setRevealCharNames(true);
       setRevealTitle(true);
     }
-  }, [movieGuessed, youWon, youLost]);
+  }, [revealAll]);
 
   useEffect(() => {
     if (!hintsStorageKey) {
       return;
     }
 
-    try {
-      const stored = JSON.parse(localStorage.getItem(hintsStorageKey));
+    const stored = loadLocalJson(hintsStorageKey);
 
-      if (stored) {
-        setRevealYear(Boolean(stored.revealYear));
-        setRevealDirector(Boolean(stored.revealDirector));
-        setRevealSynopsis(Boolean(stored.revealSynopsis));
-        setRevealCharNames(Boolean(stored.revealCharNames));
-        setRevealTitle(Boolean(stored.revealTitle));
-        setRevealHints(Boolean(stored.revealHints));
-      } else {
-        setRevealYear(false);
-        setRevealDirector(false);
-        setRevealSynopsis(false);
-        setRevealCharNames(false);
-        setRevealTitle(false);
-        setRevealHints(false);
-      }
-    } catch (err) {
-      console.error(err);
+    if (stored) {
+      setRevealYear(Boolean(stored.revealYear));
+      setRevealDirector(Boolean(stored.revealDirector));
+      setRevealSynopsis(Boolean(stored.revealSynopsis));
+      setRevealCharNames(Boolean(stored.revealCharNames));
+      setRevealTitle(Boolean(stored.revealTitle));
+      setRevealHints(Boolean(stored.revealHints));
+    } else {
+      setRevealYear(false);
+      setRevealDirector(false);
+      setRevealSynopsis(false);
+      setRevealCharNames(false);
+      setRevealTitle(false);
+      setRevealHints(false);
     }
   }, [hintsStorageKey]);
 
@@ -152,11 +158,7 @@ const Movie = ({
       revealHints,
     };
 
-    try {
-      localStorage.setItem(hintsStorageKey, JSON.stringify(payload));
-    } catch (err) {
-      console.error(err);
-    }
+    saveLocalJson(hintsStorageKey, payload);
   }, [
     hintsStorageKey,
     revealCharNames,
@@ -179,101 +181,24 @@ const Movie = ({
         <div className="movie__castpics">
           <h2 className="movie__heading">Starring:</h2>
           <div className="movie__castpics--inner">
-            {movie.cast.map((actor) => (
-              <div key={actor.id} className="movie__headshotbox">
-                <img
-                  key={actor.id}
-                  className={"movie__headshot"}
-                  src={
-                    actor.profile_path
-                      ? `${IMG_BASE}${actor.profile_path}`
-                      : profilePic
-                  }
-                  alt={actor.name}
-                />
-                <p className="movie__actorname">{`${actor.name}`}</p>
-                <p className="movie__actorname movie__actorname--as">as</p>
-                {
-                  <p className="movie__actorname movie__actorname--char">
-                    {movieGuessed || revealCharNames
-                      ? removeVoiceFromString(
-                          shortenMultipleCharNames(actor.character)
-                        )
-                      : obscureString(
-                          removeVoiceFromString(
-                            shortenMultipleCharNames(actor.character)
-                          )
-                        )}
-                  </p>
-                }
-              </div>
+            {processedCast.map((actor) => (
+              <ActorHeadshot
+                key={actor.id}
+                actor={actor}
+                revealCharNamesVisible={revealCharNamesVisible}
+              />
             ))}
           </div>
         </div>
-        <div className="movie__details">
-          <h2 className="movie__heading">Movie Details:</h2>
-          <div className="movie__details--inner">
-            <div className="movie__posterbox">
-              <img
-                alt={movieGuessed ? movie.original_title : "hidden!"}
-                className="movie__poster"
-                src={
-                  movieGuessed
-                    ? `${IMG_BASE}${movie.poster_path}`
-                    : questionmarkimg
-                }
-              />
-            </div>
-            <div className="movie__detailsbox">
-              <div className="movie__detailsbox--title">
-                <p className="movie__text movie__text--title">Title: </p>
-                <p className="movie__text movie__text--item">
-                  {movieGuessed || revealTitle
-                    ? movie.title
-                    : obscureString(movie.title)}
-                </p>
-              </div>
-              <div className="movie__detailsbox--director">
-                <p className="movie__text movie__text--title">Director: </p>
-                <p className="movie__text movie__text--item movie__text">
-                  {movieGuessed || revealDirector
-                    ? movie.directors.map((d) => (
-                        <span key={d.id} className="movie__text--directors">
-                          {d.name}
-                        </span>
-                      ))
-                    : movie.directors.map((d) => (
-                        <span key={d.id} className="movie__text--directors">
-                          {obscureString(d.name)}
-                        </span>
-                      ))}
-                </p>
-              </div>
-              <div className="movie__detailsbox--year">
-                <p className="movie__text movie__text--title">Year: </p>
-                <p className="movie__text movie__text--item">
-                  {movieGuessed || revealYear
-                    ? formatDate(movie.release_date, dateOptions)
-                    : obscureString(
-                        formatDate(movie.release_date, dateOptions)
-                      )}
-                </p>
-              </div>
-              <div className="movie__detailsbox--synopsis">
-                <p className="movie__text movie__text--title">Synopsis: </p>
-                <p className="movie__text movie__text--item">
-                  {movieGuessed || revealSynopsis
-                    ? shortenString(movie.overview)
-                    : shortenString(obscureString(movie.overview))}
-                </p>
-              </div>
-              <div className="movie__detailsbox--genres">
-                <p className="movie__text movie__text--title">Genres: </p>
-                <GenreTags genreIds={movie.genre_ids} genres={genres} />
-              </div>
-            </div>
-          </div>
-        </div>
+        <MovieDetails
+          movie={movie}
+          genres={genres}
+          revealAll={revealAll}
+          revealTitle={revealTitle}
+          revealDirector={revealDirector}
+          revealYear={revealYear}
+          revealSynopsis={revealSynopsis}
+        />
         {reallyWantHints && (
           <Hints
             handleHintClick={handleHintClick}

@@ -6,15 +6,10 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 
 // Utilities
-import { formatDate } from "../../utilities/utilities";
+import { formatDate, YEAR_ONLY_DATE_OPTIONS } from "../../utilities";
 
 // Components
 import { LoadingScreen } from "..";
-
-// Variables
-const dateOptions = {
-  year: "numeric",
-};
 
 const GuessForm = ({
   puzzleId,
@@ -120,7 +115,11 @@ const GuessForm = ({
                           }}
                         >
                           {movie.title} (
-                          {formatDate(movie.release_date, dateOptions)})
+                          {formatDate(
+                            movie.release_date,
+                            YEAR_ONLY_DATE_OPTIONS
+                          )}
+                          )
                         </button>
                       </li>
                     );

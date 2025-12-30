@@ -1,0 +1,97 @@
+@use "../../styles/partials/global" as *;
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+
+.movie {
+    &__details {
+        order: 0;
+        display: flex;
+        flex-direction: column;
+        font-size: 0.9rem;
+        width: 100%;
+
+        @include tablet {
+            width: 50%;
+        }
+
+        &--inner {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            height: 100%;
+            width: 95%;
+        }
+    }
+
+    &__detailsbox {
+        display: flex;
+        flex-direction: column;
+        padding-left: 5%;
+        width: 74%;
+
+        &--title,
+        &--director,
+        &--year,
+        &--synopsis,
+        &--genres {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            font-size: 0.75rem;
+            height: 100%;
+
+            @include desktop {
+                padding: 0 0.75rem;
+            }
+        }
+    }
+
+    &__posterbox {
+        width: 25%;
+    }
+
+    &__poster {
+        display: block;
+        object-fit: cover;
+        width: 100%;
+        border: 1px solid $primary-colour;
+        margin: 0 auto 0 auto;
+    }
+
+    &__text {
+        color: $primary-colour;
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+        min-height: 1.5rem;
+
+        &--title {
+            min-width: 25%;
+            font-weight: 550;
+        }
+
+        &--item {
+            width: 100%;
+            margin-bottom: 3%;
+        }
+
+        &--directors {
+            &:before {
+                content: ",\00a0";
+            }
+
+            &:first-child:before {
+                content: "";
+            }
+
+            &:last-child:before {
+                content: ",\00a0 &\00a0";
+            }
+
+            &:only-child:before {
+                content: "";
+            }
+        }
+    }
+}

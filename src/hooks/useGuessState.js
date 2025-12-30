@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { loadLocalJson, saveLocalJson } from "../utilities/storage";
 
 export const MAX_GUESSES = 10;
 
@@ -13,21 +14,24 @@ export const getStoredGuessState = (puzzleId, { silent = false } = {}) => {
     return null;
   }
 
-  try {
-    const raw = localStorage.getItem(puzzleId);
-    const stored = raw ? JSON.parse(raw) : null;
+  let parseFailed = false;
 
-    if (!stored || String(stored.id) !== String(puzzleId)) {
-      return null;
-    }
+  const stored = loadLocalJson(puzzleId, null, {
+    silent,
+    onError: () => {
+      parseFailed = true;
+    },
+  });
 
-    return stored;
-  } catch (err) {
-    if (!silent) {
-      console.error(err);
-    }
+  if (parseFailed) {
     return { __error: true };
   }
+
+  if (!stored || String(stored.id) !== String(puzzleId)) {
+    return null;
+  }
+
+  return stored;
 };
 
 /**
@@ -161,11 +165,7 @@ const useGuessState = (puzzleData) => {
       youLost,
     };
 
-    try {
-      localStorage.setItem(puzzleData.puzzleId, JSON.stringify(payload));
-    } catch (err) {
-      console.error(err);
-    }
+    saveLocalJson(puzzleData.puzzleId, payload);
   }, [guesses, puzzleData, youLost, youWon]);
 
   return {

@@ -2,11 +2,13 @@
 import "./GenreTags.scss";
 
 // Utilties
-import { formatGenre } from "../../utilities/utilities";
+import { formatGenre } from "../../utilities";
 
 /**
  * Component to display genre tags for a movie.
- * @param {{genreIds?: Array<number>, genres?: Array<{id: number, name: string}>}} props
+ * @param {Array<number>} [genreIds=[]] Array of genre IDs from TMDB.
+ * @param {Array<{id: number, name: string}>} [genres=[]] Array of genre objects from TMDB.
+ *
  * @returns {JSX.Element}
  */
 const GenreTags = ({ genreIds = [], genres = [] }) => {

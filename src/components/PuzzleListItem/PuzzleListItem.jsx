@@ -2,7 +2,7 @@
 import "./PuzzleListItem.scss";
 
 // Utilities
-import { firstNameOnly } from "../../utilities/utilities";
+import { firstNameOnly } from "../../utilities";
 
 // Libraries
 import { NavLink } from "react-router-dom";
