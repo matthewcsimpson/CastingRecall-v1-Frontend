@@ -32,6 +32,7 @@ const GamePage = ({ puzzleList }) => {
     totalGuesses,
     maxGuesses,
     handleSubmitGuess,
+    handleHintUse,
   } = useGuessState(puzzleData);
 
   return (
@@ -70,6 +71,7 @@ const GamePage = ({ puzzleList }) => {
               youWon={youWon}
               youLost={youLost}
               reallyWantHints={true}
+              onHintSpend={handleHintUse}
             />
           ))
         ) : (

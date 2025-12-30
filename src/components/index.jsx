@@ -1,4 +1,5 @@
 export { default as Counter } from "./Counter/Counter.jsx";
+export { default as GenreTags } from "./GenreTags/GenreTags.jsx";
 export { default as GuessForm } from "./GuessForm/GuessForm.jsx";
 export { default as Hints } from "./Hints/Hints.jsx";
 export { default as LoadingScreen } from "./LoadingScreen/LoadingScreen.jsx";

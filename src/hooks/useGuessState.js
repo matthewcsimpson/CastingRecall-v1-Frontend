@@ -2,6 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 export const MAX_GUESSES = 10;
 
+/**
+ * Reads the persisted guess state for a specific puzzle from localStorage.
+ * @param {string} puzzleId Identifier for the puzzle whose state should be loaded.
+ * @param {{silent?: boolean}} [options] Optional flags to control error handling.
+ * @returns {{id: string, guesses: Array, youWon: boolean, youLost: boolean}|{__error: true}|null} Stored state payload, error marker, or null when absent.
+ */
 export const getStoredGuessState = (puzzleId, { silent = false } = {}) => {
   if (!puzzleId) {
     return null;
@@ -24,6 +30,11 @@ export const getStoredGuessState = (puzzleId, { silent = false } = {}) => {
   }
 };
 
+/**
+ * Manages guess submission state, win/loss detection, and persistence for a puzzle run.
+ * @param {{puzzle: Array, puzzleId: string}|null} puzzleData The active puzzle payload being played.
+ * @returns {object} Aggregated state, counters, and handlers for guesses and hints.
+ */
 const useGuessState = (puzzleData) => {
   const [guesses, setGuesses] = useState([]);
   const [youWon, setYouWon] = useState(false);
@@ -45,6 +56,10 @@ const useGuessState = (puzzleData) => {
   }, [guesses]);
   const totalGuesses = guesses.length;
 
+  /**
+   * Adds a user's movie guess to the local guess log, marking correctness based on the current puzzle.
+   * @param {{id: number, title: string}} movie Movie guess returned from search.
+   */
   const handleSubmitGuess = useCallback(
     (movie) => {
       if (!puzzleData?.puzzle) {
@@ -66,13 +81,49 @@ const useGuessState = (puzzleData) => {
     [puzzleData]
   );
 
+  /**
+   * Records a hint usage as a neutral guess entry, reducing the remaining guess allotment.
+   * @param {number|string} movieId Identifier of the movie the hint is tied to.
+   * @param {string} hintType Logical key describing the hint requested.
+   * @returns {boolean} True when the hint was counted, false if spending was denied.
+   */
+  const handleHintUse = useCallback(
+    (movieId, hintType) => {
+      if (!puzzleData?.puzzle || youWon || youLost) {
+        return false;
+      }
+
+      let allowed = true;
+
+      setGuesses((prevGuesses) => {
+        if (prevGuesses.length >= maxGuesses) {
+          allowed = false;
+          return prevGuesses;
+        }
+
+        const hintGuess = {
+          id: `hint-${movieId}-${hintType}-${Date.now()}`,
+          type: "hint",
+          hintType,
+          movieId,
+          correct: null,
+        };
+
+        return [...prevGuesses, hintGuess];
+      });
+
+      return allowed;
+    },
+    [maxGuesses, puzzleData, youLost, youWon]
+  );
+
   useEffect(() => {
     if (correctCount === 6 && !youWon) {
       setYouWon(true);
       return;
     }
 
-    if (incorrectCount === maxGuesses && !youLost) {
+    if (!youWon && totalGuesses >= maxGuesses && !youLost) {
       setYouLost(true);
       return;
     }
@@ -81,7 +132,7 @@ const useGuessState = (puzzleData) => {
       setYouWon(false);
       setYouLost(false);
     }
-  }, [correctCount, incorrectCount, maxGuesses, totalGuesses, youLost, youWon]);
+  }, [correctCount, maxGuesses, totalGuesses, youLost, youWon]);
 
   useEffect(() => {
     const stored = getStoredGuessState(puzzleData?.puzzleId);
@@ -126,6 +177,7 @@ const useGuessState = (puzzleData) => {
     totalGuesses,
     maxGuesses,
     handleSubmitGuess,
+    handleHintUse,
   };
 };
 

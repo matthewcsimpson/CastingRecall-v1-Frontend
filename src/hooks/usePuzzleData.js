@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+/**
+ * Retrieves puzzle payloads from the Casting Recall API and exposes them to consumers.
+ * Automatically refreshes whenever the target puzzleId changes.
+ * @param {string} apiUrl Base API URL for puzzle requests.
+ * @param {string|undefined} puzzleId Specific puzzle identifier or undefined for the latest puzzle.
+ * @returns {object|null} Puzzle data returned by the API or null while loading.
+ */
 const usePuzzleData = (apiUrl, puzzleId) => {
   const [puzzleData, setPuzzleData] = useState(null);
 

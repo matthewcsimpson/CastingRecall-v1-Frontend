@@ -6,7 +6,7 @@ import questionmarkimg from "../../assets/question.jpg";
 import profilePic from "../../assets/profile-placeholder.jpg";
 
 // Components
-import { Hints } from "..";
+import { GenreTags, Hints } from "..";
 
 // Libraries
 import { useEffect, useMemo, useState } from "react";
@@ -35,6 +35,7 @@ const Movie = ({
   youWon,
   youLost,
   reallyWantHints,
+  onHintSpend,
 }) => {
   const [revealTitle, setRevealTitle] = useState(false);
   const [revealDirector, setRevealDirector] = useState(false);
@@ -62,31 +63,36 @@ const Movie = ({
 
   /**
    * Handle revealing the hints
-   * @param {event} e
-   * @param {setStatefunction} setFunc
-   * @param {boolean} actualHint
+   * @param {event} e React synthetic event
+   * @param {setStatefunction} setFunc State setter for reveal flag
+   * @param {boolean} actualHint Flag to indicate if this is a spendable hint
+   * @param {boolean} currentState Current reveal value for the hint
+   * @param {string} hintKey Identifier used for hint bookkeeping
    */
-  const handleHintClick = (e, setFunc, actualHint) => {
+  const handleHintClick = (e, setFunc, actualHint, currentState, hintKey) => {
     e.preventDefault();
+
+    if (actualHint) {
+      if (currentState) {
+        return;
+      }
+
+      if (typeof onHintSpend === "function") {
+        const spent = onHintSpend(movie.id, hintKey);
+
+        if (!spent) {
+          return;
+        }
+      }
+    }
+
     setFunc((prev) => {
-      if (prev === false) {
-        return !prev;
-      } else {
+      if (prev === true) {
         return prev;
       }
-    });
-  };
 
-  /**
-   * Handle revealing all hints.
-   * @param {event} e
-   */
-  const handleEasyMode = (e) => {
-    e.preventDefault();
-    handleHintClick(e, setRevealYear, true);
-    handleHintClick(e, setRevealDirector, true);
-    handleHintClick(e, setRevealSynopsis, true);
-    handleHintClick(e, setRevealCharNames, true);
+      return true;
+    });
   };
 
   // ------------------------------------------------------------------------useEffects
@@ -263,18 +269,7 @@ const Movie = ({
               </div>
               <div className="movie__detailsbox--genres">
                 <p className="movie__text movie__text--title">Genres: </p>
-                <p className="movie__genrelist">
-                  {movie.genre_ids.map((id) => {
-                    return (
-                      <span
-                        key={id}
-                        className={`movie__genre movie__genre--${id}`}
-                      >
-                        {formatGenre(id, genres)}
-                      </span>
-                    );
-                  })}
-                </p>
+                <GenreTags genreIds={movie.genre_ids} genres={genres} />
               </div>
             </div>
           </div>
@@ -292,7 +287,6 @@ const Movie = ({
             revealSynopsis={revealSynopsis}
             setRevealCharNames={setRevealCharNames}
             revealCharNames={revealCharNames}
-            handleEasyMode={handleEasyMode}
             movieGuessed={movieGuessed}
             youWon={youWon}
             youLost={youLost}

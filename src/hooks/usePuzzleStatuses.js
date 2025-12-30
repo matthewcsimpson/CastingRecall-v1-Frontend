@@ -1,6 +1,11 @@
 import { useMemo } from "react";
 import { getStoredGuessState, MAX_GUESSES } from "./useGuessState";
 
+/**
+ * Builds a mapping of puzzleIds to human readable status strings derived from saved guess state.
+ * @param {Array<{puzzleId: string}>|null} puzzleList Collection of available puzzles.
+ * @returns {Record<string, string>} Object keyed by puzzleId containing status text for the UI.
+ */
 const usePuzzleStatuses = (puzzleList) => {
   return useMemo(() => {
     if (!Array.isArray(puzzleList) || puzzleList.length === 0) {

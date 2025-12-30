@@ -14,6 +14,7 @@ const formatDate = (timestamp, options) => {
 /**
  * Return the genre name based on the genre ID# provide by TMDB.
  * @param {number} id
+ * @param {Array<{id: number, name: string}>} genres
  * @returns genre name as a string.
  */
 const formatGenre = (id, genres) => {

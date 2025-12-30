@@ -22,6 +22,12 @@ const Counter = ({ guesses }) => {
                     <p className="counter__text">🟥 {movie.original_title}</p>
                   </li>
                 );
+              } else if (movie.type === "hint") {
+                return (
+                  <li key={`${i}-${movie.id}`} className="counter__item">
+                    <p className="counter__text">💡 Hint used</p>
+                  </li>
+                );
               }
             })}
           </ul>

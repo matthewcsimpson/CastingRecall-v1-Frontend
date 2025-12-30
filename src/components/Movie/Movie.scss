@@ -8,13 +8,13 @@
 
     &__wrapper {
         width: 90%;
-        background-color: $site-background-color;
+        background-color: $background-colour;
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
         margin: 0 auto;
         padding: 0 0.5rem;
-        border-bottom: 1px solid $site-primary-color;
+        border-bottom: 1px solid $primary-colour;
 
         @include tablet {
             max-width: 70rem;
@@ -25,7 +25,7 @@
         }
 
         &:first-child {
-            border-top: 1px solid $site-primary-color;
+            border-top: 1px solid $primary-colour;
         }
 
         &--guessed,
@@ -36,7 +36,7 @@
 
     &__heading {
         margin: 0.5rem 1rem 1rem 0rem;
-        color: $site-primary-color;
+        color: $primary-colour;
         align-self: flex-start;
     }
 
@@ -85,250 +85,6 @@
         }
     }
 
-    &__genrelist {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    &__genre {
-        white-space: nowrap;
-        position: relative;
-        margin: 0 0.3125rem 0.25rem 0.625rem;
-        display: inline-block;
-        height: 1.5625rem;
-        border-radius: 0.0625rem 0.3125rem 0.3125rem 0.0625rem;
-        padding: 0 0.5rem 0 0.75rem;
-        background: #e8edf0;
-        border: 1px solid;
-        line-height: 1.4375rem;
-
-        &:before {
-            position: absolute;
-            background: #e8edf0;
-            content: "\25CF";
-            color: $site-primary-color;
-            font-size: 0.75rem;
-            line-height: 0.8125rem;
-            text-indent: 0.375rem;
-            top: 0.1875rem;
-            left: -0.625rem;
-            width: 1.125rem;
-            height: 1.125rem;
-            transform: rotate(45deg);
-            border-left: 1px solid;
-            border-bottom: 1px solid;
-        }
-
-        &--28 {
-            // Action
-            background: $genre-color-action;
-            border-color: $genre-color-action;
-            &:before {
-                background: $genre-color-action;
-                border-color: $genre-color-action;
-                border-color: $genre-color-action;
-            }
-        }
-
-        &--12 {
-            // Adventure
-            background: $genre-color-adventure;
-            border-color: $genre-color-adventure;
-            &:before {
-                background: $genre-color-adventure;
-                border-color: $genre-color-adventure;
-                border-color: $genre-color-adventure;
-            }
-        }
-
-        &--16 {
-            // Animation
-            background: $genre-color-animation;
-            border-color: $genre-color-animation;
-            &:before {
-                background: $genre-color-animation;
-                border-color: $genre-color-animation;
-                border-color: $genre-color-animation;
-            }
-        }
-
-        &--35 {
-            // Comedy
-            background: $genre-color-comedy;
-            border-color: $genre-color-comedy;
-            &:before {
-                background: $genre-color-comedy;
-                border-color: $genre-color-comedy;
-                border-color: $genre-color-comedy;
-            }
-        }
-
-        &--80 {
-            // Crime
-            background: $genre-color-crime;
-            border-color: $genre-color-crime;
-            &:before {
-                background: $genre-color-crime;
-                border-color: $genre-color-crime;
-                border-color: $genre-color-crime;
-            }
-        }
-
-        &--99 {
-            // Documentary
-            background: $genre-color-documentary;
-            border-color: $genre-color-documentary;
-            &:before {
-                background: $genre-color-documentary;
-                border-color: $genre-color-documentary;
-                border-color: $genre-color-documentary;
-            }
-        }
-
-        &--18 {
-            // Drama
-            background: $genre-color-drama;
-            border-color: $genre-color-drama;
-            &:before {
-                background: $genre-color-drama;
-                border-color: $genre-color-drama;
-                border-color: $genre-color-drama;
-            }
-        }
-
-        &--10751 {
-            // Family
-            background: $genre-color-family;
-            border-color: $genre-color-family;
-            &:before {
-                background: $genre-color-family;
-                border-color: $genre-color-family;
-                border-color: $genre-color-family;
-            }
-        }
-
-        &--14 {
-            // Fantasy
-            background: $genre-color-fantasy;
-            border-color: $genre-color-fantasy;
-            &:before {
-                background: $genre-color-fantasy;
-                border-color: $genre-color-fantasy;
-                border-color: $genre-color-fantasy;
-            }
-        }
-
-        &--36 {
-            // History
-            background: $genre-color-history;
-            border-color: $genre-color-history;
-            &:before {
-                background: $genre-color-history;
-                border-color: $genre-color-history;
-                border-color: $genre-color-history;
-            }
-        }
-
-        &--27 {
-            // Horror
-            background: $genre-color-horror;
-            border-color: $genre-color-horror;
-            &:before {
-                background: $genre-color-horror;
-                border-color: $genre-color-horror;
-                border-color: $genre-color-horror;
-            }
-        }
-
-        &--10402 {
-            // Music
-            background: $genre-color-music;
-            border-color: $genre-color-music;
-            &:before {
-                background: $genre-color-music;
-                border-color: $genre-color-music;
-                border-color: $genre-color-music;
-            }
-        }
-
-        &--9648 {
-            // Mystery
-            background: $genre-color-mystery;
-            border-color: $genre-color-mystery;
-            &:before {
-                background: $genre-color-mystery;
-                border-color: $genre-color-mystery;
-                border-color: $genre-color-mystery;
-            }
-        }
-
-        &--10749 {
-            // Romance
-            background: $genre-color-romance;
-            border-color: $genre-color-romance;
-            &:before {
-                background: $genre-color-romance;
-                border-color: $genre-color-romance;
-                border-color: $genre-color-romance;
-            }
-        }
-
-        &--878 {
-            // Science Fiction
-            background: $genre-color-scifi;
-            border-color: $genre-color-scifi;
-            &:before {
-                background: $genre-color-scifi;
-                border-color: $genre-color-scifi;
-                border-color: $genre-color-scifi;
-            }
-        }
-
-        &--10770 {
-            // TV Movie
-            background: $genre-color-tv;
-            border-color: $genre-color-tv;
-            &:before {
-                background: $genre-color-tv;
-                border-color: $genre-color-tv;
-                border-color: $genre-color-tv;
-            }
-        }
-
-        &--53 {
-            // Thriller
-            background: $genre-color-thriller;
-            border-color: $genre-color-thriller;
-            &:before {
-                background: $genre-color-thriller;
-                border-color: $genre-color-thriller;
-                border-color: $genre-color-thriller;
-            }
-        }
-
-        &--10752 {
-            // War
-            background: $genre-color-war;
-            border-color: $genre-color-war;
-            &:before {
-                background: $genre-color-war;
-                border-color: $genre-color-war;
-                border-color: $genre-color-war;
-            }
-        }
-
-        &--37 {
-            // Western
-            background: $genre-color-western;
-            border-color: $genre-color-western;
-            &:before {
-                background: $genre-color-western;
-                border-color: $genre-color-western;
-                border-color: $genre-color-western;
-            }
-        }
-    }
-
     &__posterbox {
         width: 25%;
     }
@@ -337,12 +93,12 @@
         display: block;
         object-fit: cover;
         width: 100%;
-        border: 1px solid $site-primary-color;
+        border: 1px solid $primary-colour;
         margin: 0 auto 0 auto;
     }
 
     &__text {
-        color: $site-primary-color;
+        color: $primary-colour;
         margin: 0;
         padding: 0;
         display: inline-block;
@@ -427,7 +183,7 @@
         border-radius: 0.5rem;
         flex-direction: column;
         margin: 0rem 0.5% 0.25rem;
-        background-color: $site-primary-color;
+        background-color: $primary-colour;
 
         @include tablet {
             height: 100%;
@@ -461,45 +217,6 @@
 
         &--key {
             border: 0.1875rem solid blue;
-        }
-    }
-
-    &__hintsbutton {
-        font-size: 0.75rem;
-        border-radius: 0.5rem;
-        padding: 0;
-        width: 6rem;
-
-        &--year,
-        &--director,
-        &--names,
-        &--synopsis,
-        &--easy {
-            &:disabled {
-                background-color: rgb(67, 66, 66);
-                color: rgb(42, 42, 42);
-            }
-        }
-
-        &--year {
-            background-color: rgb(70, 64, 244);
-            color: $site-primary-color;
-        }
-        &--director {
-            background-color: rgb(70, 64, 244);
-            color: $site-primary-color;
-        }
-        &--synopsis {
-            background-color: rgb(70, 64, 244);
-            color: $site-primary-color;
-        }
-        &--names {
-            background-color: rgb(70, 64, 244);
-            color: $site-primary-color;
-        }
-        &--easy {
-            background-color: rgb(108, 0, 0);
-            color: $site-primary-color;
         }
     }
 }

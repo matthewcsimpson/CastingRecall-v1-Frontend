@@ -1,5 +1,46 @@
-.hintswrapper {
+@use "../../styles/partials/variables" as *;
+
+.hints {
     width: 100%;
     margin: 0 auto;
     padding: 1rem;
+
+    &__hintsbutton {
+        font-size: 0.75rem;
+        border-radius: 0.5rem;
+        padding: 0;
+        width: 6rem;
+
+        &--year,
+        &--director,
+        &--names,
+        &--synopsis,
+        &--easy {
+            &:disabled {
+                background-color: rgb(67, 66, 66);
+                color: rgb(42, 42, 42);
+            }
+        }
+
+        &--year {
+            background-color: rgb(70, 64, 244);
+            color: $primary-colour;
+        }
+        &--director {
+            background-color: rgb(70, 64, 244);
+            color: $primary-colour;
+        }
+        &--synopsis {
+            background-color: rgb(70, 64, 244);
+            color: $primary-colour;
+        }
+        &--names {
+            background-color: rgb(70, 64, 244);
+            color: $primary-colour;
+        }
+        &--easy {
+            background-color: rgb(108, 0, 0);
+            color: $primary-colour;
+        }
+    }
 }
