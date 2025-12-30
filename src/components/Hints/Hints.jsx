@@ -24,12 +24,14 @@ const Hints = ({
           handleHintClick(e, setRevealHints, false, revealHints);
         }}
       >
-        {revealHints ? `Hints` : "pssst....need a hint?"}
+        {revealHints
+          ? `Reminder: hints use one guess!`
+          : "pssst....need a hint?"}
       </p>
       {revealHints ? (
-        <>
+        <div className="hints__buttons">
           <button
-            className="hints__hintsbutton hints__hintsbutton--year"
+            className="hints__hintsbutton"
             onClick={(e) =>
               handleHintClick(e, setRevealYear, true, revealYear, "year")
             }
@@ -38,7 +40,7 @@ const Hints = ({
             Year
           </button>
           <button
-            className="hints__hintsbutton hints__hintsbutton--director"
+            className="hints__hintsbutton"
             onClick={(e) =>
               handleHintClick(
                 e,
@@ -54,7 +56,7 @@ const Hints = ({
           </button>
 
           <button
-            className="hints__hintsbutton hints__hintsbutton--synopsis"
+            className="hints__hintsbutton"
             onClick={(e) =>
               handleHintClick(
                 e,
@@ -69,7 +71,7 @@ const Hints = ({
             Synopsis
           </button>
           <button
-            className="hints__hintsbutton hints__hintsbutton--names"
+            className="hints__hintsbutton"
             onClick={(e) =>
               handleHintClick(
                 e,
@@ -83,7 +85,7 @@ const Hints = ({
           >
             Names
           </button>
-        </>
+        </div>
       ) : null}
     </div>
   );

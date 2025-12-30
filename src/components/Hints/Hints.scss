@@ -2,45 +2,61 @@
 
 .hints {
     width: 100%;
-    margin: 0 auto;
-    padding: 1rem;
+    margin: 0 0 1rem 1rem;
+
+    color: $primary-colour;
+    font-size: 0.75rem;
+    font-style: italic;
+    text-align: left;
+
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    &__buttons {
+        display: flex;
+        align-items: center;
+
+        gap: 0.5rem;
+    }
 
     &__hintsbutton {
-        font-size: 0.75rem;
-        border-radius: 0.5rem;
-        padding: 0;
-        width: 6rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0.125rem 0.75rem;
+        border-radius: 1rem;
+        border: 1px solid rgba($primary-colour, 0.4);
+        background-color: lighten($background-colour, 8%);
+        color: $primary-colour;
+        font-size: 0.5rem;
+        line-height: 0.5rem;
 
-        &--year,
-        &--director,
-        &--names,
-        &--synopsis,
-        &--easy {
-            &:disabled {
-                background-color: rgb(67, 66, 66);
-                color: rgb(42, 42, 42);
-            }
+        height: 1rem;
+
+        text-transform: uppercase;
+        cursor: pointer;
+        transition:
+            background-color 0.2s ease,
+            border-color 0.2s ease,
+            color 0.2s ease,
+            transform 0.2s ease;
+
+        &:hover {
+            background-color: lighten($background-colour, 15%);
+            border-color: $primary-colour;
+            color: $primary-colour;
+            transform: translateY(-1px);
         }
 
-        &--year {
-            background-color: rgb(70, 64, 244);
-            color: $primary-colour;
-        }
-        &--director {
-            background-color: rgb(70, 64, 244);
-            color: $primary-colour;
-        }
-        &--synopsis {
-            background-color: rgb(70, 64, 244);
-            color: $primary-colour;
-        }
-        &--names {
-            background-color: rgb(70, 64, 244);
-            color: $primary-colour;
-        }
-        &--easy {
-            background-color: rgb(108, 0, 0);
-            color: $primary-colour;
+        &:disabled {
+            border-color: rgba($primary-colour, 0.15);
+            background-color: lighten($background-colour, 5%);
+            color: rgba($primary-colour, 0.35);
+            cursor: not-allowed;
+            transform: none;
         }
     }
 }
