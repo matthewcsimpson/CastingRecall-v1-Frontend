@@ -21,10 +21,15 @@ const App = () => {
    * function to get a list of all puzzles
    */
   const getPuzzleList = async () => {
-    await axios
-      .get(`${REACT_APP_API_REMOTE_URL}/puzzle/list`)
-      .then((res) => setPuzzleList(res.data || []))
-      .catch((err) => console.error(err));
+    try {
+      const res = await axios.get(`${REACT_APP_API_REMOTE_URL}/puzzle/list`);
+      const puzzles = Array.isArray(res.data)
+        ? res.data
+        : [res.data].filter(Boolean);
+      setPuzzleList(puzzles);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   /**
