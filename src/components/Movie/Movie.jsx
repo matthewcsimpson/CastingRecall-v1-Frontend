@@ -11,8 +11,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   shortenMultipleCharNames,
   removeVoiceFromString,
+  loadLocalJson,
+  saveLocalJson,
 } from "../../utilities";
-import { loadLocalJson, saveLocalJson } from "../../utilities/storage";
 
 const Movie = ({
   puzzleId,

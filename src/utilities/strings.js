@@ -6,6 +6,9 @@ const CHARACTER_MASK = /([A-Za-z0-9])/gi;
  * @returns {string} Masked string.
  */
 export const obscureString = (value) => {
+  if (!value) {
+    return "";
+  }
   return value.replace(CHARACTER_MASK, "x");
 };
 

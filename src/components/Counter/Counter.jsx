@@ -34,6 +34,7 @@ const Counter = ({ guesses }) => {
                   </li>
                 );
               }
+              return null;
             })}
           </ul>
         </div>

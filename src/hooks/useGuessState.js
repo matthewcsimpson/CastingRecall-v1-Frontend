@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { loadLocalJson, saveLocalJson } from "../utilities/storage";
+import { loadLocalJson, saveLocalJson } from "../utilities";
 
 export const MAX_GUESSES = 10;
 

@@ -24,13 +24,6 @@ export const loadLocalJson = (
   }
 
   try {
-    /**
-     * Serialize a value into localStorage while capturing errors.
-     * @param {string} key Local storage key to assign.
-     * @param {unknown} value Serializable value to persist.
-     * @param {{silent?: boolean, onError?: (error: unknown) => void}} [options] Optional error handling controls.
-     * @returns {boolean} True when the value was saved.
-     */
     const raw = window.localStorage.getItem(key);
     return raw ? JSON.parse(raw) : fallback;
   } catch (err) {
@@ -44,6 +37,13 @@ export const loadLocalJson = (
   }
 };
 
+/**
+ * Serialize a value into localStorage while capturing errors.
+ * @param {string} key Local storage key to assign.
+ * @param {unknown} value Serializable value to persist.
+ * @param {{silent?: boolean, onError?: (error: unknown) => void}} [options] Optional error handling controls.
+ * @returns {boolean} True when the value was saved.
+ */
 export const saveLocalJson = (key, value, { silent = false, onError } = {}) => {
   if (!key || !isStorageAvailable()) {
     return false;
