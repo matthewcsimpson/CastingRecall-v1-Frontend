@@ -83,9 +83,15 @@ const Movie = ({
    * @param {setStatefunction} setFunc State setter for reveal flag
    * @param {boolean} actualHint Flag to indicate if this is a spendable hint
    * @param {boolean} currentState Current reveal value for the hint
-   * @param {string} hintKey Identifier used for hint bookkeeping
+   * @param {string} [hintKey] Identifier used for hint bookkeeping
    */
-  const handleHintClick = (e, setFunc, actualHint, currentState, hintKey) => {
+  const handleHintClick = (
+    e,
+    setFunc,
+    actualHint,
+    currentState,
+    hintKey = null
+  ) => {
     e.preventDefault();
 
     if (actualHint) {

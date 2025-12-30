@@ -1,7 +1,7 @@
 // Styles
 import "./GenreTags.scss";
 
-// Utilties
+// Utilities
 import { formatGenre } from "../../utilities";
 
 /**
