@@ -21,7 +21,8 @@ const GuessForm = ({
   handleSubmitGuess,
 }) => {
   // Data
-  const REACT_APP_TMDB_KEY = process.env.REACT_APP_TMDB_KEY;
+
+  const REACT_APP_TMDB_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
   const REACT_APP_TMDB_SEARCH_URL = process.env.REACT_APP_TMDB_SEARCH_URL;
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -43,14 +44,26 @@ const GuessForm = ({
       return;
     }
 
+    if (!REACT_APP_TMDB_TOKEN) {
+      console.error("TMDB bearer token is not configured.");
+      setSearchResults([]);
+      return;
+    }
+
     const controller = new AbortController();
     const debounce = setTimeout(async () => {
       try {
         const response = await axios.get(
-          `${REACT_APP_TMDB_SEARCH_URL}&api_key=${REACT_APP_TMDB_KEY}&page=1&language=en-US&region=US&query=${encodeURIComponent(
+          `${REACT_APP_TMDB_SEARCH_URL}&page=1&language=en-US&region=US&query=${encodeURIComponent(
             trimmedQuery
           )}`,
-          { signal: controller.signal }
+          {
+            signal: controller.signal,
+            headers: {
+              Authorization: `Bearer ${REACT_APP_TMDB_TOKEN}`,
+              Accept: "application/json",
+            },
+          }
         );
         setSearchResults(response.data.results || []);
       } catch (err) {
@@ -65,7 +78,7 @@ const GuessForm = ({
       controller.abort();
       clearTimeout(debounce);
     };
-  }, [REACT_APP_TMDB_KEY, REACT_APP_TMDB_SEARCH_URL, trimmedQuery]);
+  }, [REACT_APP_TMDB_TOKEN, REACT_APP_TMDB_SEARCH_URL, trimmedQuery]);
 
   useEffect(() => {
     setSearchResults([]);
