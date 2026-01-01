@@ -2,7 +2,7 @@
 import "./GuessForm.scss";
 
 // Libraries
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import axios from "axios";
 
 // Utilities
@@ -10,6 +10,9 @@ import { formatDate, YEAR_ONLY_DATE_OPTIONS } from "../../utilities";
 
 // Components
 import { LoadingScreen } from "..";
+
+const TMDB_DEBOUNCE_DELAY_MS = 300;
+const TMDB_SUGGESTION_LIMIT = 10;
 
 const GuessForm = ({
   puzzleId,
@@ -21,7 +24,6 @@ const GuessForm = ({
   handleSubmitGuess,
 }) => {
   // Data
-
   const REACT_APP_TMDB_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
   const REACT_APP_TMDB_SEARCH_URL = process.env.REACT_APP_TMDB_SEARCH_URL;
 
@@ -29,17 +31,88 @@ const GuessForm = ({
   const [searchResults, setSearchResults] = useState([]);
 
   const trimmedQuery = useMemo(() => searchQuery.trim(), [searchQuery]);
+  const gameComplete = useMemo(() => youWon || youLost, [youWon, youLost]);
+  const inputClassName = useMemo(
+    () =>
+      gameComplete
+        ? "hero__guessinput hero__guessinput--complete"
+        : "hero__guessinput",
+    [gameComplete]
+  );
+  const placeholderText = useMemo(() => {
+    if (gameComplete) {
+      return "You finished this game!";
+    }
+    const guessesLeft = Math.max(maxGuesses - guessNum, 0);
+    return `Enter a guess.  You have ${guessesLeft} guesses left...`;
+  }, [gameComplete, guessNum, maxGuesses]);
+
+  const searchCache = useRef();
+  if (!searchCache.current) {
+    searchCache.current = new Map();
+  }
 
   /**
    * Function to handle fom field input one char at a time.
-   * @param {*} event
+   * @param {*} evt
    */
-  const handleFieldChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
+  const handleFieldChange = useCallback((evt) => {
+    setSearchQuery(evt.target.value);
+  }, []);
+
+  const handleSuggestionSelect = useCallback(
+    (evt) => {
+      evt.preventDefault();
+      const movieId = Number(evt.currentTarget.dataset.movieId);
+      if (!movieId) {
+        return;
+      }
+
+      const selectedMovie = searchResults.find((movie) => movie.id === movieId);
+      if (!selectedMovie) {
+        return;
+      }
+
+      handleSubmitGuess(selectedMovie);
+      setSearchResults([]);
+      setSearchQuery("");
+    },
+    [handleSubmitGuess, searchResults]
+  );
+
+  const fetchSuggestions = useCallback(
+    async (query, controller) => {
+      try {
+        const response = await axios.get(
+          `${REACT_APP_TMDB_SEARCH_URL}&page=1&language=en-US&region=US&query=${encodeURIComponent(
+            query
+          )}`,
+          {
+            signal: controller?.signal,
+            headers: {
+              Authorization: `Bearer ${REACT_APP_TMDB_TOKEN}`,
+              Accept: "application/json",
+            },
+          }
+        );
+        const limitedResults = (response.data.results || []).slice(
+          0,
+          TMDB_SUGGESTION_LIMIT
+        );
+        searchCache.current.set(query, limitedResults);
+        setSearchResults(limitedResults);
+      } catch (err) {
+        if (axios.isCancel?.(err) || err.name === "CanceledError") {
+          return;
+        }
+        console.error(err);
+      }
+    },
+    [REACT_APP_TMDB_SEARCH_URL, REACT_APP_TMDB_TOKEN]
+  );
 
   useEffect(() => {
-    if (!trimmedQuery) {
+    if (!trimmedQuery || trimmedQuery.length < 2) {
       setSearchResults([]);
       return;
     }
@@ -50,39 +123,26 @@ const GuessForm = ({
       return;
     }
 
+    if (searchCache.current.has(trimmedQuery)) {
+      setSearchResults(searchCache.current.get(trimmedQuery));
+      return;
+    }
+
     const controller = new AbortController();
-    const debounce = setTimeout(async () => {
-      try {
-        const response = await axios.get(
-          `${REACT_APP_TMDB_SEARCH_URL}&page=1&language=en-US&region=US&query=${encodeURIComponent(
-            trimmedQuery
-          )}`,
-          {
-            signal: controller.signal,
-            headers: {
-              Authorization: `Bearer ${REACT_APP_TMDB_TOKEN}`,
-              Accept: "application/json",
-            },
-          }
-        );
-        setSearchResults(response.data.results || []);
-      } catch (err) {
-        if (axios.isCancel?.(err) || err.name === "CanceledError") {
-          return;
-        }
-        console.error(err);
-      }
-    }, 300);
+    const debounce = setTimeout(() => {
+      fetchSuggestions(trimmedQuery, controller);
+    }, TMDB_DEBOUNCE_DELAY_MS);
 
     return () => {
       controller.abort();
       clearTimeout(debounce);
     };
-  }, [REACT_APP_TMDB_TOKEN, REACT_APP_TMDB_SEARCH_URL, trimmedQuery]);
+  }, [REACT_APP_TMDB_TOKEN, trimmedQuery, fetchSuggestions]);
 
   useEffect(() => {
     setSearchResults([]);
     setSearchQuery("");
+    searchCache.current.clear();
   }, [puzzleId]);
 
   return (
@@ -92,24 +152,12 @@ const GuessForm = ({
           <form className="hero__guessform" autoComplete="off">
             <input
               name="search_term"
-              className={
-                youWon || youLost
-                  ? `hero__guessinput hero__guessinput--complete`
-                  : `hero__guessinput`
-              }
+              className={inputClassName}
               type="text"
               value={searchQuery}
-              placeholder={
-                youWon || youLost
-                  ? `You finished this game!`
-                  : `Enter a guess.  You have ${
-                      maxGuesses - guessNum
-                    } guesses left...`
-              }
-              onChange={(event) => {
-                handleFieldChange(event);
-              }}
-              disabled={youWon || youLost}
+              placeholder={placeholderText}
+              onChange={handleFieldChange}
+              disabled={gameComplete}
             />
             <div className="hero__suggestionpositioning">
               <ul className="hero__searchsuggestions">
@@ -120,12 +168,9 @@ const GuessForm = ({
                         <button
                           className="hero__suggestion"
                           id={movie.id}
-                          onClick={(event) => {
-                            event.preventDefault();
-                            handleSubmitGuess(movie);
-                            setSearchResults([]);
-                            setSearchQuery("");
-                          }}
+                          type="button"
+                          data-movie-id={movie.id}
+                          onClick={handleSuggestionSelect}
                         >
                           {movie.title} (
                           {formatDate(

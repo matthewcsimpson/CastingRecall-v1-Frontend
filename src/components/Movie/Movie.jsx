@@ -79,20 +79,20 @@ const Movie = ({
 
   /**
    * Handle revealing the hints
-   * @param {event} e React synthetic event
+   * @param {event} evt React synthetic event
    * @param {setStatefunction} setFunc State setter for reveal flag
    * @param {boolean} actualHint Flag to indicate if this is a spendable hint
    * @param {boolean} currentState Current reveal value for the hint
    * @param {string} [hintKey] Identifier used for hint bookkeeping
    */
   const handleHintClick = (
-    e,
+    evt,
     setFunc,
     actualHint,
     currentState,
     hintKey = null
   ) => {
-    e.preventDefault();
+    evt.preventDefault();
 
     if (actualHint) {
       if (currentState) {

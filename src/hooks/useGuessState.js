@@ -7,7 +7,7 @@ export const MAX_GUESSES = 10;
  * Reads the persisted guess state for a specific puzzle from localStorage.
  * @param {string} puzzleId Identifier for the puzzle whose state should be loaded.
  * @param {{silent?: boolean}} [options] Optional flags to control error handling.
- * @returns {{id: string, guesses: Array, youWon: boolean, youLost: boolean}|{__error: true}|null} Stored state payload, error marker, or null when absent.
+ * @returns {{id: string, guesses: Array, youWon: boolean, youLost: boolean}|{__err: true}|null} Stored state payload, error marker, or null when absent.
  */
 export const getStoredGuessState = (puzzleId, { silent = false } = {}) => {
   if (!puzzleId) {
@@ -24,7 +24,7 @@ export const getStoredGuessState = (puzzleId, { silent = false } = {}) => {
   });
 
   if (parseFailed) {
-    return { __error: true };
+    return { __err: true };
   }
 
   if (!stored || String(stored.id) !== String(puzzleId)) {
@@ -141,7 +141,7 @@ const useGuessState = (puzzleData) => {
   useEffect(() => {
     const stored = getStoredGuessState(puzzleData?.puzzleId);
 
-    if (stored && !stored.__error) {
+    if (stored && !stored.__err) {
       setGuesses(stored.guesses || []);
       setYouWon(Boolean(stored.youWon));
       setYouLost(Boolean(stored.youLost));

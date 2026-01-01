@@ -20,8 +20,8 @@ const Hints = ({
     <div className="hints">
       <p
         className="hints__text hints__text--hints"
-        onClick={(e) => {
-          handleHintClick(e, setRevealHints, false, revealHints);
+        onClick={(evt) => {
+          handleHintClick(evt, setRevealHints, false, revealHints);
         }}
       >
         {revealHints
@@ -32,8 +32,8 @@ const Hints = ({
         <div className="hints__buttons">
           <button
             className="hints__hintsbutton"
-            onClick={(e) =>
-              handleHintClick(e, setRevealYear, true, revealYear, "year")
+            onClick={(evt) =>
+              handleHintClick(evt, setRevealYear, true, revealYear, "year")
             }
             disabled={revealYear || movieGuessed || youWon || youLost}
           >
@@ -41,9 +41,9 @@ const Hints = ({
           </button>
           <button
             className="hints__hintsbutton"
-            onClick={(e) =>
+            onClick={(evt) =>
               handleHintClick(
-                e,
+                evt,
                 setRevealDirector,
                 true,
                 revealDirector,
@@ -57,9 +57,9 @@ const Hints = ({
 
           <button
             className="hints__hintsbutton"
-            onClick={(e) =>
+            onClick={(evt) =>
               handleHintClick(
-                e,
+                evt,
                 setRevealSynopsis,
                 true,
                 revealSynopsis,
@@ -72,9 +72,9 @@ const Hints = ({
           </button>
           <button
             className="hints__hintsbutton"
-            onClick={(e) =>
+            onClick={(evt) =>
               handleHintClick(
-                e,
+                evt,
                 setRevealCharNames,
                 true,
                 revealCharNames,

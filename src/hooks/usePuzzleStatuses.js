@@ -20,7 +20,7 @@ const usePuzzleStatuses = (puzzleList) => {
         return acc;
       }
 
-      if (stored.__error) {
+      if (stored.__err) {
         acc[puzzleId] = "Progress unavailable.";
         return acc;
       }
