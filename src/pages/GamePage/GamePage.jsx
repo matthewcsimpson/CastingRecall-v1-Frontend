@@ -17,13 +17,16 @@ import { useGenres, usePuzzleData, useGuessState } from "../../hooks";
 
 const GamePage = ({ puzzleList }) => {
   // Data
-  const REACT_APP_TMDB_KEY = process.env.REACT_APP_TMDB_KEY;
+  const REACT_APP_TMDB_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
   const REACT_APP_TMDB_GENRE_DETAILS = process.env.REACT_APP_TMDB_GENRE_DETAILS;
   const REACT_APP_API_REMOTE_URL = process.env.REACT_APP_API_REMOTE_URL;
 
   let { puzzleId } = useParams();
 
-  const genreData = useGenres(REACT_APP_TMDB_GENRE_DETAILS, REACT_APP_TMDB_KEY);
+  const genreData = useGenres(
+    REACT_APP_TMDB_GENRE_DETAILS,
+    REACT_APP_TMDB_TOKEN
+  );
   const puzzleData = usePuzzleData(REACT_APP_API_REMOTE_URL, puzzleId);
   const {
     guesses,
