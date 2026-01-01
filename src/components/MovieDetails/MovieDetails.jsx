@@ -24,7 +24,6 @@ const MovieDetails = ({
   revealAll,
   revealTitle,
   revealDirector,
-  revealYear,
   revealSynopsis,
 }) => {
   const posterSrc = useMemo(() => {
@@ -48,14 +47,6 @@ const MovieDetails = ({
 
     return formatDate(movie.release_date, YEAR_ONLY_DATE_OPTIONS);
   }, [movie?.release_date]);
-
-  const obscuredReleaseYear = useMemo(() => {
-    if (!formattedReleaseYear) {
-      return "";
-    }
-
-    return obscureString(formattedReleaseYear);
-  }, [formattedReleaseYear]);
 
   const shortenedSynopsis = useMemo(() => {
     if (!movie?.overview) {
@@ -86,7 +77,6 @@ const MovieDetails = ({
 
   const revealTitleVisible = revealAll || revealTitle;
   const revealDirectorVisible = revealAll || revealDirector;
-  const revealYearVisible = revealAll || revealYear;
   const revealSynopsisVisible = revealAll || revealSynopsis;
 
   return (
@@ -120,7 +110,7 @@ const MovieDetails = ({
           <div className="movie__detailsbox--year">
             <p className="movie__text movie__text--title">Year: </p>
             <p className="movie__text movie__text--item">
-              {revealYearVisible ? formattedReleaseYear : obscuredReleaseYear}
+              {formattedReleaseYear}
             </p>
           </div>
           <div className="movie__detailsbox--synopsis">

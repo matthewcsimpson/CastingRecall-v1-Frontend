@@ -11,7 +11,8 @@ const YouLost = ({ guesses, youLost }) => {
           <div className="youlost__wrapper">
             <h2 className="youlost__heading">You didn't get this one!</h2>
             <p className="youlost__text">
-              You got {count.length} correct out of {guesses.length}
+              You got {count.length} film correct out of 6, using{" "}
+              {guesses.length} guesses.
             </p>
 
             <h2 className="youlost__subheading">Better luck next time!</h2>

@@ -2,15 +2,10 @@ import "./Hints.scss";
 
 const Hints = ({
   handleHintClick,
-  setRevealHints,
+  revealKeys,
   revealHints,
-  setRevealYear,
-  revealYear,
-  setRevealDirector,
   revealDirector,
-  setRevealSynopsis,
   revealSynopsis,
-  setRevealCharNames,
   revealCharNames,
   movieGuessed,
   youWon,
@@ -21,7 +16,7 @@ const Hints = ({
       <p
         className="hints__text hints__text--hints"
         onClick={(evt) => {
-          handleHintClick(evt, setRevealHints, false, revealHints);
+          handleHintClick(evt, revealKeys.HINTS, false, revealHints);
         }}
       >
         {revealHints
@@ -33,18 +28,9 @@ const Hints = ({
           <button
             className="hints__hintsbutton"
             onClick={(evt) =>
-              handleHintClick(evt, setRevealYear, true, revealYear, "year")
-            }
-            disabled={revealYear || movieGuessed || youWon || youLost}
-          >
-            Year
-          </button>
-          <button
-            className="hints__hintsbutton"
-            onClick={(evt) =>
               handleHintClick(
                 evt,
-                setRevealDirector,
+                revealKeys.DIRECTOR,
                 true,
                 revealDirector,
                 "director"
@@ -60,7 +46,7 @@ const Hints = ({
             onClick={(evt) =>
               handleHintClick(
                 evt,
-                setRevealSynopsis,
+                revealKeys.SYNOPSIS,
                 true,
                 revealSynopsis,
                 "synopsis"
@@ -75,7 +61,7 @@ const Hints = ({
             onClick={(evt) =>
               handleHintClick(
                 evt,
-                setRevealCharNames,
+                revealKeys.CHAR_NAMES,
                 true,
                 revealCharNames,
                 "names"
