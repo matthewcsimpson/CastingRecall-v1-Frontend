@@ -6,10 +6,10 @@ import axios from "axios";
  * Automatically refreshes whenever the target puzzleId changes.
  * @param {string} apiUrl Base API URL for puzzle requests.
  * @param {string|undefined} puzzleId Specific puzzle identifier or undefined for the latest puzzle.
- * @returns {object|null} Puzzle data returned by the API or null while loading.
+ * @returns {{data: object|null, isLoading: boolean}} Puzzle payload and loading flag.
  */
 const usePuzzleData = (apiUrl, puzzleId) => {
-  const [puzzleData, setPuzzleData] = useState(null);
+  const [state, setState] = useState({ data: null, isLoading: true });
 
   useEffect(() => {
     if (!apiUrl) {
@@ -21,16 +21,17 @@ const usePuzzleData = (apiUrl, puzzleId) => {
 
     const fetchPuzzle = async () => {
       try {
-        setPuzzleData(null);
+        setState((prev) => ({ ...prev, isLoading: true }));
         const response = await axios.get(`${apiUrl}/puzzle/${activePuzzleId}`, {
           signal: controller.signal,
         });
-        setPuzzleData(response.data);
+        setState({ data: response.data, isLoading: false });
       } catch (err) {
         if (axios.isCancel(err) || err.name === "CanceledError") {
           return;
         }
         console.error(err);
+        setState((prev) => ({ ...prev, isLoading: false }));
       }
     };
 
@@ -41,7 +42,7 @@ const usePuzzleData = (apiUrl, puzzleId) => {
     };
   }, [apiUrl, puzzleId]);
 
-  return puzzleData;
+  return state;
 };
 
 export default usePuzzleData;

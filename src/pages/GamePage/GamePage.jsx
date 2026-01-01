@@ -27,7 +27,10 @@ const GamePage = ({ puzzleList }) => {
     REACT_APP_TMDB_GENRE_DETAILS,
     REACT_APP_TMDB_TOKEN
   );
-  const puzzleData = usePuzzleData(REACT_APP_API_REMOTE_URL, puzzleId);
+  const { data: puzzleData, isLoading: isPuzzleLoading } = usePuzzleData(
+    REACT_APP_API_REMOTE_URL,
+    puzzleId
+  );
   const {
     guesses,
     youWon,
@@ -77,9 +80,9 @@ const GamePage = ({ puzzleList }) => {
               onHintSpend={handleHintUse}
             />
           ))
-        ) : (
+        ) : isPuzzleLoading ? (
           <LoadingScreen />
-        )}
+        ) : null}
       </div>
     </>
   );

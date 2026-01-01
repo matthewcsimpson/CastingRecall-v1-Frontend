@@ -39,10 +39,15 @@ export const getStoredGuessState = (puzzleId, { silent = false } = {}) => {
  * @param {{puzzle: Array, puzzleId: string}|null} puzzleData The active puzzle payload being played.
  * @returns {object} Aggregated state, counters, and handlers for guesses and hints.
  */
+const createInitialGuessState = () => ({
+  guesses: [],
+  youWon: false,
+  youLost: false,
+});
+
 const useGuessState = (puzzleData) => {
-  const [guesses, setGuesses] = useState([]);
-  const [youWon, setYouWon] = useState(false);
-  const [youLost, setYouLost] = useState(false);
+  const [state, setState] = useState(createInitialGuessState);
+  const { guesses, youWon, youLost } = state;
   const maxGuesses = MAX_GUESSES;
 
   const { correctCount, incorrectCount } = useMemo(() => {
@@ -70,16 +75,19 @@ const useGuessState = (puzzleData) => {
         return;
       }
 
-      setGuesses((prevGuesses) => {
+      setState((prev) => {
         const match = puzzleData.puzzle.find(
           (puzzleMovie) => puzzleMovie.id === movie.id
         );
 
-        if (match) {
-          return [...prevGuesses, { ...match, correct: true }];
-        }
+        const nextGuess = match
+          ? { ...match, correct: true }
+          : { ...movie, correct: false };
 
-        return [...prevGuesses, { ...movie, correct: false }];
+        return {
+          ...prev,
+          guesses: [...prev.guesses, nextGuess],
+        };
       });
     },
     [puzzleData]
@@ -99,10 +107,10 @@ const useGuessState = (puzzleData) => {
 
       let allowed = true;
 
-      setGuesses((prevGuesses) => {
-        if (prevGuesses.length >= maxGuesses) {
+      setState((prev) => {
+        if (prev.guesses.length >= maxGuesses) {
           allowed = false;
-          return prevGuesses;
+          return prev;
         }
 
         const hintGuess = {
@@ -113,7 +121,10 @@ const useGuessState = (puzzleData) => {
           correct: null,
         };
 
-        return [...prevGuesses, hintGuess];
+        return {
+          ...prev,
+          guesses: [...prev.guesses, hintGuess],
+        };
       });
 
       return allowed;
@@ -123,18 +134,32 @@ const useGuessState = (puzzleData) => {
 
   useEffect(() => {
     if (correctCount === 6 && !youWon) {
-      setYouWon(true);
+      setState((prev) => {
+        if (prev.youWon) {
+          return prev;
+        }
+        return { ...prev, youWon: true };
+      });
       return;
     }
 
     if (!youWon && totalGuesses >= maxGuesses && !youLost) {
-      setYouLost(true);
+      setState((prev) => {
+        if (prev.youLost) {
+          return prev;
+        }
+        return { ...prev, youLost: true };
+      });
       return;
     }
 
     if (totalGuesses === 0 && (youWon || youLost)) {
-      setYouWon(false);
-      setYouLost(false);
+      setState((prev) => {
+        if (!prev.youWon && !prev.youLost) {
+          return prev;
+        }
+        return { ...prev, youWon: false, youLost: false };
+      });
     }
   }, [correctCount, maxGuesses, totalGuesses, youLost, youWon]);
 
@@ -142,15 +167,15 @@ const useGuessState = (puzzleData) => {
     const stored = getStoredGuessState(puzzleData?.puzzleId);
 
     if (stored && !stored.__err) {
-      setGuesses(stored.guesses || []);
-      setYouWon(Boolean(stored.youWon));
-      setYouLost(Boolean(stored.youLost));
+      setState({
+        guesses: Array.isArray(stored.guesses) ? stored.guesses : [],
+        youWon: Boolean(stored.youWon),
+        youLost: Boolean(stored.youLost),
+      });
       return;
     }
 
-    setGuesses([]);
-    setYouWon(false);
-    setYouLost(false);
+    setState(createInitialGuessState());
   }, [puzzleData]);
 
   useEffect(() => {
