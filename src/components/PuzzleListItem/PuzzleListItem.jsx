@@ -8,7 +8,14 @@ import { firstNameOnly } from "../../utilities";
 import { NavLink } from "react-router-dom";
 
 const PuzzleListItem = ({ puzznum, puzzleId, keyPeople, status }) => {
-  const progressText = status || "Not yet attempted!";
+  const STATUS_COPY = {
+    solved: "Solved!",
+    failed: "Failed — try again!",
+    not_attempted: "Not yet attempted!",
+  };
+
+  const safeStatus = status ?? "not_attempted";
+  const progressText = STATUS_COPY[safeStatus] || STATUS_COPY.not_attempted;
 
   return (
     <>
@@ -33,7 +40,9 @@ const PuzzleListItem = ({ puzznum, puzzleId, keyPeople, status }) => {
               <p className="puzzlelist__progress puzzlelist__text">
                 Progress:{" "}
               </p>
-              <p className="puzzlelist__status puzzlelist__text">
+              <p
+                className={`puzzlelist__status puzzlelist__text puzzlelist__status--${safeStatus}`}
+              >
                 {progressText}
               </p>
             </div>

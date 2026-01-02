@@ -48,6 +48,18 @@
     &__status {
         flex-basis: 38%;
         font-style: italic;
+
+        &--solved {
+            color: rgb(7, 235, 7);
+        }
+
+        &--failed {
+            color: rgb(253, 63, 63);
+        }
+
+        &--not_attempted {
+            color: $primary-colour;
+        }
     }
 
     &__list {

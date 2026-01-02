@@ -12,5 +12,4 @@ export { default as SiteFooter } from "./SiteFooter/SiteFooter.jsx";
 export { default as SiteHeader } from "./SiteHeader/SiteHeader.jsx";
 export { default as SiteNav } from "./SiteNav/SiteNav.jsx";
 export { default as SiteNavItem } from "./SiteNavItem/SiteNavItem.jsx";
-export { default as YouLost } from "./YouLost/YouLost.jsx";
-export { default as YouWon } from "./YouWon/YouWon.jsx";
+export { default as GameOutcome } from "./GameOutcome/GameOutcome.jsx";

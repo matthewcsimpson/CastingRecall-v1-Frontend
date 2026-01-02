@@ -1,12 +1,11 @@
 // Components
 import {
   Counter,
+  GameOutcome,
   GuessForm,
   LoadingScreen,
   Movie,
   SiteNav,
-  YouLost,
-  YouWon,
 } from "../../components/";
 
 // Libraries
@@ -41,6 +40,8 @@ const GamePage = ({ puzzleList }) => {
     handleHintUse,
   } = useGuessState(puzzleData);
 
+  const outcomeStatus = youWon ? "won" : youLost ? "lost" : null;
+
   return (
     <>
       {Array.isArray(puzzleList) && puzzleList.length > 0 ? (
@@ -48,8 +49,7 @@ const GamePage = ({ puzzleList }) => {
       ) : (
         <LoadingScreen />
       )}
-      <YouWon guesses={guesses} youWon={youWon} />
-      <YouLost guesses={guesses} youLost={youLost} />
+      <GameOutcome guesses={guesses} status={outcomeStatus} />
       {puzzleData ? (
         <>
           <GuessForm
