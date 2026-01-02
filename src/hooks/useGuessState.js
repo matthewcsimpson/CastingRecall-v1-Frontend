@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadLocalJson, saveLocalJson } from "../utilities";
-
-export const MAX_GUESSES = 10;
+import { MAX_GUESSES, MOVIES_PER_PUZZLE } from "../constants/config";
 
 /**
  * Reads the persisted guess state for a specific puzzle from localStorage.
  * @param {string} puzzleId Identifier for the puzzle whose state should be loaded.
  * @param {{silent?: boolean}} [options] Optional flags to control error handling.
- * @returns {{id: string, guesses: Array, youWon: boolean, youLost: boolean}|{__error: true}|null} Stored state payload, error marker, or null when absent.
+ * @returns {{id: string, guesses: Array, youWon: boolean, youLost: boolean}|{__err: true}|null} Stored state payload, error marker, or null when absent.
  */
 export const getStoredGuessState = (puzzleId, { silent = false } = {}) => {
   if (!puzzleId) {
@@ -24,7 +23,7 @@ export const getStoredGuessState = (puzzleId, { silent = false } = {}) => {
   });
 
   if (parseFailed) {
-    return { __error: true };
+    return { __err: true };
   }
 
   if (!stored || String(stored.id) !== String(puzzleId)) {
@@ -39,10 +38,15 @@ export const getStoredGuessState = (puzzleId, { silent = false } = {}) => {
  * @param {{puzzle: Array, puzzleId: string}|null} puzzleData The active puzzle payload being played.
  * @returns {object} Aggregated state, counters, and handlers for guesses and hints.
  */
+const createInitialGuessState = () => ({
+  guesses: [],
+  youWon: false,
+  youLost: false,
+});
+
 const useGuessState = (puzzleData) => {
-  const [guesses, setGuesses] = useState([]);
-  const [youWon, setYouWon] = useState(false);
-  const [youLost, setYouLost] = useState(false);
+  const [state, setState] = useState(createInitialGuessState);
+  const { guesses, youWon, youLost } = state;
   const maxGuesses = MAX_GUESSES;
 
   const { correctCount, incorrectCount } = useMemo(() => {
@@ -70,16 +74,19 @@ const useGuessState = (puzzleData) => {
         return;
       }
 
-      setGuesses((prevGuesses) => {
+      setState((prev) => {
         const match = puzzleData.puzzle.find(
           (puzzleMovie) => puzzleMovie.id === movie.id
         );
 
-        if (match) {
-          return [...prevGuesses, { ...match, correct: true }];
-        }
+        const nextGuess = match
+          ? { ...match, correct: true }
+          : { ...movie, correct: false };
 
-        return [...prevGuesses, { ...movie, correct: false }];
+        return {
+          ...prev,
+          guesses: [...prev.guesses, nextGuess],
+        };
       });
     },
     [puzzleData]
@@ -99,10 +106,10 @@ const useGuessState = (puzzleData) => {
 
       let allowed = true;
 
-      setGuesses((prevGuesses) => {
-        if (prevGuesses.length >= maxGuesses) {
+      setState((prev) => {
+        if (prev.guesses.length >= maxGuesses) {
           allowed = false;
-          return prevGuesses;
+          return prev;
         }
 
         const hintGuess = {
@@ -113,7 +120,10 @@ const useGuessState = (puzzleData) => {
           correct: null,
         };
 
-        return [...prevGuesses, hintGuess];
+        return {
+          ...prev,
+          guesses: [...prev.guesses, hintGuess],
+        };
       });
 
       return allowed;
@@ -122,35 +132,49 @@ const useGuessState = (puzzleData) => {
   );
 
   useEffect(() => {
-    if (correctCount === 6 && !youWon) {
-      setYouWon(true);
+    if (correctCount === MOVIES_PER_PUZZLE && !youWon) {
+      setState((prev) => {
+        if (prev.youWon) {
+          return prev;
+        }
+        return { ...prev, youWon: true };
+      });
       return;
     }
 
     if (!youWon && totalGuesses >= maxGuesses && !youLost) {
-      setYouLost(true);
+      setState((prev) => {
+        if (prev.youLost) {
+          return prev;
+        }
+        return { ...prev, youLost: true };
+      });
       return;
     }
 
     if (totalGuesses === 0 && (youWon || youLost)) {
-      setYouWon(false);
-      setYouLost(false);
+      setState((prev) => {
+        if (!prev.youWon && !prev.youLost) {
+          return prev;
+        }
+        return { ...prev, youWon: false, youLost: false };
+      });
     }
   }, [correctCount, maxGuesses, totalGuesses, youLost, youWon]);
 
   useEffect(() => {
     const stored = getStoredGuessState(puzzleData?.puzzleId);
 
-    if (stored && !stored.__error) {
-      setGuesses(stored.guesses || []);
-      setYouWon(Boolean(stored.youWon));
-      setYouLost(Boolean(stored.youLost));
+    if (stored && !stored.__err) {
+      setState({
+        guesses: Array.isArray(stored.guesses) ? stored.guesses : [],
+        youWon: Boolean(stored.youWon),
+        youLost: Boolean(stored.youLost),
+      });
       return;
     }
 
-    setGuesses([]);
-    setYouWon(false);
-    setYouLost(false);
+    setState(createInitialGuessState());
   }, [puzzleData]);
 
   useEffect(() => {

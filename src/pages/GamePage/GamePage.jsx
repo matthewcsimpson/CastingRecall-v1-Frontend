@@ -1,30 +1,43 @@
 // Components
 import {
   Counter,
+  GameOutcome,
   GuessForm,
   LoadingScreen,
   Movie,
   SiteNav,
-  YouLost,
-  YouWon,
 } from "../../components/";
 
 // Libraries
 import { useParams } from "react-router-dom";
 
 // Hooks
-import { useGenres, usePuzzleData, useGuessState } from "../../hooks";
+import {
+  useGenres,
+  usePuzzleData,
+  usePuzzleList,
+  useGuessState,
+} from "../../hooks";
 
-const GamePage = ({ puzzleList }) => {
+const GamePage = () => {
   // Data
-  const REACT_APP_TMDB_KEY = process.env.REACT_APP_TMDB_KEY;
+  const REACT_APP_TMDB_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
   const REACT_APP_TMDB_GENRE_DETAILS = process.env.REACT_APP_TMDB_GENRE_DETAILS;
   const REACT_APP_API_REMOTE_URL = process.env.REACT_APP_API_REMOTE_URL;
 
   let { puzzleId } = useParams();
 
-  const genreData = useGenres(REACT_APP_TMDB_GENRE_DETAILS, REACT_APP_TMDB_KEY);
-  const puzzleData = usePuzzleData(REACT_APP_API_REMOTE_URL, puzzleId);
+  const genreData = useGenres(
+    REACT_APP_TMDB_GENRE_DETAILS,
+    REACT_APP_TMDB_TOKEN
+  );
+  const { data: puzzleData, isLoading: isPuzzleLoading } = usePuzzleData(
+    REACT_APP_API_REMOTE_URL,
+    puzzleId
+  );
+  const { data: puzzleList, isLoading: isPuzzleListLoading } = usePuzzleList(
+    REACT_APP_API_REMOTE_URL
+  );
   const {
     guesses,
     youWon,
@@ -35,15 +48,21 @@ const GamePage = ({ puzzleList }) => {
     handleHintUse,
   } = useGuessState(puzzleData);
 
+  const outcomeStatus = youWon ? "won" : youLost ? "lost" : null;
+  const hasPuzzleList = Array.isArray(puzzleList) && puzzleList.length > 0;
+
   return (
     <>
-      {Array.isArray(puzzleList) && puzzleList.length > 0 ? (
+      {hasPuzzleList ? (
         <SiteNav puzzleId={puzzleId} puzzleList={puzzleList} />
-      ) : (
+      ) : isPuzzleListLoading ? (
         <LoadingScreen />
-      )}
-      <YouWon guesses={guesses} youWon={youWon} />
-      <YouLost guesses={guesses} youLost={youLost} />
+      ) : null}
+      <GameOutcome
+        guesses={guesses}
+        status={outcomeStatus}
+        featuredNames={puzzleData?.keyPeople}
+      />
       {puzzleData ? (
         <>
           <GuessForm
@@ -74,9 +93,9 @@ const GamePage = ({ puzzleList }) => {
               onHintSpend={handleHintUse}
             />
           ))
-        ) : (
+        ) : isPuzzleLoading ? (
           <LoadingScreen />
-        )}
+        ) : null}
       </div>
     </>
   );

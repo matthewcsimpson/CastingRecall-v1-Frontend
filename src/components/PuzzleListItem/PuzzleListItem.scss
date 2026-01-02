@@ -3,7 +3,7 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/fontface" as *;
 
-.puzzlelist {
+.puzzleListItem {
     width: 100%;
     font-size: 0.9rem;
     &__wrapper {
@@ -25,15 +25,17 @@
     &__puzzlewrapper {
         display: flex;
         flex-direction: column;
+        gap: 0.5rem;
+        padding: 0 2rem;
 
         @include tablet {
             flex-direction: row;
+            align-items: center;
+            gap: 1rem;
         }
     }
 
-    &__number,
     &__progress {
-        flex-basis: 10%;
         font-weight: bold;
     }
 
@@ -42,12 +44,26 @@
     }
 
     &__nameswrapper {
-        flex-basis: 38%;
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
     }
 
     &__status {
-        flex-basis: 38%;
         font-style: italic;
+    }
+
+    &__statuswrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+
+        @include tablet {
+            justify-content: flex-end;
+            min-width: 14rem;
+        }
     }
 
     &__list {

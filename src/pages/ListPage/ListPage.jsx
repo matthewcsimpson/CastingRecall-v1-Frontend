@@ -2,33 +2,48 @@
 import "./ListPage.scss";
 
 // Components
-import { LoadingScreen, PuzzleListItem, SiteNav } from "../../components";
+import {
+  LoadingScreen,
+  PuzzleListHeader,
+  PuzzleListItem,
+  SiteNav,
+} from "../../components";
 
 // Hooks
-import { usePuzzleStatuses } from "../../hooks";
+import { usePuzzleList, usePuzzleStatuses } from "../../hooks";
 
-const ListPage = ({ puzzleList }) => {
+const ListPage = () => {
+  const REACT_APP_API_REMOTE_URL = process.env.REACT_APP_API_REMOTE_URL;
+
+  const { data: puzzleList, isLoading: isPuzzleListLoading } = usePuzzleList(
+    REACT_APP_API_REMOTE_URL
+  );
+
   const hasPuzzles = Array.isArray(puzzleList) && puzzleList.length > 0;
   const statusByPuzzleId = usePuzzleStatuses(puzzleList);
+  const showLoading = isPuzzleListLoading && !hasPuzzles;
 
   return (
     <>
       {hasPuzzles ? (
         <SiteNav puzzleId={"list"} puzzleList={puzzleList} />
-      ) : (
+      ) : showLoading ? (
         <LoadingScreen />
-      )}
+      ) : null}
+      {hasPuzzles ? <PuzzleListHeader /> : null}
       <div className="listpage__listcontainer">
-        {hasPuzzles &&
-          puzzleList.map(({ puzzleId, keyPeople }, index) => (
+        {hasPuzzles ? (
+          puzzleList.map(({ puzzleId, keyPeople }) => (
             <PuzzleListItem
               key={puzzleId}
-              puzznum={index}
               puzzleId={puzzleId}
               keyPeople={keyPeople}
               status={statusByPuzzleId[puzzleId]}
             />
-          ))}
+          ))
+        ) : showLoading ? (
+          <LoadingScreen />
+        ) : null}
       </div>
     </>
   );

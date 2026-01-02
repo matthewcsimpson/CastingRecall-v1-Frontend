@@ -1,6 +1,9 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+
 .listpage {
     &__listcontainer {
         display: flex;
-        flex-direction: column-reverse;
+        flex-direction: column;
     }
 }

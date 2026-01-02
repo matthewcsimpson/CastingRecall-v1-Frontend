@@ -2,15 +2,10 @@ import "./Hints.scss";
 
 const Hints = ({
   handleHintClick,
-  setRevealHints,
+  revealKeys,
   revealHints,
-  setRevealYear,
-  revealYear,
-  setRevealDirector,
   revealDirector,
-  setRevealSynopsis,
   revealSynopsis,
-  setRevealCharNames,
   revealCharNames,
   movieGuessed,
   youWon,
@@ -20,8 +15,8 @@ const Hints = ({
     <div className="hints">
       <p
         className="hints__text hints__text--hints"
-        onClick={(e) => {
-          handleHintClick(e, setRevealHints, false, revealHints);
+        onClick={(evt) => {
+          handleHintClick(evt, revealKeys.HINTS, false, revealHints);
         }}
       >
         {revealHints
@@ -32,19 +27,10 @@ const Hints = ({
         <div className="hints__buttons">
           <button
             className="hints__hintsbutton"
-            onClick={(e) =>
-              handleHintClick(e, setRevealYear, true, revealYear, "year")
-            }
-            disabled={revealYear || movieGuessed || youWon || youLost}
-          >
-            Year
-          </button>
-          <button
-            className="hints__hintsbutton"
-            onClick={(e) =>
+            onClick={(evt) =>
               handleHintClick(
-                e,
-                setRevealDirector,
+                evt,
+                revealKeys.DIRECTOR,
                 true,
                 revealDirector,
                 "director"
@@ -57,10 +43,10 @@ const Hints = ({
 
           <button
             className="hints__hintsbutton"
-            onClick={(e) =>
+            onClick={(evt) =>
               handleHintClick(
-                e,
-                setRevealSynopsis,
+                evt,
+                revealKeys.SYNOPSIS,
                 true,
                 revealSynopsis,
                 "synopsis"
@@ -72,10 +58,10 @@ const Hints = ({
           </button>
           <button
             className="hints__hintsbutton"
-            onClick={(e) =>
+            onClick={(evt) =>
               handleHintClick(
-                e,
-                setRevealCharNames,
+                evt,
+                revealKeys.CHAR_NAMES,
                 true,
                 revealCharNames,
                 "names"

@@ -5,7 +5,14 @@ import "./Movie.scss";
 import { ActorHeadshot, Hints, MovieDetails } from "..";
 
 // Libraries
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 
 // Utility Functions
 import {
@@ -14,6 +21,40 @@ import {
   loadLocalJson,
   saveLocalJson,
 } from "../../utilities";
+
+const RevealKeys = Object.freeze({
+  TITLE: "title",
+  DIRECTOR: "director",
+  SYNOPSIS: "synopsis",
+  CHAR_NAMES: "charNames",
+  HINTS: "hints",
+});
+
+const RevealActionTypes = Object.freeze({
+  SET: "SET",
+  RESET: "RESET",
+});
+
+const ValidRevealKeys = new Set(Object.values(RevealKeys));
+
+const createInitialRevealState = () => ({
+  [RevealKeys.TITLE]: false,
+  [RevealKeys.DIRECTOR]: false,
+  [RevealKeys.SYNOPSIS]: false,
+  [RevealKeys.CHAR_NAMES]: false,
+  [RevealKeys.HINTS]: false,
+});
+
+const revealReducer = (state, action) => {
+  switch (action.type) {
+    case RevealActionTypes.SET:
+      return { ...state, ...action.payload };
+    case RevealActionTypes.RESET:
+      return { ...createInitialRevealState(), ...action.payload };
+    default:
+      return state;
+  }
+};
 
 const Movie = ({
   puzzleId,
@@ -25,12 +66,19 @@ const Movie = ({
   reallyWantHints,
   onHintSpend,
 }) => {
-  const [revealTitle, setRevealTitle] = useState(false);
-  const [revealDirector, setRevealDirector] = useState(false);
-  const [revealYear, setRevealYear] = useState(false);
-  const [revealSynopsis, setRevealSynopsis] = useState(false);
-  const [revealCharNames, setRevealCharNames] = useState(false);
-  const [revealHints, setRevealHints] = useState(false);
+  const [revealState, dispatchReveal] = useReducer(
+    revealReducer,
+    undefined,
+    createInitialRevealState
+  );
+
+  const {
+    [RevealKeys.TITLE]: revealTitle,
+    [RevealKeys.DIRECTOR]: revealDirector,
+    [RevealKeys.SYNOPSIS]: revealSynopsis,
+    [RevealKeys.CHAR_NAMES]: revealCharNames,
+    [RevealKeys.HINTS]: revealHints,
+  } = revealState;
 
   const hintsStorageKey = useMemo(() => {
     if (!puzzleId) {
@@ -79,43 +127,41 @@ const Movie = ({
 
   /**
    * Handle revealing the hints
-   * @param {event} e React synthetic event
-   * @param {setStatefunction} setFunc State setter for reveal flag
+   * @param {React.SyntheticEvent} evt React synthetic event
+   * @param {string} stateKey Reveal flag key to update; expected to match one of RevealKeys
    * @param {boolean} actualHint Flag to indicate if this is a spendable hint
    * @param {boolean} currentState Current reveal value for the hint
-   * @param {string} [hintKey] Identifier used for hint bookkeeping
+   * @param {string|null} [hintKey] Identifier used for hint bookkeeping
    */
-  const handleHintClick = (
-    e,
-    setFunc,
-    actualHint,
-    currentState,
-    hintKey = null
-  ) => {
-    e.preventDefault();
+  const handleHintClick = useCallback(
+    (evt, stateKey, actualHint, currentState, hintKey = null) => {
+      evt.preventDefault();
 
-    if (actualHint) {
-      if (currentState) {
+      if (!ValidRevealKeys.has(stateKey)) {
         return;
       }
 
-      if (typeof onHintSpend === "function") {
-        const spent = onHintSpend(movie.id, hintKey);
-
-        if (!spent) {
+      if (actualHint) {
+        if (currentState) {
           return;
         }
-      }
-    }
 
-    setFunc((prev) => {
-      if (prev === true) {
-        return prev;
+        if (typeof onHintSpend === "function") {
+          const spent = onHintSpend(movie.id, hintKey);
+
+          if (!spent) {
+            return;
+          }
+        }
       }
 
-      return true;
-    });
-  };
+      dispatchReveal({
+        type: RevealActionTypes.SET,
+        payload: { [stateKey]: true },
+      });
+    },
+    [movie.id, onHintSpend]
+  );
 
   // ------------------------------------------------------------------------useEffects
 
@@ -124,11 +170,15 @@ const Movie = ({
    */
   useEffect(() => {
     if (revealAll) {
-      setRevealYear(true);
-      setRevealDirector(true);
-      setRevealSynopsis(true);
-      setRevealCharNames(true);
-      setRevealTitle(true);
+      dispatchReveal({
+        type: RevealActionTypes.SET,
+        payload: {
+          [RevealKeys.DIRECTOR]: true,
+          [RevealKeys.SYNOPSIS]: true,
+          [RevealKeys.CHAR_NAMES]: true,
+          [RevealKeys.TITLE]: true,
+        },
+      });
     }
   }, [revealAll]);
 
@@ -142,23 +192,26 @@ const Movie = ({
     setHintsHydrated(false);
 
     const stored = loadLocalJson(hintsStorageKey);
-    const nextState = {
-      revealYear: Boolean(stored?.revealYear),
+    const nextStoredPayload = {
+      revealTitle: Boolean(stored?.revealTitle),
       revealDirector: Boolean(stored?.revealDirector),
       revealSynopsis: Boolean(stored?.revealSynopsis),
       revealCharNames: Boolean(stored?.revealCharNames),
-      revealTitle: Boolean(stored?.revealTitle),
       revealHints: Boolean(stored?.revealHints),
     };
 
-    setRevealYear(nextState.revealYear);
-    setRevealDirector(nextState.revealDirector);
-    setRevealSynopsis(nextState.revealSynopsis);
-    setRevealCharNames(nextState.revealCharNames);
-    setRevealTitle(nextState.revealTitle);
-    setRevealHints(nextState.revealHints);
+    dispatchReveal({
+      type: RevealActionTypes.RESET,
+      payload: {
+        [RevealKeys.TITLE]: nextStoredPayload.revealTitle,
+        [RevealKeys.DIRECTOR]: nextStoredPayload.revealDirector,
+        [RevealKeys.SYNOPSIS]: nextStoredPayload.revealSynopsis,
+        [RevealKeys.CHAR_NAMES]: nextStoredPayload.revealCharNames,
+        [RevealKeys.HINTS]: nextStoredPayload.revealHints,
+      },
+    });
 
-    hydratedHintsRef.current = nextState;
+    hydratedHintsRef.current = nextStoredPayload;
     setHintsHydrated(true);
   }, [hintsStorageKey]);
 
@@ -168,12 +221,11 @@ const Movie = ({
     }
 
     const payload = {
-      revealYear,
-      revealDirector,
-      revealSynopsis,
-      revealCharNames,
-      revealTitle,
-      revealHints,
+      revealTitle: revealTitle,
+      revealDirector: revealDirector,
+      revealSynopsis: revealSynopsis,
+      revealCharNames: revealCharNames,
+      revealHints: revealHints,
     };
 
     if (
@@ -191,7 +243,6 @@ const Movie = ({
   }, [
     hintsStorageKey,
     hintsHydrated,
-    revealYear,
     revealDirector,
     revealSynopsis,
     revealCharNames,
@@ -226,21 +277,15 @@ const Movie = ({
           revealAll={revealAll}
           revealTitle={revealTitle}
           revealDirector={revealDirector}
-          revealYear={revealYear}
           revealSynopsis={revealSynopsis}
         />
         {reallyWantHints && (
           <Hints
             handleHintClick={handleHintClick}
-            setRevealHints={setRevealHints}
+            revealKeys={RevealKeys}
             revealHints={revealHints}
-            setRevealYear={setRevealYear}
-            revealYear={revealYear}
-            setRevealDirector={setRevealDirector}
             revealDirector={revealDirector}
-            setRevealSynopsis={setRevealSynopsis}
             revealSynopsis={revealSynopsis}
-            setRevealCharNames={setRevealCharNames}
             revealCharNames={revealCharNames}
             movieGuessed={movieGuessed}
             youWon={youWon}

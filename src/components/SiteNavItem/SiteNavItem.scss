@@ -8,46 +8,30 @@
     color: $primary-colour;
     font-size: 0.75rem;
     font-weight: 600;
-    border-left: 1px solid $primary-colour;
-    border-right: 1px solid $primary-colour;
-    padding: 0 0.25rem 1rem;
+    padding: 0 0.5rem 1rem;
     margin: 0;
     text-align: center;
-
-    &:first-child {
-        border-left: none;
-    }
-
-    &:last-child {
-        border-right: none;
-    }
-
-    &--hidden {
-        display: none;
-
-        @include tablet {
-            display: contents;
-        }
-    }
-
-    &--hideifnull {
-        visibility: hidden;
-    }
 
     &--link {
         text-decoration: none;
         color: $primary-colour;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
 
         &:hover {
-            text-decoration: underline;
+            text-decoration: none;
         }
     }
 
     &--inactivelink {
         text-decoration: none;
-        color: rgb(100, 100, 100);
+        color: $disabled-colour;
         pointer-events: none;
         cursor: default;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
     &--button {
@@ -56,6 +40,9 @@
         padding: 0;
         font: inherit;
         cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
 
         &:disabled {
             cursor: default;
@@ -64,24 +51,24 @@
 
     @include tablet {
         font-size: 1rem;
-        border: none;
         padding: 0 1rem;
     }
 
     &__icon {
         display: inline-flex;
         align-items: center;
-
-        &--left {
-            margin-right: 0.25rem;
-        }
-
-        &--right {
-            margin-left: 0.25rem;
-        }
+        justify-content: center;
+        font-size: 1.25rem;
     }
 
     &__label {
         display: inline-block;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
     }
 }

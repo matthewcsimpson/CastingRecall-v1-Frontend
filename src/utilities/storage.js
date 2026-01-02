@@ -11,7 +11,7 @@ const isStorageAvailable = () => {
  * @template T
  * @param {string} key Local storage key to inspect.
  * @param {T} [fallback=null] Default value when entry is missing or invalid.
- * @param {{silent?: boolean, onError?: (error: unknown) => void}} [options] Optional error handling controls.
+ * @param {{silent?: boolean, onError?: (err: unknown) => void}} [options] Optional error handling controls.
  * @returns {T} Parsed JSON payload or fallback value.
  */
 export const loadLocalJson = (
@@ -41,7 +41,7 @@ export const loadLocalJson = (
  * Serialize a value into localStorage while capturing errors.
  * @param {string} key Local storage key to assign.
  * @param {unknown} value Serializable value to persist.
- * @param {{silent?: boolean, onError?: (error: unknown) => void}} [options] Optional error handling controls.
+ * @param {{silent?: boolean, onError?: (err: unknown) => void}} [options] Optional error handling controls.
  * @returns {boolean} True when the value was saved.
  */
 export const saveLocalJson = (key, value, { silent = false, onError } = {}) => {

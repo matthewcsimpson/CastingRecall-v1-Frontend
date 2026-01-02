@@ -1,0 +1,132 @@
+@use "../../styles/partials/global" as *;
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/fontface" as *;
+
+.game-outcome {
+    width: 100%;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0px;
+    z-index: 100;
+
+    &__wrapper {
+        width: 90%;
+        background-color: $background-colour;
+        margin: 0 auto;
+        padding: 0.5rem 0.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 10px solid var(--game-outcome-border, rgb(7, 235, 7));
+
+        @include tablet {
+            max-width: 70rem;
+        }
+    }
+
+    &__heading {
+        color: $primary-colour;
+        font-size: 1.5rem;
+        text-align: center;
+        margin: 0;
+
+        @include tablet {
+            font-size: 2rem;
+        }
+    }
+
+    &__subheading {
+        color: $primary-colour;
+        font-size: 1rem;
+        text-align: center;
+        margin: 0;
+
+        @include tablet {
+            font-size: 1.5rem;
+        }
+
+        @include desktop {
+            font-size: 2rem;
+        }
+    }
+
+    &__text {
+        color: $primary-colour;
+        font-size: 1rem;
+        text-align: center;
+        margin: 0;
+
+        @include tablet {
+            font-size: 1.5rem;
+        }
+
+        @include desktop {
+            font-size: 2rem;
+        }
+    }
+
+    &__share {
+        margin-top: 1rem;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        gap: 0.75rem;
+        align-items: center;
+        justify-content: center;
+
+        @include tablet {
+            max-width: 32rem;
+        }
+    }
+
+    &__share-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1.25rem;
+        border-radius: 999px;
+        border: 1px solid rgba($primary-colour, 0.4);
+        background-color: lighten($background-colour, 10%);
+        color: $primary-colour;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        cursor: pointer;
+        transition:
+            background-color 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.2s ease;
+
+        &:hover,
+        &:focus {
+            background-color: lighten($background-colour, 16%);
+            border-color: $primary-colour;
+            transform: translateY(-1px);
+        }
+
+        &:focus {
+            outline: 2px solid rgba($primary-colour, 0.6);
+            outline-offset: 2px;
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+
+    &__share-feedback {
+        min-height: 1rem;
+        color: rgba($primary-colour, 0.7);
+        font-size: 0.85rem;
+    }
+
+    &--won {
+        --game-outcome-border: rgb(7, 235, 7);
+    }
+
+    &--lost {
+        --game-outcome-border: rgb(253, 63, 63);
+    }
+}
