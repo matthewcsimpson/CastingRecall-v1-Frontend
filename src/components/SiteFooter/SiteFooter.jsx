@@ -9,7 +9,7 @@ const SiteFooter = () => {
           Designed &amp; Coded by{" "}
           <a
             className="footer__text footer__text--link"
-            href="https://github.com/matthewcsimpson/"
+            href="https://mattsimpson.name"
             target="_blank"
             rel="noreferrer"
           >

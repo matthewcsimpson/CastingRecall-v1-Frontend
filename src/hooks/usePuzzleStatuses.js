@@ -1,12 +1,19 @@
 import { useMemo } from "react";
-import { getStoredGuessState, MAX_GUESSES } from "./useGuessState";
+import { getStoredGuessState } from "./useGuessState";
 
 /**
- * Builds a mapping of puzzleIds to human readable status strings derived from saved guess state.
+ * Builds a mapping of puzzleIds to simplified status strings derived from saved guess state.
  * @param {Array<{puzzleId: string}>|null} puzzleList Collection of available puzzles.
- * @returns {Record<string, string>} Object keyed by puzzleId containing status text for the UI.
+ * @returns {Record<string, "solved" | "failed" | "not_attempted">} Object keyed by puzzleId containing status identifiers for the UI.
  */
 const usePuzzleStatuses = (puzzleList) => {
+  const STATUS = {
+    SOLVED: "solved",
+    FAILED: "failed",
+    IN_PROGRESS: "in_progress",
+    NOT_ATTEMPTED: "not_attempted",
+  };
+
   return useMemo(() => {
     if (!Array.isArray(puzzleList) || puzzleList.length === 0) {
       return {};
@@ -15,27 +22,19 @@ const usePuzzleStatuses = (puzzleList) => {
     return puzzleList.reduce((acc, { puzzleId }) => {
       const stored = getStoredGuessState(puzzleId);
 
-      if (!stored) {
-        acc[puzzleId] = "Not yet attempted!";
+      if (!stored || stored.__err) {
+        acc[puzzleId] = STATUS.NOT_ATTEMPTED;
         return acc;
       }
-
-      if (stored.__error) {
-        acc[puzzleId] = "Progress unavailable.";
-        return acc;
-      }
-
-      const guesses = Array.isArray(stored.guesses) ? stored.guesses : [];
-      const correct = guesses.filter((guess) => guess.correct === true).length;
-      const total = guesses.length;
-      const guessesLeft = Math.max(0, MAX_GUESSES - total);
 
       if (stored.youWon) {
-        acc[puzzleId] = `Solved in ${total} guesses!`;
+        acc[puzzleId] = STATUS.SOLVED;
       } else if (stored.youLost) {
-        acc[puzzleId] = `Failed, but you got ${correct} right!`;
+        acc[puzzleId] = STATUS.FAILED;
+      } else if (Array.isArray(stored.guesses) && stored.guesses.length > 0) {
+        acc[puzzleId] = STATUS.IN_PROGRESS;
       } else {
-        acc[puzzleId] = `In progress, with ${guessesLeft} guesses left...`;
+        acc[puzzleId] = STATUS.NOT_ATTEMPTED;
       }
 
       return acc;

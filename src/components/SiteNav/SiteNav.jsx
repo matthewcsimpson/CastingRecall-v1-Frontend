@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 // Components
 import SiteNavItem from "../SiteNavItem/SiteNavItem.jsx";
 import HowToPlayModal from "../HowToPlayModal/HowToPlayModal.jsx";
+import { ROUTES } from "../../constants/config";
 
 const SiteNav = ({ puzzleId, puzzleList }) => {
   const [isHowToOpen, setIsHowToOpen] = useState(false);
@@ -29,18 +30,17 @@ const SiteNav = ({ puzzleId, puzzleList }) => {
     : [];
 
   const effectivePuzzleId =
-    puzzleId ??
-    (puzzleIds.length > 0 ? puzzleIds[puzzleIds.length - 1] : undefined);
+    puzzleId ?? (puzzleIds.length > 0 ? puzzleIds[0] : undefined);
 
   const resolvedId = String(effectivePuzzleId ?? "");
   const index = puzzleIds.findIndex((id) => String(id) === resolvedId);
-  const activeIndex = index === -1 ? puzzleIds.length - 1 : index;
+  const activeIndex = index === -1 ? 0 : index;
   const isListView = resolvedId === "list";
-  const prevId = activeIndex > 0 ? puzzleIds[activeIndex - 1] : puzzleIds[0];
-  const nextId =
-    activeIndex >= 0 && activeIndex < puzzleIds.length - 1
+  const prevId =
+    activeIndex < puzzleIds.length - 1
       ? puzzleIds[activeIndex + 1]
       : puzzleIds[puzzleIds.length - 1];
+  const nextId = activeIndex > 0 ? puzzleIds[activeIndex - 1] : puzzleIds[0];
 
   const handleOpenHowTo = () => {
     setIsHowToOpen(true);
@@ -57,30 +57,35 @@ const SiteNav = ({ puzzleId, puzzleList }) => {
           <div className="nav__wrapper">
             <ul className="nav__list">
               <SiteNavItem
-                to={`/puzzle/${prevId}`}
-                label="Prev Puzzle"
+                to={`${ROUTES.puzzleId.replace(":puzzleId", prevId)}`}
+                label="Previous"
                 icon="⬅️"
-                iconPosition="left"
-                disabled={resolvedId === String(puzzleIds[0]) || isListView}
-              />
-              <SiteNavItem to="/puzzle/list" label="Puzzle List" />
-              <SiteNavItem label="How to Play" onClick={handleOpenHowTo} />
-              <SiteNavItem
-                to={`/`}
-                label="Latest Puzzle"
-                disabled={
-                  resolvedId === String(puzzleIds[puzzleIds.length - 1])
-                }
-              />
-              <SiteNavItem
-                to={`/puzzle/${nextId}`}
-                label="Next Puzzle"
-                icon="➡️"
-                iconPosition="right"
                 disabled={
                   resolvedId === String(puzzleIds[puzzleIds.length - 1]) ||
                   isListView
                 }
+              />
+              <SiteNavItem
+                icon="📋"
+                to={ROUTES.puzzleList}
+                label="Puzzle List"
+              />
+              <SiteNavItem
+                icon="❓"
+                label="How to Play"
+                onClick={handleOpenHowTo}
+              />
+              <SiteNavItem
+                to={ROUTES.home}
+                icon="🆕"
+                label="Latest"
+                disabled={resolvedId === String(puzzleIds[0])}
+              />
+              <SiteNavItem
+                to={`${ROUTES.puzzleId.replace(":puzzleId", nextId)}`}
+                label="Next"
+                icon="➡️"
+                disabled={resolvedId === String(puzzleIds[0]) || isListView}
               />
             </ul>
           </div>
