@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 // Hooks & constants
-import { MAX_GUESSES } from "../../hooks/useGuessState";
+import { MAX_GUESSES, MOVIES_PER_PUZZLE } from "../../constants/config";
 import { firstNameOnly } from "../../utilities";
 
 // Styles
@@ -32,7 +32,7 @@ const GameOutcome = ({ guesses, status, featuredNames }) => {
     lost: {
       heading: "You didn't get this one!",
       subheading: "Better luck next time!",
-      text: `You got ${correctCount} film correct out of 6, using ${guessSummary} and ${hintSummary}.`,
+      text: `You got ${correctCount} film correct out of ${MOVIES_PER_PUZZLE}, using ${guessSummary} and ${hintSummary}.`,
     },
   };
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { DEFAULT_PAGE_SIZE, API_ENDPOINTS } from "../constants/config";
 
 /**
  * Retrieves the full puzzle list from the Casting Recall API.
@@ -7,7 +8,10 @@ import axios from "axios";
  * @param {{page?: number, pageSize?: number}} [options] Pagination controls for the list request.
  * @returns {{data: Array<object>|null, pagination: object|null, isLoading: boolean}} Puzzle collection, pagination data, and loading flag.
  */
-const usePuzzleList = (apiUrl, { page = 1, pageSize = 20 } = {}) => {
+const usePuzzleList = (
+  apiUrl,
+  { page = 1, pageSize = DEFAULT_PAGE_SIZE } = {}
+) => {
   const [state, setState] = useState({
     data: null,
     pagination: null,
@@ -24,10 +28,13 @@ const usePuzzleList = (apiUrl, { page = 1, pageSize = 20 } = {}) => {
     const fetchPuzzleList = async () => {
       try {
         setState((prev) => ({ ...prev, isLoading: true }));
-        const response = await axios.get(`${apiUrl}/puzzle/list`, {
-          params: { page, pageSize },
-          signal: controller.signal,
-        });
+        const response = await axios.get(
+          `${apiUrl}${API_ENDPOINTS.puzzleList}`,
+          {
+            params: { page, pageSize },
+            signal: controller.signal,
+          }
+        );
 
         const { puzzles, pagination } = response?.data ?? {};
         const list = Array.isArray(puzzles)

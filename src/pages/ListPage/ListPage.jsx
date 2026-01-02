@@ -13,11 +13,12 @@ import {
 
 // Hooks
 import { usePuzzleList, usePuzzleStatuses } from "../../hooks";
+import { DEFAULT_PAGE_SIZE } from "../../constants/config";
 
 const ListPage = () => {
   const REACT_APP_API_REMOTE_URL = process.env.REACT_APP_API_REMOTE_URL;
   const [page, setPage] = useState(1);
-  const pageSize = 20;
+  const pageSize = DEFAULT_PAGE_SIZE;
 
   const {
     data: puzzleList,

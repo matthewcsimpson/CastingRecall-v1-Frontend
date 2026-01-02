@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_ENDPOINTS } from "constants/config";
 
 /**
  * Retrieves puzzle payloads from the Casting Recall API and exposes them to consumers.
@@ -22,9 +23,15 @@ const usePuzzleData = (apiUrl, puzzleId) => {
     const fetchPuzzle = async () => {
       try {
         setState((prev) => ({ ...prev, isLoading: true }));
-        const response = await axios.get(`${apiUrl}/puzzle/${activePuzzleId}`, {
-          signal: controller.signal,
-        });
+        const response = await axios.get(
+          `${apiUrl}${API_ENDPOINTS.puzzleId.replace(
+            ":puzzleId",
+            activePuzzleId
+          )}`,
+          {
+            signal: controller.signal,
+          }
+        );
         setState({ data: response.data, isLoading: false });
       } catch (err) {
         if (axios.isCancel(err) || err.name === "CanceledError") {

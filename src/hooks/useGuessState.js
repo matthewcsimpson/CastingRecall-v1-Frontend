@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadLocalJson, saveLocalJson } from "../utilities";
-
-export const MAX_GUESSES = 10;
+import { MAX_GUESSES, MOVIES_PER_PUZZLE } from "../constants/config";
 
 /**
  * Reads the persisted guess state for a specific puzzle from localStorage.
@@ -133,7 +132,7 @@ const useGuessState = (puzzleData) => {
   );
 
   useEffect(() => {
-    if (correctCount === 6 && !youWon) {
+    if (correctCount === MOVIES_PER_PUZZLE && !youWon) {
       setState((prev) => {
         if (prev.youWon) {
           return prev;

@@ -10,6 +10,7 @@ import ListPage from "./pages/ListPage/ListPage";
 
 // Libraries
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ROUTES } from "./constants/config";
 
 const App = () => {
   return (
@@ -17,10 +18,10 @@ const App = () => {
       <SiteHeader />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<GamePage />} />
-          <Route path="/puzzle/:puzzleId" element={<GamePage />} />
-          <Route path="/puzzle/list" element={<ListPage />} />
-          <Route path="*" element={<GamePage />} />
+          <Route path={ROUTES.home} element={<GamePage />} />
+          <Route path={ROUTES.puzzleId} element={<GamePage />} />
+          <Route path={ROUTES.puzzleList} element={<ListPage />} />
+          <Route path={ROUTES.fallback} element={<GamePage />} />
         </Routes>
       </BrowserRouter>
       <SiteFooter />

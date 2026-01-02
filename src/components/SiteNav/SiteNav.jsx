@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 // Components
 import SiteNavItem from "../SiteNavItem/SiteNavItem.jsx";
 import HowToPlayModal from "../HowToPlayModal/HowToPlayModal.jsx";
+import { ROUTES } from "../../constants/config";
 
 const SiteNav = ({ puzzleId, puzzleList }) => {
   const [isHowToOpen, setIsHowToOpen] = useState(false);
@@ -56,7 +57,7 @@ const SiteNav = ({ puzzleId, puzzleList }) => {
           <div className="nav__wrapper">
             <ul className="nav__list">
               <SiteNavItem
-                to={`/puzzle/${prevId}`}
+                to={`${ROUTES.puzzleId.replace(":puzzleId", prevId)}`}
                 label="Previous"
                 icon="⬅️"
                 disabled={
@@ -64,20 +65,24 @@ const SiteNav = ({ puzzleId, puzzleList }) => {
                   isListView
                 }
               />
-              <SiteNavItem icon="📋" to="/puzzle/list" label="Puzzle List" />
+              <SiteNavItem
+                icon="📋"
+                to={ROUTES.puzzleList}
+                label="Puzzle List"
+              />
               <SiteNavItem
                 icon="❓"
                 label="How to Play"
                 onClick={handleOpenHowTo}
               />
               <SiteNavItem
-                to={`/`}
+                to={ROUTES.home}
                 icon="🆕"
                 label="Latest"
                 disabled={resolvedId === String(puzzleIds[0])}
               />
               <SiteNavItem
-                to={`/puzzle/${nextId}`}
+                to={`${ROUTES.puzzleId.replace(":puzzleId", nextId)}`}
                 label="Next"
                 icon="➡️"
                 disabled={resolvedId === String(puzzleIds[0]) || isListView}
