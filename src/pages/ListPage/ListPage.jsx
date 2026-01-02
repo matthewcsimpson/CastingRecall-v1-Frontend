@@ -55,8 +55,6 @@ const ListPage = () => {
   const totalPages = pagination?.totalPages ?? totalPagesFromCounts ?? 1;
   const currentPage = pagination?.page ?? page;
 
-  console.log("puzzleList:", puzzleList);
-
   return (
     <>
       {hasPuzzles ? (

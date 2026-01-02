@@ -18,6 +18,8 @@ const GameOutcome = ({ guesses, status, featuredNames }) => {
     : 0;
 
   const guessSummary = guessCount === 1 ? "1 guess" : `${guessCount} guesses`;
+  const correctSummary =
+    correctCount === 1 ? "1 film" : `${correctCount} films`;
   const hintSummary = hintCount
     ? hintCount === 1
       ? " and 1 hint"
@@ -32,7 +34,7 @@ const GameOutcome = ({ guesses, status, featuredNames }) => {
     lost: {
       heading: "You didn't get this one!",
       subheading: "Better luck next time!",
-      text: `You got ${correctCount} film correct out of ${MOVIES_PER_PUZZLE}, using ${guessSummary} and ${hintSummary}.`,
+      text: `You got ${correctSummary} correct out of ${MOVIES_PER_PUZZLE}, using ${guessSummary} and ${hintSummary}.`,
     },
   };
 

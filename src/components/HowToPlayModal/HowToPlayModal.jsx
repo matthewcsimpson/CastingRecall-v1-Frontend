@@ -87,7 +87,7 @@ const HowToPlayModal = ({ isOpen, onClose }) => {
           an entire guess.
         </p>
         <p className="howto__text">
-          There is a patten to how the puzzle is generated, see if you can spot
+          There is a pattern to how the puzzle is generated, see if you can spot
           it!
         </p>
       </div>
