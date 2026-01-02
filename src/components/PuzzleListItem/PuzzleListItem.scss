@@ -3,7 +3,7 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/fontface" as *;
 
-.puzzlelist {
+.puzzleListItem {
     width: 100%;
     font-size: 0.9rem;
     &__wrapper {

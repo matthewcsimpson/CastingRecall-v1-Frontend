@@ -1,20 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { DEFAULT_PAGE_SIZE, API_ENDPOINTS } from "../constants/config";
+import { API_ENDPOINTS } from "../constants/config";
 
 /**
  * Retrieves the full puzzle list from the Casting Recall API.
  * @param {string} apiUrl Base API URL for list requests.
- * @param {{page?: number, pageSize?: number}} [options] Pagination controls for the list request.
- * @returns {{data: Array<object>|null, pagination: object|null, isLoading: boolean}} Puzzle collection, pagination data, and loading flag.
+ * @returns {{data: Array<object>|null, isLoading: boolean}} Puzzle collection and loading flag.
  */
-const usePuzzleList = (
-  apiUrl,
-  { page = 1, pageSize = DEFAULT_PAGE_SIZE } = {}
-) => {
+const usePuzzleList = (apiUrl) => {
   const [state, setState] = useState({
     data: null,
-    pagination: null,
     isLoading: true,
   });
 
@@ -31,12 +26,11 @@ const usePuzzleList = (
         const response = await axios.get(
           `${apiUrl}${API_ENDPOINTS.puzzleList}`,
           {
-            params: { page, pageSize },
             signal: controller.signal,
           }
         );
 
-        const { puzzles, pagination } = response?.data ?? {};
+        const { puzzles } = response?.data ?? {};
         const list = Array.isArray(puzzles)
           ? puzzles
           : Array.isArray(response?.data)
@@ -45,7 +39,6 @@ const usePuzzleList = (
 
         setState({
           data: list,
-          pagination: pagination ?? null,
           isLoading: false,
         });
       } catch (err) {
@@ -62,7 +55,7 @@ const usePuzzleList = (
     return () => {
       controller.abort();
     };
-  }, [apiUrl, page, pageSize]);
+  }, [apiUrl]);
 
   return state;
 };

@@ -7,7 +7,7 @@ import { firstNameOnly } from "../../utilities";
 // Libraries
 import { NavLink } from "react-router-dom";
 
-const PuzzleListItem = ({ puzzleId, keyPeople, status }) => {
+const puzzleListItemItem = ({ puzzleId, keyPeople, status }) => {
   const STATUS_COPY = {
     solved: "Solved!",
     failed: "Failed — try again!",
@@ -20,30 +20,30 @@ const PuzzleListItem = ({ puzzleId, keyPeople, status }) => {
 
   return (
     <>
-      <div className="puzzlelist">
-        <div className="puzzlelist__wrapper">
+      <div className="puzzleListItem">
+        <div className="puzzleListItem__wrapper">
           <NavLink to={`/puzzle/${puzzleId}`}>
-            <div className="puzzlelist__puzzlewrapper">
-              <p className="puzzlelist__progress puzzlelist__text">
+            <div className="puzzleListItem__puzzlewrapper">
+              <p className="puzzleListItem__progress puzzleListItem__text">
                 Puzzle Name:
               </p>
-              <div className="puzzlelist__nameswrapper">
+              <div className="puzzleListItem__nameswrapper">
                 {Array.isArray(keyPeople) &&
                   keyPeople.map((personName, index) => (
                     <p
                       key={`${puzzleId}-${index}`}
-                      className="puzzlelist__listitem puzzlelist__text"
+                      className="puzzleListItem__listitem puzzleListItem__text"
                     >
                       {firstNameOnly(personName)}
                     </p>
                   ))}
               </div>
-              <div className="puzzlelist__statuswrapper">
-                <p className="puzzlelist__progress puzzlelist__text">
+              <div className="puzzleListItem__statuswrapper">
+                <p className="puzzleListItem__progress puzzleListItem__text">
                   Progress:
                 </p>
                 <p
-                  className={`puzzlelist__status puzzlelist__text puzzlelist__status--${safeStatus}`}
+                  className={`puzzleListItem__status puzzleListItem__text puzzleListItem__status--${safeStatus}`}
                 >
                   {progressText}
                 </p>
@@ -56,4 +56,4 @@ const PuzzleListItem = ({ puzzleId, keyPeople, status }) => {
   );
 };
 
-export default PuzzleListItem;
+export default puzzleListItemItem;

@@ -1,0 +1,31 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.listheader {
+    width: 100%;
+    display: none;
+
+    @include tablet {
+        display: block;
+    }
+
+    &__wrapper {
+        width: 90%;
+        background-color: $background-colour;
+        margin: 0 auto;
+        padding: 0.5rem;
+        border-bottom: 1px solid $primary-colour;
+
+        display: flex;
+        justify-content: space-around;
+
+        @include tablet {
+            max-width: 70rem;
+        }
+    }
+
+    &__headerlabel {
+        font-weight: bold;
+        color: $primary-colour;
+    }
+}
