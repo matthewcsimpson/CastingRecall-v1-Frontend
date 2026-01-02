@@ -1,6 +1,9 @@
 // Styles
 import "./SiteHeader.scss";
 
+// Libraries
+import { Link } from "react-router-dom";
+
 const SiteHeader = () => {
   return (
     <header className="header">
@@ -19,9 +22,13 @@ const SiteHeader = () => {
           <div className="header__clapperbottom--white"></div>
           <div className="header__clapperbottom--white"></div>
         </div>
-        <h1 className="header__heading">Casting ReCall</h1>
+        <h1 className="header__heading">
+          <Link to="/" className="header__headinglink">
+            Casting ReCall
+          </Link>
+        </h1>
         <p className="header__subtitle">
-          Can you guess the movie based on who starred in it?
+          Can you guess the films based on who starred in them?
         </p>
       </div>
     </header>
