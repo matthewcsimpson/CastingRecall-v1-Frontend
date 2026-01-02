@@ -53,7 +53,7 @@ const GuessForm = ({
   }
 
   /**
-   * Function to handle fom field input one char at a time.
+   * Function to handle form field input one char at a time.
    * @param {*} evt
    */
   const handleFieldChange = useCallback((evt) => {
