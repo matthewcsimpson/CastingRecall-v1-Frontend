@@ -1,6 +1,33 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+
 .listpage {
+    &__header {
+        width: 100%;
+        display: none;
+        background-color: $background-colour;
+
+        @include tablet {
+            margin: 0 auto;
+            padding: 0.5rem;
+            display: flex;
+            justify-content: space-around;
+            max-width: 70rem;
+            border-bottom: 1px solid $primary-colour;
+        }
+    }
+    &__headerlabel {
+        font-weight: bold;
+        color: $primary-colour;
+    }
+
     &__listcontainer {
         display: flex;
-        flex-direction: column-reverse;
+        flex-direction: column;
+    }
+
+    &__pagination {
+        display: flex;
+        justify-content: center;
     }
 }

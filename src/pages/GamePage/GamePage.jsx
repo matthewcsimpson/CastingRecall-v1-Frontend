@@ -12,9 +12,14 @@ import {
 import { useParams } from "react-router-dom";
 
 // Hooks
-import { useGenres, usePuzzleData, useGuessState } from "../../hooks";
+import {
+  useGenres,
+  usePuzzleData,
+  usePuzzleList,
+  useGuessState,
+} from "../../hooks";
 
-const GamePage = ({ puzzleList }) => {
+const GamePage = () => {
   // Data
   const REACT_APP_TMDB_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
   const REACT_APP_TMDB_GENRE_DETAILS = process.env.REACT_APP_TMDB_GENRE_DETAILS;
@@ -30,6 +35,9 @@ const GamePage = ({ puzzleList }) => {
     REACT_APP_API_REMOTE_URL,
     puzzleId
   );
+  const { data: puzzleList, isLoading: isPuzzleListLoading } = usePuzzleList(
+    REACT_APP_API_REMOTE_URL
+  );
   const {
     guesses,
     youWon,
@@ -41,14 +49,15 @@ const GamePage = ({ puzzleList }) => {
   } = useGuessState(puzzleData);
 
   const outcomeStatus = youWon ? "won" : youLost ? "lost" : null;
+  const hasPuzzleList = Array.isArray(puzzleList) && puzzleList.length > 0;
 
   return (
     <>
-      {Array.isArray(puzzleList) && puzzleList.length > 0 ? (
+      {hasPuzzleList ? (
         <SiteNav puzzleId={puzzleId} puzzleList={puzzleList} />
-      ) : (
+      ) : isPuzzleListLoading ? (
         <LoadingScreen />
-      )}
+      ) : null}
       <GameOutcome guesses={guesses} status={outcomeStatus} />
       {puzzleData ? (
         <>

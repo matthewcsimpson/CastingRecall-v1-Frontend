@@ -86,6 +86,10 @@ const HowToPlayModal = ({ isOpen, onClose }) => {
           they reveal one piece of information about a one movie but they cost
           an entire guess.
         </p>
+        <p className="howto__text">
+          There is a patten to how the puzzle is generated, see if you can spot
+          it!
+        </p>
       </div>
     </div>
   );

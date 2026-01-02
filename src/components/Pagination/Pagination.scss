@@ -1,0 +1,76 @@
+@use "../../styles/partials/variables" as *;
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 2rem 0;
+    color: $primary-colour;
+
+    &__list {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    &__control,
+    &__page {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: lighten($background-colour, 8%);
+        border: 1px solid rgba($primary-colour, 0.4);
+        border-radius: 1.5rem;
+        color: $primary-colour;
+        padding: 0.35rem 0.85rem;
+        font-size: 0.85rem;
+        line-height: 1;
+        cursor: pointer;
+        transition:
+            background-color 0.2s ease,
+            border-color 0.2s ease,
+            color 0.2s ease,
+            transform 0.2s ease;
+
+        &:hover:not(:disabled) {
+            background-color: lighten($background-colour, 15%);
+            border-color: $primary-colour;
+            color: $primary-colour;
+            transform: translateY(-1px);
+        }
+
+        &:disabled {
+            border-color: rgba($primary-colour, 0.15);
+            background-color: lighten($background-colour, 5%);
+            color: rgba($primary-colour, 0.35);
+            cursor: not-allowed;
+            transform: none;
+        }
+    }
+
+    &__page {
+        min-width: 2.25rem;
+
+        &--active {
+            background-color: $primary-colour;
+            border-color: $primary-colour;
+            color: $background-colour;
+
+            &:disabled {
+                background-color: $primary-colour;
+                border-color: $primary-colour;
+                color: $background-colour;
+            }
+        }
+    }
+
+    &__ellipsis {
+        width: 1rem;
+        text-align: center;
+        color: rgba($primary-colour, 0.6);
+    }
+}

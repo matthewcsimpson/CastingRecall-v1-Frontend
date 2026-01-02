@@ -8,6 +8,7 @@ export { default as HowToPlayModal } from "./HowToPlayModal/HowToPlayModal.jsx";
 export { default as Movie } from "./Movie/Movie.jsx";
 export { default as MovieDetails } from "./MovieDetails/MovieDetails.jsx";
 export { default as PuzzleListItem } from "./PuzzleListItem/PuzzleListItem.jsx";
+export { default as Pagination } from "./Pagination/Pagination.jsx";
 export { default as SiteFooter } from "./SiteFooter/SiteFooter.jsx";
 export { default as SiteHeader } from "./SiteHeader/SiteHeader.jsx";
 export { default as SiteNav } from "./SiteNav/SiteNav.jsx";

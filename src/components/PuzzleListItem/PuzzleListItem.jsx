@@ -7,7 +7,7 @@ import { firstNameOnly } from "../../utilities";
 // Libraries
 import { NavLink } from "react-router-dom";
 
-const PuzzleListItem = ({ puzznum, puzzleId, keyPeople, status }) => {
+const PuzzleListItem = ({ puzzleId, keyPeople, status }) => {
   const STATUS_COPY = {
     solved: "Solved!",
     failed: "Failed — try again!",
@@ -23,8 +23,8 @@ const PuzzleListItem = ({ puzznum, puzzleId, keyPeople, status }) => {
         <div className="puzzlelist__wrapper">
           <NavLink to={`/puzzle/${puzzleId}`}>
             <div className="puzzlelist__puzzlewrapper">
-              <p className="puzzlelist__number puzzlelist__text">
-                Puzzle #{puzznum + 1}:
+              <p className="puzzlelist__progress puzzlelist__text">
+                Puzzle Name:
               </p>
               <div className="puzzlelist__nameswrapper">
                 {Array.isArray(keyPeople) &&
@@ -37,14 +37,16 @@ const PuzzleListItem = ({ puzznum, puzzleId, keyPeople, status }) => {
                     </p>
                   ))}
               </div>
-              <p className="puzzlelist__progress puzzlelist__text">
-                Progress:{" "}
-              </p>
-              <p
-                className={`puzzlelist__status puzzlelist__text puzzlelist__status--${safeStatus}`}
-              >
-                {progressText}
-              </p>
+              <div className="puzzlelist__statuswrapper">
+                <p className="puzzlelist__progress puzzlelist__text">
+                  Progress:
+                </p>
+                <p
+                  className={`puzzlelist__status puzzlelist__text puzzlelist__status--${safeStatus}`}
+                >
+                  {progressText}
+                </p>
+              </div>
             </div>
           </NavLink>
         </div>
