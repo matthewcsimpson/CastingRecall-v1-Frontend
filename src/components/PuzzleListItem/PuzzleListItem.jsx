@@ -11,6 +11,7 @@ const PuzzleListItem = ({ puzzleId, keyPeople, status }) => {
   const STATUS_COPY = {
     solved: "Solved!",
     failed: "Failed — try again!",
+    in_progress: "In progress",
     not_attempted: "Not yet attempted!",
   };
 

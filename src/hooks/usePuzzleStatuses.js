@@ -10,6 +10,7 @@ const usePuzzleStatuses = (puzzleList) => {
   const STATUS = {
     SOLVED: "solved",
     FAILED: "failed",
+    IN_PROGRESS: "in_progress",
     NOT_ATTEMPTED: "not_attempted",
   };
 
@@ -30,6 +31,8 @@ const usePuzzleStatuses = (puzzleList) => {
         acc[puzzleId] = STATUS.SOLVED;
       } else if (stored.youLost) {
         acc[puzzleId] = STATUS.FAILED;
+      } else if (Array.isArray(stored.guesses) && stored.guesses.length > 0) {
+        acc[puzzleId] = STATUS.IN_PROGRESS;
       } else {
         acc[puzzleId] = STATUS.NOT_ATTEMPTED;
       }

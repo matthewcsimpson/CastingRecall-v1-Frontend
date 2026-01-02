@@ -67,6 +67,61 @@
         }
     }
 
+    &__share {
+        margin-top: 1rem;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        gap: 0.75rem;
+        align-items: center;
+        justify-content: center;
+
+        @include tablet {
+            max-width: 32rem;
+        }
+    }
+
+    &__share-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1.25rem;
+        border-radius: 999px;
+        border: 1px solid rgba($primary-colour, 0.4);
+        background-color: lighten($background-colour, 10%);
+        color: $primary-colour;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        cursor: pointer;
+        transition:
+            background-color 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.2s ease;
+
+        &:hover,
+        &:focus {
+            background-color: lighten($background-colour, 16%);
+            border-color: $primary-colour;
+            transform: translateY(-1px);
+        }
+
+        &:focus {
+            outline: 2px solid rgba($primary-colour, 0.6);
+            outline-offset: 2px;
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+
+    &__share-feedback {
+        min-height: 1rem;
+        color: rgba($primary-colour, 0.7);
+        font-size: 0.85rem;
+    }
+
     &--won {
         --game-outcome-border: rgb(7, 235, 7);
     }

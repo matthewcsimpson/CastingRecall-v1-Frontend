@@ -58,7 +58,11 @@ const GamePage = () => {
       ) : isPuzzleListLoading ? (
         <LoadingScreen />
       ) : null}
-      <GameOutcome guesses={guesses} status={outcomeStatus} />
+      <GameOutcome
+        guesses={guesses}
+        status={outcomeStatus}
+        featuredNames={puzzleData?.keyPeople}
+      />
       {puzzleData ? (
         <>
           <GuessForm
