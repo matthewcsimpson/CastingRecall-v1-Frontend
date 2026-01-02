@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 // Hooks & constants
 import { MAX_GUESSES } from "../../hooks/useGuessState";
@@ -16,17 +16,23 @@ const GameOutcome = ({ guesses, status, featuredNames }) => {
   const correctCount = Array.isArray(guesses)
     ? guesses.filter((guess) => guess?.correct === true).length
     : 0;
+
   const guessSummary = guessCount === 1 ? "1 guess" : `${guessCount} guesses`;
+  const hintSummary = hintCount
+    ? hintCount === 1
+      ? " and 1 hint"
+      : ` and ${hintCount} hints`
+    : "";
 
   const variants = {
     won: {
       heading: "Congrats! You won!",
-      subheading: `And it only took you ${guessSummary}`,
+      subheading: `You used ${guessSummary}${hintSummary}!`,
     },
     lost: {
       heading: "You didn't get this one!",
       subheading: "Better luck next time!",
-      text: `You got ${correctCount} film correct out of 6, using ${guessSummary}.`,
+      text: `You got ${correctCount} film correct out of 6, using ${guessSummary} and ${hintSummary}.`,
     },
   };
 
@@ -160,19 +166,19 @@ const GameOutcome = ({ guesses, status, featuredNames }) => {
               className="game-outcome__share-button"
               onClick={handleCopyShareText}
             >
-              Share result
+              {copyState === null
+                ? "Share Result"
+                : copyState === "success"
+                ? "Copied!"
+                : copyState === "error"
+                ? "Copy failed"
+                : ""}
             </button>
             <span
               className="game-outcome__share-feedback"
               role="status"
               aria-live="polite"
-            >
-              {copyState === "success"
-                ? "Copied!"
-                : copyState === "error"
-                ? "Copy failed"
-                : ""}
-            </span>
+            ></span>
           </div>
         ) : null}
       </div>

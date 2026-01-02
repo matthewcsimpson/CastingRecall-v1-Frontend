@@ -57,26 +57,29 @@ const SiteNav = ({ puzzleId, puzzleList }) => {
             <ul className="nav__list">
               <SiteNavItem
                 to={`/puzzle/${prevId}`}
-                label="Prev Puzzle"
+                label="Previous"
                 icon="⬅️"
-                iconPosition="left"
                 disabled={
                   resolvedId === String(puzzleIds[puzzleIds.length - 1]) ||
                   isListView
                 }
               />
-              <SiteNavItem to="/puzzle/list" label="Puzzle List" />
-              <SiteNavItem label="How to Play" onClick={handleOpenHowTo} />
+              <SiteNavItem icon="📋" to="/puzzle/list" label="Puzzle List" />
+              <SiteNavItem
+                icon="❓"
+                label="How to Play"
+                onClick={handleOpenHowTo}
+              />
               <SiteNavItem
                 to={`/`}
-                label="Latest Puzzle"
+                icon="🆕"
+                label="Latest"
                 disabled={resolvedId === String(puzzleIds[0])}
               />
               <SiteNavItem
                 to={`/puzzle/${nextId}`}
-                label="Next Puzzle"
+                label="Next"
                 icon="➡️"
-                iconPosition="right"
                 disabled={resolvedId === String(puzzleIds[0]) || isListView}
               />
             </ul>
