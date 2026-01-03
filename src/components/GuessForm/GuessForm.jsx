@@ -40,10 +40,7 @@ const GuessForm = ({
     const parsedYear = Number.parseInt(REACT_APP_TMDB_LOWEST_YEAR ?? "", 10);
     return Number.isFinite(parsedYear) ? parsedYear : null;
   }, [REACT_APP_TMDB_LOWEST_YEAR]);
-  const tmdbLatestDate = useMemo(
-    () => new Date().toISOString().slice(0, 10),
-    []
-  );
+  const tmdbLatestDate = new Date().toISOString().slice(0, 10);
 
   // Trimmed search query
   const trimmedQuery = useMemo(() => searchQuery.trim(), [searchQuery]);
@@ -128,8 +125,8 @@ const GuessForm = ({
         url.searchParams.set("with_text_query", query);
         url.searchParams.set("sort_by", "revenue.desc");
         url.searchParams.set("with_runtime.gte", String(MIN_RUNTIME_MINUTES));
+        url.searchParams.set("without_genres", EXCLUDED_GENRES.join("|"));
 
-        console.log("url", url.toString());
         if (tmdbLowestYear) {
           url.searchParams.set(
             "primary_release_date.gte",
@@ -154,26 +151,8 @@ const GuessForm = ({
           : [];
 
         const filteredResults = rawResults.filter((movie) => {
-          const runtimeMinutes =
-            typeof movie?.runtime === "number" ? movie.runtime : null;
           const releaseDate =
             typeof movie?.release_date === "string" ? movie.release_date : "";
-
-          const genres = movie?.genre_ids;
-
-          if (
-            Number.isFinite(runtimeMinutes) &&
-            runtimeMinutes < MIN_RUNTIME_MINUTES
-          ) {
-            return false;
-          }
-
-          if (
-            Array.isArray(genres) &&
-            genres.some((genreId) => EXCLUDED_GENRES.includes(genreId))
-          ) {
-            return false;
-          }
 
           if (!releaseDate) {
             return true;
