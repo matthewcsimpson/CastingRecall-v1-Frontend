@@ -123,7 +123,7 @@ const GuessForm = ({
         url.searchParams.set("language", "en-US");
         url.searchParams.set("page", "1");
         url.searchParams.set("with_text_query", query);
-        url.searchParams.set("sort_by", "revenue.desc");
+        url.searchParams.set("sort_by", "popularity.desc");
         url.searchParams.set("with_runtime.gte", String(MIN_RUNTIME_MINUTES));
         url.searchParams.set("without_genres", EXCLUDED_GENRES.join("|"));
 
