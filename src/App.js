@@ -14,18 +14,16 @@ import { ROUTES } from "./constants/config";
 
 const App = () => {
   return (
-    <>
+    <BrowserRouter>
       <SiteHeader />
-      <BrowserRouter>
-        <Routes>
-          <Route path={ROUTES.home} element={<GamePage />} />
-          <Route path={ROUTES.puzzleId} element={<GamePage />} />
-          <Route path={ROUTES.puzzleList} element={<ListPage />} />
-          <Route path={ROUTES.fallback} element={<GamePage />} />
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route path={ROUTES.home} element={<GamePage />} />
+        <Route path={ROUTES.puzzleId} element={<GamePage />} />
+        <Route path={ROUTES.puzzleList} element={<ListPage />} />
+        <Route path={ROUTES.fallback} element={<GamePage />} />
+      </Routes>
       <SiteFooter />
-    </>
+    </BrowserRouter>
   );
 };
 
