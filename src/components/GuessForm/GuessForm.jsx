@@ -273,12 +273,7 @@ const GuessForm = ({
                           data-movie-id={movie.id}
                           onClick={handleSuggestionSelect}
                         >
-                          {movie.title} (
-                          {formatDate(
-                            movie.release_date,
-                            YEAR_ONLY_DATE_OPTIONS
-                          )}
-                          )
+                          {movie.title}
                         </button>
                       </li>
                     );
