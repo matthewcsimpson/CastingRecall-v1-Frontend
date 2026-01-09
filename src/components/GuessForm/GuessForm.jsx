@@ -5,9 +5,6 @@ import "./GuessForm.scss";
 import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import axios from "axios";
 
-// Utilities
-import { formatDate, YEAR_ONLY_DATE_OPTIONS } from "../../utilities";
-
 // Components
 import { LoadingScreen } from "..";
 
@@ -273,12 +270,7 @@ const GuessForm = ({
                           data-movie-id={movie.id}
                           onClick={handleSuggestionSelect}
                         >
-                          {movie.title} (
-                          {formatDate(
-                            movie.release_date,
-                            YEAR_ONLY_DATE_OPTIONS
-                          )}
-                          )
+                          {movie.title}
                         </button>
                       </li>
                     );
