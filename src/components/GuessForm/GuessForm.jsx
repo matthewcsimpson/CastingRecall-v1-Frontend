@@ -5,9 +5,6 @@ import "./GuessForm.scss";
 import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import axios from "axios";
 
-// Utilities
-import { formatDate, YEAR_ONLY_DATE_OPTIONS } from "../../utilities";
-
 // Components
 import { LoadingScreen } from "..";
 

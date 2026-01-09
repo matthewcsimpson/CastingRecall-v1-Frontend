@@ -28,7 +28,7 @@ const SiteHeader = () => {
           </Link>
         </h1>
         <p className="header__subtitle">
-          Can you guess the films based on who starred in them?
+          Can you guess the six films based on who starred in them?
         </p>
       </div>
     </header>
