@@ -12,7 +12,7 @@ import { LoadingScreen } from "..";
 const TMDB_DEBOUNCE_DELAY_MS = 300;
 const TMDB_SUGGESTION_LIMIT = 10;
 const EXCLUDED_GENRES = [99, 10770];
-const MIN_RUNTIME_MINUTES = 40;
+const REQUIRED_ORIGINAL_LANGUAGE = "en";
 
 const GuessForm = ({
   puzzleId,
@@ -24,9 +24,10 @@ const GuessForm = ({
   handleSubmitGuess,
 }) => {
   // Data
-  const REACT_APP_TMDB_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
-  const REACT_APP_TMDB_DISCOVER_URL = process.env.REACT_APP_TMDB_DISCOVER_URL;
-  const REACT_APP_TMDB_LOWEST_YEAR = process.env.REACT_APP_TMDB_LOWEST_YEAR;
+  const TMDB_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
+  const SEARCH_URL = process.env.REACT_APP_TMDB_MOVIE_SEARCH_URL;
+  const LOWEST_YEAR = process.env.REACT_APP_TMDB_LOWEST_YEAR;
+  const IMG_BASE = process.env.REACT_APP_TMDB_IMG_BASE;
 
   // State
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,10 +35,9 @@ const GuessForm = ({
 
   // Memoized values
   const tmdbLowestYear = useMemo(() => {
-    const parsedYear = Number.parseInt(REACT_APP_TMDB_LOWEST_YEAR ?? "", 10);
+    const parsedYear = Number.parseInt(LOWEST_YEAR ?? "", 10);
     return Number.isFinite(parsedYear) ? parsedYear : null;
-  }, [REACT_APP_TMDB_LOWEST_YEAR]);
-  const tmdbLatestDate = new Date().toISOString().slice(0, 10);
+  }, [LOWEST_YEAR]);
 
   // Trimmed search query
   const trimmedQuery = useMemo(() => searchQuery.trim(), [searchQuery]);
@@ -51,7 +51,7 @@ const GuessForm = ({
       gameComplete
         ? "hero__guessinput hero__guessinput--complete"
         : "hero__guessinput",
-    [gameComplete]
+    [gameComplete],
   );
 
   // Placeholder text for the input field
@@ -63,11 +63,18 @@ const GuessForm = ({
     return `Enter a guess.  You have ${guessesLeft} guesses left...`;
   }, [gameComplete, guessNum, maxGuesses]);
 
-  // Cache for search results to avoid repeat requests
-  const searchCache = useRef();
+  // Cache for search results to avoid repeat requests (keyed by query + filter signature)
+  const searchCache = useRef(null);
   if (!searchCache.current) {
     searchCache.current = new Map();
   }
+
+  const cacheKey = useMemo(() => {
+    const yearKey = tmdbLowestYear == null ? "none" : String(tmdbLowestYear);
+    return `${trimmedQuery}|minYear=${yearKey}|excluded=${EXCLUDED_GENRES.join(
+      ",",
+    )}|origLang=${REQUIRED_ORIGINAL_LANGUAGE}`;
+  }, [trimmedQuery, tmdbLowestYear]);
 
   /**
    * Function to handle form field input one char at a time.
@@ -98,7 +105,7 @@ const GuessForm = ({
       setSearchResults([]);
       setSearchQuery("");
     },
-    [handleSubmitGuess, searchResults]
+    [handleSubmitGuess, searchResults],
   );
 
   /**
@@ -108,37 +115,23 @@ const GuessForm = ({
    */
   const fetchSuggestions = useCallback(
     async (query, controller) => {
-      if (!REACT_APP_TMDB_DISCOVER_URL) {
+      if (!SEARCH_URL) {
         console.error("TMDB search URL is not configured.");
         return;
       }
 
       try {
-        const url = new URL(REACT_APP_TMDB_DISCOVER_URL);
+        const url = new URL(SEARCH_URL);
+        url.searchParams.set("query", query);
         url.searchParams.set("include_adult", "false");
         url.searchParams.set("region", "US");
         url.searchParams.set("language", "en-US");
         url.searchParams.set("page", "1");
-        url.searchParams.set("with_text_query", query);
-        url.searchParams.set("sort_by", "popularity.desc");
-        url.searchParams.set("with_runtime.gte", String(MIN_RUNTIME_MINUTES));
-        url.searchParams.set("without_genres", EXCLUDED_GENRES.join("|"));
-
-        if (tmdbLowestYear) {
-          url.searchParams.set(
-            "primary_release_date.gte",
-            `${tmdbLowestYear}-01-01`
-          );
-        }
-
-        if (tmdbLatestDate) {
-          url.searchParams.set("primary_release_date.lte", tmdbLatestDate);
-        }
 
         const response = await axios.get(url.toString(), {
           signal: controller?.signal,
           headers: {
-            Authorization: `Bearer ${REACT_APP_TMDB_TOKEN}`,
+            Authorization: `Bearer ${TMDB_TOKEN}`,
             Accept: "application/json",
           },
         });
@@ -147,76 +140,82 @@ const GuessForm = ({
           ? response.data.results
           : [];
 
+        // Strict filter: require valid release_date and genre_ids, exclude by genre and year,
+        // and align with BE puzzle rules by enforcing original_language === "en".
         const filteredResults = rawResults.filter((movie) => {
-          const releaseDate =
-            typeof movie?.release_date === "string" ? movie.release_date : "";
-
-          if (!releaseDate) {
-            return true;
-          }
-
-          if (tmdbLatestDate && releaseDate > tmdbLatestDate) {
+          if (movie?.original_language !== REQUIRED_ORIGINAL_LANGUAGE) {
             return false;
           }
 
-          if (!tmdbLowestYear) {
-            return true;
+          if (
+            typeof movie?.release_date !== "string" ||
+            movie.release_date.length < 4
+          ) {
+            return false;
           }
 
-          const releaseYear = Number.parseInt(releaseDate.slice(0, 4), 10);
+          if (!Array.isArray(movie.genre_ids) || movie.genre_ids.length === 0) {
+            return false;
+          }
 
+          if (movie.genre_ids.some((id) => EXCLUDED_GENRES.includes(id))) {
+            return false;
+          }
+
+          const releaseYear = Number.parseInt(
+            movie.release_date.slice(0, 4),
+            10,
+          );
           if (!Number.isFinite(releaseYear)) {
-            return true;
+            return false;
           }
 
-          return releaseYear >= tmdbLowestYear;
+          if (tmdbLowestYear != null && releaseYear < tmdbLowestYear) {
+            return false;
+          }
+
+          return true;
         });
 
         const limitedResults = filteredResults.slice(0, TMDB_SUGGESTION_LIMIT);
-        searchCache.current.set(query, limitedResults);
+
+        searchCache.current.set(cacheKey, limitedResults);
         setSearchResults(limitedResults);
       } catch (err) {
-        if (axios.isCancel?.(err) || err.name === "CanceledError") {
+        if (axios.isCancel?.(err) || err?.name === "CanceledError") {
           return;
         }
-
         if (err instanceof TypeError) {
           console.error("Failed to build TMDB request URL.", err);
           return;
         }
-
         console.error(err);
       }
     },
-    [
-      REACT_APP_TMDB_DISCOVER_URL,
-      REACT_APP_TMDB_TOKEN,
-      tmdbLowestYear,
-      tmdbLatestDate,
-    ]
+    [SEARCH_URL, TMDB_TOKEN, tmdbLowestYear, cacheKey],
   );
 
   // Effect to fetch suggestions when the search query changes
   useEffect(() => {
-    if (!trimmedQuery || trimmedQuery.length < 2) {
+    if (!trimmedQuery || trimmedQuery.length < 1) {
       setSearchResults([]);
       return;
     }
 
-    if (!REACT_APP_TMDB_TOKEN) {
+    if (!TMDB_TOKEN) {
       console.error("TMDB bearer token is not configured.");
       setSearchResults([]);
       return;
     }
 
-    if (!REACT_APP_TMDB_DISCOVER_URL) {
+    if (!SEARCH_URL) {
       console.error("TMDB search URL is not configured.");
       setSearchResults([]);
       return;
     }
 
-    if (searchCache.current.has(trimmedQuery)) {
-      setSearchResults(searchCache.current.get(trimmedQuery));
+    if (searchCache.current.has(cacheKey)) {
+      setSearchResults(searchCache.current.get(cacheKey));
       return;
     }
 
@@ -229,12 +228,7 @@ const GuessForm = ({
       controller.abort();
       clearTimeout(debounce);
     };
-  }, [
-    REACT_APP_TMDB_TOKEN,
-    REACT_APP_TMDB_DISCOVER_URL,
-    trimmedQuery,
-    fetchSuggestions,
-  ]);
+  }, [TMDB_TOKEN, SEARCH_URL, trimmedQuery, cacheKey, fetchSuggestions]);
 
   // Effect to clear search state when the puzzle ID changes
   useEffect(() => {
@@ -261,16 +255,26 @@ const GuessForm = ({
               <ul className="hero__searchsuggestions">
                 {searchResults &&
                   searchResults.map((movie) => {
+                    const posterUrl = movie.poster_path
+                      ? `${IMG_BASE}${movie.poster_path}`
+                      : null;
+
                     return (
                       <li key={movie.id}>
                         <button
                           className="hero__suggestion"
-                          id={movie.id}
                           type="button"
                           data-movie-id={movie.id}
                           onClick={handleSuggestionSelect}
                         >
-                          {movie.title}
+                          {posterUrl && (
+                            <img
+                              src={posterUrl}
+                              alt={movie.title}
+                              className="hero__suggestionposter"
+                            />
+                          )}
+                          <span>{movie.title}</span>
                         </button>
                       </li>
                     );
