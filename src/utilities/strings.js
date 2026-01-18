@@ -22,7 +22,7 @@ export const shortenString = (value) => {
     return "";
   }
 
-  const limit = 147;
+  const limit = 300;
   if (value.length <= limit) {
     return value;
   }

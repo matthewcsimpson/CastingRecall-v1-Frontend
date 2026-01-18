@@ -58,17 +58,29 @@
         list-style: none;
         padding: 0;
         margin: 0;
+        width: 80%;
     }
 
     &__suggestion {
-        width: 100%;
-        list-style: none;
-        height: 2.5rem;
+        min-width: 60%;
+        height: 6.5rem;
         font-size: 1.5rem;
         background: $suggestion-bg-colour;
         color: $suggestion-text-colour;
         border-bottom: 1px dotted $suggestion-border-colour;
         padding: 0.25rem 0.5rem;
         text-align: left;
+
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    &__suggestionposter {
+        height: 6rem;
+        width: auto;
+        border-radius: 0.25rem;
+        flex-shrink: 0;
+        object-fit: cover;
     }
 }
